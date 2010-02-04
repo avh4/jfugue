@@ -40,6 +40,7 @@ public final class MidiParser extends Parser
     long[][] tempNoteRegistry = new long[16][255];
     byte[][] tempNoteAttackRegistry = new byte[16][255];
     int tempo;
+    int resolution;
     private static final int DEFAULT_TEMPO = 120;
 
     public MidiParser()
@@ -72,6 +73,16 @@ public final class MidiParser extends Parser
 
         // Get the MIDI tracks from the sequence.  Expect a maximum of 16 tracks.
         Track[] tracks = sequence.getTracks();
+        float divisionType = sequence.getDivisionType();
+        this.resolution = sequence.getResolution();
+        System.out.println("divisionType == PPQ? "+ (divisionType == Sequence.PPQ));
+        System.out.println("resolution = "+sequence.getResolution());
+        
+//        if (divisionType == Sequence.PPQ) {
+//        	resolution = sequence.getResolution();
+//        } else {
+//        	frames = sequence.get 
+//        }
 
         // Compute the size of this adventure for the ParserProgressListener
         long totalCount = 0;
@@ -98,7 +109,7 @@ public final class MidiParser extends Parser
                     MidiMessage message = event.getMessage();
 
                     trace("Message received: ",message);
-                    parse(message, event.getTick());
+                    parse(message, event.getTick());  
                 }
             }
         }
@@ -212,7 +223,7 @@ public final class MidiParser extends Parser
         fireVoiceEvent(new Voice((byte)track));
         Note note = new Note((byte)data1, (long)(timestamp - time));
         // Can you believe it?  Need to multiply an int by 1.0 to turn it into a double
-        double decimalDuration = (timestamp - time)*1.0 / 768.0; //(this.tempo * 1.0); // TODO: This is a hack!
+        double decimalDuration = (timestamp - time)*1.0 / (resolution * 4.0); // TODO: This will work for PPQ, but what about SMPTE division type?
         note.setDecimalDuration(decimalDuration);
         note.setAttackVelocity(tempNoteAttackRegistry[track][data1]);
         note.setDecayVelocity((byte)data2);
