@@ -22,8 +22,6 @@
 
 package org.jfugue;
 
-import java.util.EventListener;
-
 import javax.swing.event.EventListenerList;
 
 /**
@@ -109,7 +107,7 @@ public class Parser
      */
     public void addParserProgressListener(ParserProgressListener l) 
     {
-        progressListenerList.add (ParserProgressListener.class, l);
+        progressListenerList.add(ParserProgressListener.class, l);
     }
 
     /**
@@ -119,26 +117,37 @@ public class Parser
      */
     public void removeParserProgressListener(ParserProgressListener l) 
     {
-        progressListenerList.remove (ParserProgressListener.class, l);
+        progressListenerList.remove(ParserProgressListener.class, l);
     }
 
+    /**
+     * Returns an array of all <code>ParserProgressListener</code>s.
+     * 
+     * @return array of all <code>ParserProgressListener</code>s
+     */
+    public ParserProgressListener[] getParserProgressListeners()
+    {
+        ParserProgressListener[] listeners = listenerList.getListeners(ParserProgressListener.class);
+        return listeners;
+    }
+    
+    /**
+     * Removes all of the <code>ParserProgressListener</code>s.
+     */
     protected void clearParserProgressListeners() 
     {
-        EventListener[] l = progressListenerList.getListeners (ParserProgressListener.class);
-        int numListeners = l.length;
-        for (int i = 0; i < numListeners; i++) {
-            progressListenerList.remove (ParserProgressListener.class, (ParserProgressListener)l[i]);
+        ParserProgressListener[] listeners = listenerList.getListeners(ParserProgressListener.class);
+        for (ParserProgressListener listener : listeners) { 
+            listenerList.remove(ParserProgressListener.class, listener);
         }
     }
 
     /** Tells all ParserProgressListener interfaces that progress has occurred. */
-    protected void fireProgressReported(String description, long partComplete, long whole)
+    protected void fireProgressReported(String description, long partCompleted, long whole)
     {
-        Object[] listeners = progressListenerList.getListenerList ();
-        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            if (listeners[i] == ParserProgressListener.class) {
-                ((ParserProgressListener)listeners[i + 1]).progressReported(description, partComplete, whole);
-            }
+        ParserProgressListener[] listeners = getParserProgressListeners();
+        for (ParserProgressListener listener : listeners) {
+            listener.progressReported(description, partCompleted, whole);
         }
     }
 
@@ -155,9 +164,9 @@ public class Parser
      *
      * @param listener the listener that is to be notified of parser events
      */
-    public void addParserListener(ParserListener l) 
+    public void addParserListener(ParserListener listener) 
     {
-        listenerList.add (ParserListener.class, l);
+        listenerList.add(ParserListener.class, listener);
     }
 
     /**
@@ -165,171 +174,156 @@ public class Parser
      *
      * @param listener the listener to remove
      */
-    public void removeParserListener(ParserListener l) 
+    public void removeParserListener(ParserListener listener) 
     {
-        listenerList.remove (ParserListener.class, l);
+        listenerList.remove(ParserListener.class, listener);
     }
 
+    /**
+     * Returns an array of all <code>ParserListener</code>s.
+     * 
+     * @return array of all <code>ParserListener</code>s
+     */
+    public ParserListener[] getParserListeners()
+    {
+        ParserListener[] listeners = listenerList.getListeners(ParserListener.class);
+        return listeners;
+    }
+    
+    /**
+     * Removes all of the <code>ParserListener</code>s.
+     */
     protected void clearParserListeners() 
     {
-        EventListener[] l = listenerList.getListeners (ParserListener.class);
-        int numListeners = l.length;
-        for (int i = 0; i < numListeners; i++) {
-            listenerList.remove (ParserListener.class, (ParserListener)l[i]);
+        ParserListener[] listeners = listenerList.getListeners(ParserListener.class);
+        for (ParserListener listener : listeners) { 
+            listenerList.remove(ParserListener.class, listener);
         }
     }
 
     /** Tells all ParserListeners that a voice event has been parsed. */
     protected void fireVoiceEvent(Voice event)
     {
-        Object[] listeners = listenerList.getListenerList ();
-        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            if (listeners[i] == ParserListener.class) {
-                ((ParserListener)listeners[i + 1]).voiceEvent(event);
-            }
+        ParserListener[] listeners = getParserListeners();
+        for (ParserListener listener : listeners) {
+            listener.voiceEvent(event);
         }
     }
 
     /** Tells all ParserListeners that a tempo event has been parsed. */
     protected void fireTempoEvent(Tempo event)
     {
-        Object[] listeners = listenerList.getListenerList ();
-        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            if (listeners[i] == ParserListener.class) {
-                ((ParserListener)listeners[i + 1]).tempoEvent(event);
-            }
+        ParserListener[] listeners = getParserListeners();
+        for (ParserListener listener : listeners) {
+            listener.tempoEvent(event);
         }
     }
 
     /** Tells all ParserListeners that an instrument event has been parsed. */
     protected void fireInstrumentEvent(Instrument event)
     {
-        Object[] listeners = listenerList.getListenerList ();
-        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            if (listeners[i] == ParserListener.class) {
-                ((ParserListener)listeners[i + 1]).instrumentEvent(event);
-            }
+        ParserListener[] listeners = getParserListeners();
+        for (ParserListener listener : listeners) {
+            listener.instrumentEvent(event);
         }
     }
 
     /** Tells all ParserListeners that a layer event has been parsed. */
     protected void fireLayerEvent(Layer event)
     {
-        Object[] listeners = listenerList.getListenerList ();
-        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            if (listeners[i] == ParserListener.class) {
-                ((ParserListener)listeners[i + 1]).layerEvent(event);
-            }
+        ParserListener[] listeners = getParserListeners();
+        for (ParserListener listener : listeners) {
+            listener.layerEvent(event);
         }
     }
     
     /** Tells all ParserListeners that a time event has been parsed. */
     protected void fireTimeEvent(Time event)
     {
-        Object[] listeners = listenerList.getListenerList ();
-        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            if (listeners[i] == ParserListener.class) {
-                ((ParserListener)listeners[i + 1]).timeEvent(event);
-            }
+        ParserListener[] listeners = getParserListeners();
+        for (ParserListener listener : listeners) {
+            listener.timeEvent(event);
         }
     }
     
     /** Tells all ParserListeners that a key signature event has been parsed. */
     protected void fireKeySignatureEvent(KeySignature event)
     {
-        Object[] listeners = listenerList.getListenerList ();
-        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            if (listeners[i] == ParserListener.class) {
-                ((ParserListener)listeners[i + 1]).keySignatureEvent(event);
-            }
+        ParserListener[] listeners = getParserListeners();
+        for (ParserListener listener : listeners) {
+            listener.keySignatureEvent(event);
         }
     }
     
     /** Tells all ParserListeners that a measure event has been parsed. */
     protected void fireMeasureEvent(Measure event)
     {
-        Object[] listeners = listenerList.getListenerList ();
-        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            if (listeners[i] == ParserListener.class) {
-                ((ParserListener)listeners[i + 1]).measureEvent(event);
-            }
+        ParserListener[] listeners = getParserListeners();
+        for (ParserListener listener : listeners) {
+            listener.measureEvent(event);
         }
     }
 
     /** Tells all ParserListeners that a controller event has been parsed. */
     protected void fireControllerEvent(Controller event)
     {
-        Object[] listeners = listenerList.getListenerList ();
-        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            if (listeners[i] == ParserListener.class) {
-                ((ParserListener)listeners[i + 1]).controllerEvent(event);
-            }
+        ParserListener[] listeners = getParserListeners();
+        for (ParserListener listener : listeners) {
+            listener.controllerEvent(event);
         }
     }
 
     /** Tells all ParserListeners that a controller event has been parsed. */
     protected void fireChannelPressureEvent(ChannelPressure event)
     {
-        Object[] listeners = listenerList.getListenerList ();
-        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            if (listeners[i] == ParserListener.class) {
-                ((ParserListener)listeners[i + 1]).channelPressureEvent(event);
-            }
+        ParserListener[] listeners = getParserListeners();
+        for (ParserListener listener : listeners) {
+            listener.channelPressureEvent(event);
         }
     }
 
     /** Tells all ParserListeners that a controller event has been parsed. */
     protected void firePolyphonicPressureEvent(PolyphonicPressure event)
     {
-        Object[] listeners = listenerList.getListenerList ();
-        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            if (listeners[i] == ParserListener.class) {
-                ((ParserListener)listeners[i + 1]).polyphonicPressureEvent(event);
-            }
+        ParserListener[] listeners = getParserListeners();
+        for (ParserListener listener : listeners) {
+            listener.polyphonicPressureEvent(event);
         }
     }
 
     /** Tells all ParserListeners that a controller event has been parsed. */
     protected void firePitchBendEvent(PitchBend event)
     {
-        Object[] listeners = listenerList.getListenerList ();
-        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            if (listeners[i] == ParserListener.class) {
-                ((ParserListener)listeners[i + 1]).pitchBendEvent(event);
-            }
+        ParserListener[] listeners = getParserListeners();
+        for (ParserListener listener : listeners) {
+            listener.pitchBendEvent(event);
         }
     }
 
     /** Tells all ParserListeners that a note event has been parsed. */
     protected void fireNoteEvent(Note event)
     {
-        Object[] listeners = listenerList.getListenerList ();
-        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            if (listeners[i] == ParserListener.class) {
-                ((ParserListener)listeners[i + 1]).noteEvent(event);
-            }
+        ParserListener[] listeners = getParserListeners();
+        for (ParserListener listener : listeners) {
+            listener.noteEvent(event);
         }
     }
 
     /** Tells all ParserListeners that a sequential note event has been parsed. */
     protected void fireSequentialNoteEvent(Note event)
     {
-        Object[] listeners = listenerList.getListenerList ();
-        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            if (listeners[i] == ParserListener.class) {
-                ((ParserListener)listeners[i + 1]).sequentialNoteEvent(event);
-            }
+        ParserListener[] listeners = getParserListeners();
+        for (ParserListener listener : listeners) {
+            listener.sequentialNoteEvent(event);
         }
     }
 
     /** Tells all ParserListeners that a parallel note event has been parsed. */
     protected void fireParallelNoteEvent(Note event)
     {
-        Object[] listeners = listenerList.getListenerList ();
-        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            if (listeners[i] == ParserListener.class) {
-                ((ParserListener)listeners[i + 1]).parallelNoteEvent(event);
-            }
+        ParserListener[] listeners = getParserListeners();
+        for (ParserListener listener : listeners) {
+            listener.parallelNoteEvent(event);
         }
     }
 
