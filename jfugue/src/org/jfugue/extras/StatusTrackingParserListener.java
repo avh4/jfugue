@@ -10,6 +10,7 @@ import org.jfugue.Note;
 import org.jfugue.ParserListener;
 import org.jfugue.PitchBend;
 import org.jfugue.PolyphonicPressure;
+import org.jfugue.SystemExclusiveEvent;
 import org.jfugue.Tempo;
 import org.jfugue.Time;
 import org.jfugue.Voice;
@@ -81,6 +82,11 @@ public class StatusTrackingParserListener implements ParserListener
 	public void keySignatureEvent(KeySignature keySig) {
 		sendMessageToOutput(keySig.getVerifyString());
 	}
+
+	@Override
+	public void systemExclusiveEvent(SystemExclusiveEvent sysex) {
+		sendMessageToOutput(sysex.getVerifyString());
+    }
 
 	@Override
 	public void layerEvent(Layer layer) {

@@ -73,6 +73,11 @@ public final class MusicStringRenderer implements ParserListener
         pattern.add(keySig.getMusicString());
     }
 
+    public void systemExclusiveEvent(SystemExclusiveEvent sysex)
+    {	
+    	pattern.add(sysex.getMusicString());
+    }
+
     public void measureEvent(Measure measure)
     {
         pattern.add(measure.getMusicString());

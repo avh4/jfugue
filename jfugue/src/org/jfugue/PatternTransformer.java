@@ -116,10 +116,16 @@ public class PatternTransformer implements ParserListener
         returnPattern.addElement(time);
     }
 
-    /** Extend this method to make your transformer modify the time. */
+    /** Extend this method to make your transformer modify the key signature. */
     public void keySignatureEvent(KeySignature keySig)
     {
         returnPattern.addElement(keySig);
+    }
+
+    /** Extend this method to make your transformer modify sysex events. */
+    public void systemExclusiveEvent(SystemExclusiveEvent sysex)
+    {
+        returnPattern.addElement(sysex);
     }
 
     /** Extend this method to make your transformer modify the measure. */

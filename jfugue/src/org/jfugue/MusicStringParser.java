@@ -24,6 +24,7 @@ package org.jfugue;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 /**
  * Parses music strings, and fires events for <code>ParserListener</code> interfaces
@@ -127,6 +128,7 @@ public final class MusicStringParser extends Parser
             case '&' : parsePitchBendElement(s);       break;  // New in 3.0
             case '|' : parseMeasureElement(s);         break;  // New in 3.0
             case '$' : parseDictionaryElement(s);      break;  // New in 2.0
+            case '^' : parseSystemExclusiveElement(s); break;  // New in 4.1
             case '(' : parseCollectedNoteElement(s);   break;  // New in 4.1
             case 'A' :
             case 'B' :
@@ -217,6 +219,30 @@ public final class MusicStringParser extends Parser
         fireTimeEvent(new Time(timeNumber));
     }
 
+    /**
+     * Parses a system exclusive element.
+     * @param s the token that contains a time element
+     * @throws JFugueException if there is a problem parsing the element
+     */
+    private void parseSystemExclusiveElement(String s) throws JFugueException
+    {
+        String sysexString = s.substring(1,s.length());
+        StringTokenizer strtok = new StringTokenizer(sysexString, ",");
+        byte[] data = new byte[strtok.countTokens()];
+        StringBuilder traceReport = new StringBuilder();
+        int c=0;
+        while (strtok.hasMoreElements())
+        {
+        	String token = strtok.nextToken();
+        	data[c] = Byte.parseByte(token);
+        	traceReport.append(data[c]);
+        	traceReport.append(" ");
+        	c++;
+        }
+        trace("Sysex element: bytes = ",traceReport.toString());
+        fireSystemExclusiveEvent(new SystemExclusiveEvent(data));
+    }
+    
     /**
      * Parses a key signature element.
      * @param s the token that contains a key signature

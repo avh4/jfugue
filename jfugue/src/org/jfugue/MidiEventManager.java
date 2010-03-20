@@ -27,6 +27,7 @@ import javax.sound.midi.MetaMessage;
 import javax.sound.midi.MidiEvent;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.ShortMessage;
+import javax.sound.midi.SysexMessage;
 import javax.sound.midi.Track;
 
 /**
@@ -118,9 +119,8 @@ public final class MidiEventManager
     /**
      * Adds a MetaMessage to the current track.  
      *
-     * @param command the MIDI command represented by this message
-     * @param data1 the first data byte
-     * @param data2 the second data byte
+     * @param type the type of the MetaMessage
+     * @param bytes the data of the MetaMessage
      */
     public void addMetaMessage(int type, byte[] bytes)
     {
@@ -135,7 +135,25 @@ public final class MidiEventManager
             e.printStackTrace();
         }
     }
-
+    
+    /**
+     * Adds a SysexMessage to the current track.  
+     *
+     * @param bytes the data of the SysexMessage
+     */
+    public void addSystemExclusiveEvent(byte[] bytes)
+    {
+    	try {
+    		SysexMessage message = new SysexMessage();
+    		message.setMessage(bytes, bytes.length);
+            MidiEvent event = new MidiEvent(message, getTrackTimer());
+            track[currentTrack].add(event);
+        } catch (InvalidMidiDataException e)
+        {
+            // We've kept a good eye on the data.  This exception won't happen.
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Adds a MIDI event to the current track.  

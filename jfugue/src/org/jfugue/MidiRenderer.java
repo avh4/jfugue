@@ -138,6 +138,11 @@ public final class MidiRenderer extends ParserListenerAdapter
         this.eventManager.addMetaMessage(0x59, new byte[] { keySig.getKeySig(), keySig.getScale() });
     }
 
+    public void systemExclusiveEvent(SystemExclusiveEvent systemExclusiveEvent)
+    {
+    	this.eventManager.addSystemExclusiveEvent(systemExclusiveEvent.getBytes());
+    }
+    
     public void controllerEvent(Controller controller)
     {
         this.eventManager.addEvent(ShortMessage.CONTROL_CHANGE, controller.getIndex(), controller.getValue());

@@ -79,10 +79,17 @@ public interface ParserListener extends EventListener
     
     /**
      * Called when the parser encounters a key signature event.
-     * @param time the event that has been parsed
+     * @param keySig the event that has been parsed
      * @see KeySignature
      */
     public void keySignatureEvent(KeySignature keySig);
+    
+    /**
+     * Called when the parser encounters a system exclusive event.
+     * @param sysex the event that has been parsed
+     * @see SystemExclusiveEvent
+     */
+    public void systemExclusiveEvent(SystemExclusiveEvent sysex);
     
     /**
      * Called when the parser encounters a controller event.

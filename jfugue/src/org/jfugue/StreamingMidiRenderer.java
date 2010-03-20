@@ -22,7 +22,6 @@
 
 package org.jfugue;
 
-import javax.sound.midi.Sequence;
 import javax.sound.midi.ShortMessage;
 
 /**
@@ -98,6 +97,11 @@ public class StreamingMidiRenderer implements ParserListener
     public void keySignatureEvent(KeySignature keySig)
     {
         this.eventManager.addMetaMessage(0x59, new byte[] { keySig.getKeySig(), keySig.getScale() });
+    }
+
+    public void systemExclusiveEvent(SystemExclusiveEvent sysex)
+    {
+        this.eventManager.addSystemExclusiveEvent(sysex.getBytes());
     }
 
     public void controllerEvent(Controller controller)

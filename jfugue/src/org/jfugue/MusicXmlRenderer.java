@@ -290,6 +290,11 @@ public class MusicXmlRenderer implements ParserListener
  //       pattern.add(time.getMusicString());
     }
 
+    public void systemExclusiveEvent(SystemExclusiveEvent sysex)
+    {	
+    	// NOP
+    }
+
     public void keySignatureEvent(KeySignature keySig)
     {	doKeySig(keySig);
     }

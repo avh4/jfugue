@@ -246,6 +246,15 @@ public class Parser
         }
     }
     
+    /** Tells all ParserListeners that a time event has been parsed. */
+    protected void fireSystemExclusiveEvent(SystemExclusiveEvent event)
+    {
+        ParserListener[] listeners = getParserListeners();
+        for (ParserListener listener : listeners) {
+            listener.systemExclusiveEvent(event);
+        }
+    }
+    
     /** Tells all ParserListeners that a key signature event has been parsed. */
     protected void fireKeySignatureEvent(KeySignature event)
     {

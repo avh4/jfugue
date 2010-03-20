@@ -57,6 +57,11 @@ public abstract class CollatedParserListener implements ParserListener
         jfugueEvent(keySig);
     }
 
+    public void systemExclusiveEvent(SystemExclusiveEvent sysex)
+    {	
+    	jfugueEvent(sysex);
+    }
+
     public void layerEvent(Layer layer)
     {
         jfugueEvent(layer);

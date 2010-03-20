@@ -225,6 +225,16 @@ public class StreamingMidiEventManager
     {
         // NOP
     }
+    
+    /**
+     * Adds a SysexMessage to the current track.  
+     *
+     * @param bytes the data of the SysexMessage
+     */
+    public void addSystemExclusiveEvent(byte[] bytes)
+    {
+    	// NOP
+    }
 
     /**
      * Adds a MIDI event to the current track.  
