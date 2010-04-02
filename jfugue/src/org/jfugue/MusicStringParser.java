@@ -226,7 +226,19 @@ public final class MusicStringParser extends Parser
      */
     private void parseSystemExclusiveElement(String s) throws JFugueException
     {
-        String sysexString = s.substring(1,s.length());
+        int indexOfColon = s.indexOf(':');
+        String decOrHex = s.substring(1, indexOfColon);
+        boolean dec = false;
+        boolean hex = false;
+        if (decOrHex.toUpperCase().equals("DEC")) {
+        	dec = true;
+        } else if (decOrHex.toUpperCase().equals("HEX")) {
+        	hex = true;
+        } else {
+        	throw new JFugueException(JFugueException.SYSEX_FORMAT_EXC, s);
+        }
+        
+    	String sysexString = s.substring(indexOfColon+1,s.length());
         StringTokenizer strtok = new StringTokenizer(sysexString, ",");
         byte[] data = new byte[strtok.countTokens()];
         StringBuilder traceReport = new StringBuilder();
@@ -234,7 +246,13 @@ public final class MusicStringParser extends Parser
         while (strtok.hasMoreElements())
         {
         	String token = strtok.nextToken();
-        	data[c] = Byte.parseByte(token);
+        	int ti = 0;
+        	if (dec) {
+        		ti = Integer.parseInt(token);
+        	} else if (hex) {
+        		ti = Integer.parseInt(token, 16);
+        	}
+        	data[c] = (byte)ti;
         	traceReport.append(data[c]);
         	traceReport.append(" ");
         	c++;
@@ -1633,6 +1651,10 @@ public final class MusicStringParser extends Parser
             // 4.0 New parser
             parser.parseToken("D3");
             parser.parseToken("C##3"); // Should be like D3
+
+            // 4.1 System Exclusive
+            parser.parseToken("^dec:240,67,127,0,0,3,0,65,247");
+            parser.parseToken("^hex:F0,43,7F,00,00,03,00,41,F7");
             
             long endTime = System.currentTimeMillis();
             System.out.println("Time taken: "+(endTime-startTime)+"ms");

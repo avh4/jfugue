@@ -104,6 +104,8 @@ public class JFugueException extends RuntimeException
     public static final String WORD_NOT_DEFINED_EXC = "The word * has no definition.  Check the spelling, or define the word before using it.  See the JFugue Instruction Manual for information on defining words.";
     /** The Controller command, X<i>index</i>=<i>value</i>, is malformed. */
     public static final String CONTROL_FORMAT_EXC = "The controller token * is missing an equals sign.  See the JFugue Instruction Manual for information on using the Controller token.";
+    /** The Sysex command, ^<i>[ dec | hex ]:byte,byte,byte,..., is malformed. */
+    public static final String SYSEX_FORMAT_EXC = "The sysex token * is malformed.  See the JFugue Instruction Manual for information on using the Sysex token.";
 
     /** The parser expected a byte. */
     public static final String EXPECTED_BYTE   = "The JFugue Parser expected a byte, but encountered the value * which is not a byte.";
