@@ -228,12 +228,11 @@ public final class MusicStringParser extends Parser
     {
         int indexOfColon = s.indexOf(':');
         String decOrHex = s.substring(1, indexOfColon);
-        boolean dec = false;
-        boolean hex = false;
+        int radix = 10;
         if (decOrHex.toUpperCase().equals("DEC")) {
-        	dec = true;
+        	radix = 10;
         } else if (decOrHex.toUpperCase().equals("HEX")) {
-        	hex = true;
+        	radix = 16;
         } else {
         	throw new JFugueException(JFugueException.SYSEX_FORMAT_EXC, s);
         }
@@ -246,12 +245,7 @@ public final class MusicStringParser extends Parser
         while (strtok.hasMoreElements())
         {
         	String token = strtok.nextToken();
-        	int ti = 0;
-        	if (dec) {
-        		ti = Integer.parseInt(token);
-        	} else if (hex) {
-        		ti = Integer.parseInt(token, 16);
-        	}
+      		int ti = Integer.parseInt(token, radix);
         	data[c] = (byte)ti;
         	traceReport.append(data[c]);
         	traceReport.append(" ");
