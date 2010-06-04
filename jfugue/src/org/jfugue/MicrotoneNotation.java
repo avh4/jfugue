@@ -70,22 +70,25 @@ public class MicrotoneNotation
      */
     public static String convertFrequencyToMusicString(double freq)
     {
+    	// The calculations below were derived from 
+    	// http://www.myriad-online.com/resources/docs/melody/english/microtone.htm
         double totalCents = 1200 * Math.log(freq / 16.3515978312876) / Math.log(2);
         double octave = Math.round(totalCents / 1200.0);
         double semitoneCents = totalCents - (octave * 1200.0);
         double semitone = Math.round(semitoneCents / 100.0);
-        double cents = 8192 + Math.round(semitoneCents - (semitone * 100));
+        double microtonalAdjustment = semitoneCents - (semitone * 100.0);
+        double pitches = 8192.0 + (microtonalAdjustment * 8192.0 / 100.0);
 
         double note = ((octave+1)*12)+semitone; // This gives a MIDI value, 0 - 128
         if (note > 127) note = 127;
 
-        StringBuilder buffy = new StringBuilder();
-        buffy.append("&");
-        buffy.append((int)cents);
-        buffy.append(" [");
-        buffy.append((int)note);
-        buffy.append("]");
-        return buffy.toString();
+        StringBuilder buddy = new StringBuilder();
+        buddy.append("&");
+        buddy.append((int)pitches);
+        buddy.append(" [");
+        buddy.append((int)note);
+        buddy.append("]");
+        return buddy.toString();
     }
 
     public static String getResetPitchWheelString()
