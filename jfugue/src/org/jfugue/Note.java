@@ -337,10 +337,10 @@ public final class Note implements JFugueElement
         }
         
         // If this is a Sequential note or a Parallel note, include that information.
-        if (SEQUENTIAL == this.type) {
+        if (this.type == SEQUENTIAL) {
             buddy.append("_");
         }
-        else if (PARALLEL == this.type) {
+        else if (this.type == PARALLEL) {
             buddy.append("+");
         }
 

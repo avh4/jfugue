@@ -178,7 +178,7 @@ public final class MidiRenderer extends ParserListenerAdapter
 
         // Add messages to the track
         if (note.isRest()) {
-            this.eventManager.advanceTrackTimer(duration);
+            this.eventManager.addRest(duration);
         } else {
             initialNoteTime = eventManager.getTrackTimer();
             byte attackVelocity = note.getAttackVelocity();
@@ -191,7 +191,7 @@ public final class MidiRenderer extends ParserListenerAdapter
     {
         long duration = note.getDuration();
         if (note.isRest()) {
-            this.eventManager.advanceTrackTimer(duration);
+            this.eventManager.addRest(duration);
         } else {
             byte attackVelocity = note.getAttackVelocity();
             byte decayVelocity = note.getDecayVelocity();
@@ -204,7 +204,7 @@ public final class MidiRenderer extends ParserListenerAdapter
         long duration = note.getDuration();
         this.eventManager.setTrackTimer(this.initialNoteTime);
         if (note.isRest()) {
-            this.eventManager.advanceTrackTimer(duration);
+            this.eventManager.addRest(duration);
         } else {
             byte attackVelocity = note.getAttackVelocity();
             byte decayVelocity = note.getDecayVelocity();

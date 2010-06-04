@@ -112,6 +112,7 @@ public final class MusicStringParser extends Parser
         }
 
         s = s.toUpperCase();
+        trace(" ");
         trace("--------Processing Token: ",s);
 
         switch(s.charAt(0))
@@ -545,7 +546,9 @@ public final class MusicStringParser extends Parser
         NoteContext context = new NoteContext();
 
         while (context.existAnotherNote) {
-            trace("--Parsing note from token "+s);
+            trace(" ");
+        	trace("--Parsing note from token "+s);
+        	context.isRest = false;
             decideSequentialOrParallel(context);
             int index = 0;
             int slen = s.length(); // We pass the length of the string because it is an invariant value that is used often

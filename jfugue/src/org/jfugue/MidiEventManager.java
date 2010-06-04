@@ -196,6 +196,15 @@ public final class MidiEventManager
         }
     }
     
+    /**
+     * Adds a rest - which really just advances the track timer.
+     *
+     * @param duration the duration of the rest
+     */
+    public void addRest(long duration)
+    {
+    	advanceTrackTimer(duration);
+    }
     
     /**
      * Adds a ShortMessage.NOTE_ON event to the current track, using attack and
