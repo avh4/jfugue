@@ -223,7 +223,8 @@ public final class MidiParser extends Parser
         fireVoiceEvent(new Voice((byte)track));
         Note note = new Note((byte)data1, (long)(timestamp - time));
         // Can you believe it?  Need to multiply an int by 1.0 to turn it into a double
-        double decimalDuration = (timestamp - time)*1.0 / (resolution * 4.0); // TODO: This will work for PPQ, but what about SMPTE division type?
+//        double decimalDuration = (timestamp - time)*1.0 / (resolution * 4.0); // TODO: This will work for PPQ, but what about SMPTE division type?
+        double decimalDuration = (timestamp - time)*1.0 / (resolution); // TODO: This will work for PPQ, but what about SMPTE division type?
         note.setDecimalDuration(decimalDuration);
         note.setAttackVelocity(tempNoteAttackRegistry[track][data1]);
         note.setDecayVelocity((byte)data2);
@@ -263,7 +264,7 @@ public final class MidiParser extends Parser
     
     private void parseTempo(MetaMessage message, long timestamp)
     {
-        int beatsPerMinute = (int)TimeFactor.convertMicrosecondsPerBeatToBPM(TimeFactor.parseMicrosecondsPerBeat(message, timestamp));
+        int beatsPerMinute = (int)TimeFactor.convertMicrosecondsPerBeatToBPM(TimeFactor.parseMicrosecondsPerBeat(message)) * 4;
         trace("Tempo Event, bpm = ",beatsPerMinute);
         fireTimeEvent(new Time(timestamp));
         fireTempoEvent(new Tempo(beatsPerMinute));

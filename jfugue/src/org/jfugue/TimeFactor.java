@@ -93,7 +93,7 @@ public final class TimeFactor
 //        return new byte[] { (byte)i1, (byte)i2, (byte)i3 };
     }    
     
-    public static final int parseMicrosecondsPerBeat(MetaMessage message, long timestamp)
+    public static final int parseMicrosecondsPerBeat(MetaMessage message)
     {
     	byte bytes[] = message.getMessage();
     	int microseconds = (int)bytes[3] * 65536 + (int)bytes[4]*256 + (int)bytes[5];
@@ -128,13 +128,13 @@ public final class TimeFactor
      */
     public static final void sortAndDeliverMidiMessages(Sequence sequence, MidiMessageRecipient recipient) 
     {
-        double timeFactor = 1.0;
-        
+    	double timeFactor = 4.0;
+    	
         Map<Long, List<MidiEvent>> timeMap = new HashMap<Long, List<MidiEvent>>();
         long longestTime = TimeEventManager.sortSequenceByTimestamp(sequence, timeMap);
         
         long lastTime = 0;
-        for (long time=0; time < longestTime; time++)
+        for (long time=0; time <= longestTime; time++)
         {
             List<MidiEvent> midiEventList = (List<MidiEvent>)timeMap.get(time);
             if (midiEventList != null)
@@ -142,9 +142,11 @@ public final class TimeFactor
                 for (MidiEvent event : midiEventList)
                 {
                     MidiMessage message = event.getMessage(); 
+                    
+                    // If the message is a Tempo event (0x51), convert the tempo so we can use it in timing the messages
                     if ((message.getMessage().length >= 2) && (message.getMessage()[1] == 0x51) && (message instanceof MetaMessage)) 
                     {
-                        int bpm = parseMicrosecondsPerBeat((MetaMessage)message, time);
+                        double bpm = TimeFactor.convertMicrosecondsPerBeatToBPM(parseMicrosecondsPerBeat((MetaMessage)message)) * 4.0;
                         timeFactor = TimeFactor.getTimeFactor(sequence, bpm);
                     }
                     recipient.messageReady(message, time);
@@ -152,8 +154,7 @@ public final class TimeFactor
 
                 try
                 {
-                    long sleepTime = (int)(((time - lastTime) * (4*TimeFactor.QUARTER_DURATIONS_IN_WHOLE+0.20))); // TODO - Make the numbers here less magical
-                    // System.out.println("Sleep time is "+sleepTime+" time diff is "+(time-lastTime));
+                    long sleepTime = (int)(((time - lastTime) * (timeFactor * TimeFactor.QUARTER_DURATIONS_IN_WHOLE+0.20))); // TODO - Make the numbers here less magical
                     Thread.sleep(sleepTime); 
                     lastTime = time;
                 } catch (Exception ex)
