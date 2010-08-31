@@ -22,6 +22,9 @@
 
 package org.jfugue;
 
+import org.jfugue.extras.DurationPatternTransformer;
+import org.jfugue.extras.PatternInvestigator;
+
 /**
  * EXPERIMENTAL -
  * Contains a variety of static methods that create Patterns
@@ -32,7 +35,13 @@ package org.jfugue;
  */
 public class MusicalEffects
 {
-    /**
+    
+	public static final char EFFECT_DIRECTION_UP = 'U';
+	public static final char EFFECT_DIRECTION_DOWN = 'D';
+	
+	private static final double THIRTY_SECOND = 0.03125d;
+	
+	/**
      * Returns a Pattern that plays two notes in rapid succession
      * (for a total of each note being played numHammers times)
      * over the given duration.
@@ -108,5 +117,185 @@ public class MusicalEffects
     public static Pattern trill(Note note1, Note note2, double duration, int numSteps)
     {
         return hammerOn(note1, note2, duration, numSteps);
+    }
+    
+    /**
+     * Returns a Pattern that adds a grace note to a given note.  This method assumes a
+     * 32nd sound duration for the grace note.
+     * 
+     * @param graceNote Note value for grace note.
+     * @param baseNote Note value and duration.
+     * @return Pattern for the calculated effect.
+     */
+    public static Pattern graceNote(Note graceNote, Note baseNote){
+    	return graceNote(graceNote, baseNote, THIRTY_SECOND);
+    }
+    
+    /**
+     * Returns a Pattern that adds a grace note with a given sound duration to a given note.
+     * 
+     * @param graceNote Note value for grace note.
+     * @param baseNote Note value and duration.
+     * @param graceNoteDuration Duration for the sound of the grace note.
+     * @return Pattern for the calculated effect.
+     */
+    public static Pattern graceNote(Note graceNote, Note baseNote, double graceNoteDuration){
+    	Pattern gracePattern = new Pattern(graceNote.getMusicString());
+    	return addOrnament(gracePattern, baseNote, graceNoteDuration);
+    }
+    
+    /**
+     * Returns a Pattern that adds an ornamental pattern to a given note.  
+     * 
+     * @param ornament Ornamental pattern.
+     * @param baseNote Note value and duration.
+     * @return Pattern for the calculated effect.
+     */
+    public static Pattern addOrnament(Pattern ornament, Note baseNote){
+    	return addOrnament(ornament, baseNote, THIRTY_SECOND);
+    }
+    
+    
+    /**
+     * Returns a Pattern that adds an ornamental pattern to a given note.  
+     * 
+     * @param ornament Ornamental pattern.
+     * @param baseNote Note value and duration.
+     * @param longestOrnamentDuration Duration for the sound of the longest note token in the ornament pattern.
+     *                                All other durations in the pattern will be adjusted relative to this 
+     *                                duration.
+     * @return Pattern for the calculated effect.
+     */
+    public static Pattern addOrnament(Pattern ornament, Note baseNote, double longestOrnamentDuration){
+    	PatternInvestigator investigator = new PatternInvestigator();
+    	MusicStringParser stringParser = new MusicStringParser();
+    	
+    	stringParser.addParserListener(investigator);
+    	stringParser.parse(ornament);
+    	
+    	double longestDuration = investigator.getLongestDecimalDuration();
+    	double durationChange =  longestOrnamentDuration / longestDuration;
+    	
+    	DurationPatternTransformer transformer = new DurationPatternTransformer(durationChange);
+    	
+    	Pattern result = transformer.transform(ornament);
+    	
+    	stringParser.removeParserListener(investigator);
+    	investigator = new PatternInvestigator();
+    	stringParser.addParserListener(investigator);
+    	stringParser.parse(result);
+    	
+    	if(investigator.getTotalDecimalDuration() < baseNote.getDecimalDuration()){
+    		double remainingDuration = baseNote.getDecimalDuration() - investigator.getTotalDecimalDuration();
+    		baseNote.setDecimalDuration(remainingDuration);
+    		result.add(baseNote.getMusicString());
+    		return result;
+    	} else {
+    		return new Pattern(baseNote.getMusicString());
+    	}
+    }
+    
+    /**
+     * Returns a Pattern that plays a trill given a note, trill direction, and duration of each
+     * individual sound.
+     * 
+     * Example:
+     * trill(Note.createNote("C"), MusicalEffects.EFFECT_DIRECTION_UP, 0.03125d);
+     * will produce this Pattern: 
+     * [60]/0.03125 [61]/0.03125 [60]/0.03125 [61]/0.03125 [60]/0.03125 [61]/0.03125 [60]/0.03125 [60]/0.03125
+     *
+     * @param baseNote Note value and duration for the trill.
+     * @param trillDirection Describes if the patter should trill up or down.
+     * @param singleSoundDuration duration of each individual note of the trill.
+     * @return Pattern for the calculated trill.
+     */
+    public static Pattern trill(Note baseNote, char trillDirection, double singleSoundDuration){
+        
+    	StringBuilder musicStringBuilder = new StringBuilder();
+        
+    	double totalDuration = baseNote.getDecimalDuration();
+        double actualDuration = 0.0d;
+        
+        byte secondNote = baseNote.getValue();
+        
+        if(trillDirection == EFFECT_DIRECTION_UP){
+        	secondNote++;
+        } else if(trillDirection == EFFECT_DIRECTION_DOWN){
+        	secondNote--;
+        }
+        
+        double remainingDuration = totalDuration - (2*singleSoundDuration);
+        if(remainingDuration > 0.0d){
+        	
+        	appendNoteValueAndDuration(musicStringBuilder, baseNote.getValue(), singleSoundDuration);
+        	actualDuration+=singleSoundDuration;
+        	
+        	while(actualDuration < totalDuration){
+        		if(actualDuration + (2*singleSoundDuration) < totalDuration){
+        			appendNoteValueAndDuration(musicStringBuilder, secondNote, singleSoundDuration);
+        			actualDuration += singleSoundDuration;
+        			appendNoteValueAndDuration(musicStringBuilder, baseNote.getValue(), singleSoundDuration);
+        			actualDuration += singleSoundDuration;
+        		} else if(actualDuration + singleSoundDuration > totalDuration){
+        			double gapDuration = totalDuration - actualDuration;
+        			appendNoteValueAndDuration(musicStringBuilder, baseNote.getValue(), gapDuration);
+        			actualDuration+=gapDuration;
+        		} else {
+        			appendNoteValueAndDuration(musicStringBuilder, baseNote.getValue(), singleSoundDuration);
+        			actualDuration+=singleSoundDuration;
+        		}
+        	}
+        	return new Pattern(musicStringBuilder.toString().trim());
+        } else {
+        	return new Pattern(baseNote.getMusicString());
+        }
+    }
+    
+    /**
+     * Returns a Pattern that plays a trill given a note, and trill direction.
+     * 
+     * Example:
+     * trill(Note.createNote("C6h"), MusicalEffects.EFFECT_DIRECTION_UP)
+     * will produce this Pattern: 
+     * [72]/0.03125 [73]/0.03125 [72]/0.03125 [73]/0.03125 [72]/0.03125 [73]/0.03125 [72]/0.03125 [73]/0.03125 [72]/0.03125 [73]/0.03125 [72]/0.03125 [73]/0.03125 [72]/0.03125 [73]/0.03125 [72]/0.03125 [72]/0.03125
+     *
+     * @param baseNote Note value and duration for the trill.
+     * @param trillDirection Describes if the patter should trill up or down.
+     * @return Pattern for the calculated trill.
+     */
+    public static Pattern trill(Note baseNote, char trillDirection){
+    	return trill(baseNote, trillDirection, THIRTY_SECOND);
+    }
+    
+    /**
+     * Returns a Pattern that plays a trill given a note, and trill direction.
+     * 
+     * Example:
+     * trill(Note.createNote("C6h"))
+     * will produce this Pattern: 
+     * [72]/0.03125 [73]/0.03125 [72]/0.03125 [73]/0.03125 [72]/0.03125 [73]/0.03125 [72]/0.03125 [73]/0.03125 [72]/0.03125 [73]/0.03125 [72]/0.03125 [73]/0.03125 [72]/0.03125 [73]/0.03125 [72]/0.03125 [72]/0.03125
+     *
+     * @param baseNote Note value and duration for the trill.
+     * @return Pattern for the calculated trill.
+     */
+    public static Pattern trill(Note baseNote){
+    	return trill(baseNote, EFFECT_DIRECTION_UP);
+    }
+    
+    /**
+     * Takes care of redundant music string building for adding notes/durations.
+     * 
+     * @param inputBuilder The StringBuilder to modify.
+     * @param noteValue The note value in numeric form.
+     * @param noteDuration The note duration in decimal form.
+     * @return StringBuilder with the appropriate strings appended
+     */
+    private static StringBuilder appendNoteValueAndDuration(StringBuilder inputBuilder, byte noteValue, double noteDuration){
+    	inputBuilder.append("[");
+    	inputBuilder.append(noteValue);
+    	inputBuilder.append("]/");
+    	inputBuilder.append(noteDuration);
+    	inputBuilder.append(" ");
+    	return inputBuilder;
     }
 }
