@@ -107,9 +107,13 @@ public final class MidiParser extends Parser
                     
                     MidiEvent event = tracks[t].get(ev);
                     MidiMessage message = event.getMessage();
-
+                    
                     trace("Message received: ",message);
                     parse(message, event.getTick());  
+                    
+                 // The following line of code may hold the solution to Issue 33,
+                 // but I'm not confident enough to turn it into production code yet
+//                    parse(message, (int)(event.getTick() / (resolution / 120.0)));   
                 }
             }
         }
@@ -222,9 +226,8 @@ public final class MidiParser extends Parser
         fireTimeEvent(new Time(time));
         fireVoiceEvent(new Voice((byte)track));
         Note note = new Note((byte)data1, (long)(timestamp - time));
-        // Can you believe it?  Need to multiply an int by 1.0 to turn it into a double
 //        double decimalDuration = (timestamp - time)*1.0 / (resolution * 4.0); // TODO: This will work for PPQ, but what about SMPTE division type?
-        double decimalDuration = (timestamp - time)*1.0 / (resolution); // TODO: This will work for PPQ, but what about SMPTE division type?
+        double decimalDuration = (timestamp - time)*1.0 / resolution; // TODO: This will work for PPQ, but what about SMPTE division type?
         note.setDecimalDuration(decimalDuration);
         note.setAttackVelocity(tempNoteAttackRegistry[track][data1]);
         note.setDecayVelocity((byte)data2);
@@ -253,9 +256,10 @@ public final class MidiParser extends Parser
         switch (message.getType())
         {
           case 0x51 : parseTempo(message, timestamp); break;
-          case 0x59 : /*nop*/  // Even though we care about Key Signatures, we don't want to read one in from a MIDI file,
-                               // because the notes that we'll receive will already be adjusted for the key signature.
-                               // MIDI's Key Signature is more about notating sheet music that influencing the played notes.
+          case 0x59 : trace("KeySignature received but not parsed by JFugue (doesn't use them)");
+           // Even though we care about Key Signatures, we don't want to read one in from a MIDI file,
+           // because the notes that we'll receive will already be adjusted for the key signature.
+           // MIDI's Key Signature is more about notating sheet music that influencing the played notes.
           default : 
               trace("MetaMessage "+message.getType()+" (0x"+Integer.toHexString(message.getType())+") received but not parsed by JFugue (doesn't use them)");
               break;
@@ -264,7 +268,7 @@ public final class MidiParser extends Parser
     
     private void parseTempo(MetaMessage message, long timestamp)
     {
-        int beatsPerMinute = (int)TimeFactor.convertMicrosecondsPerBeatToBPM(TimeFactor.parseMicrosecondsPerBeat(message)) * 4;
+        int beatsPerMinute = (int)(TimeFactor.convertMicrosecondsPerBeatToBPM(TimeFactor.parseMicrosecondsPerBeat(message)) * 4.0);
         trace("Tempo Event, bpm = ",beatsPerMinute);
         fireTimeEvent(new Time(timestamp));
         fireTempoEvent(new Tempo(beatsPerMinute));
