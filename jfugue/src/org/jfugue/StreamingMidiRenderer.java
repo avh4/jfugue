@@ -35,7 +35,9 @@ public class StreamingMidiRenderer implements ParserListener
 {
     private StreamingMidiEventManager eventManager;
     private MusicStringParser parser;
-    long initialNoteTime = 0;
+    private long initialNoteTime = 0;
+    private long lastParallelNoteDuration = 0;
+    private int currentTempo = Tempo.ALLEGRO;
 
     /**
      * Instantiates a Renderer
@@ -71,7 +73,7 @@ public class StreamingMidiRenderer implements ParserListener
 
     public void tempoEvent(Tempo tempo)
     {
-//        this.parser.setTempo(tempo.getTempo());
+        this.currentTempo = tempo.getTempo();
     }
 
     public void instrumentEvent(Instrument instrument)
@@ -126,47 +128,59 @@ public class StreamingMidiRenderer implements ParserListener
 
     public void noteEvent(Note note)
     {
+        if(lastParallelNoteDuration != 0)
+        {
+            this.eventManager.advanceTrackTimer(lastParallelNoteDuration);
+            lastParallelNoteDuration = 0;
+        }
+        
         // Remember the current track time, so we can flip back to it
         // if there are other notes to play in parallel
         this.initialNoteTime = this.eventManager.getTrackTimer();
-        long duration = note.getDuration();
+        
+        final long durationInMillis = getNoteDurationInMillis(note);
+        
         boolean noteOn = !note.isEndOfTie();
         boolean noteOff = !note.isStartOfTie();
 
         // Add messages to the track
         if (note.isRest()) {
-            this.eventManager.advanceTrackTimer(note.getDuration());   
+            this.eventManager.advanceTrackTimer(durationInMillis);   
         } else {
             initialNoteTime = eventManager.getTrackTimer();
             byte attackVelocity = note.getAttackVelocity();
             byte decayVelocity = note.getDecayVelocity();
-            this.eventManager.addNoteEvents(note.getValue(), attackVelocity, decayVelocity, duration, noteOn, noteOff);
-            this.eventManager.advanceTrackTimer(duration);
+            this.eventManager.addNoteEvents(note.getValue(), attackVelocity, decayVelocity, durationInMillis, noteOn, noteOff);
+            if(!note.hasAccompanyingNotes())
+            {
+                this.eventManager.advanceTrackTimer(durationInMillis);
+            }
         }
     }
 
     public void sequentialNoteEvent(Note note)
     {
-        long duration = note.getDuration();
+        final long durationInMillis = getNoteDurationInMillis(note);
         if (note.isRest()) {
-            this.eventManager.advanceTrackTimer(note.getDuration());
+            this.eventManager.advanceTrackTimer(durationInMillis);
         } else {
             byte attackVelocity = note.getAttackVelocity();
             byte decayVelocity = note.getDecayVelocity();
-            this.eventManager.addNoteEvents(note.getValue(), attackVelocity, decayVelocity, duration, !note.isEndOfTie(), !note.isStartOfTie());
+            this.eventManager.addNoteEvents(note.getValue(), attackVelocity, decayVelocity, durationInMillis, !note.isEndOfTie(), !note.isStartOfTie());
         }
     }
 
     public void parallelNoteEvent(Note note)
     {
-        long duration = note.getDuration();
+        final long durationInMillis = getNoteDurationInMillis(note);
+        lastParallelNoteDuration = durationInMillis;
         this.eventManager.setTrackTimer(this.initialNoteTime);
         if (note.isRest()) {
-            this.eventManager.advanceTrackTimer(note.getDuration());
+            this.eventManager.advanceTrackTimer(durationInMillis);
         } else {
             byte attackVelocity = note.getAttackVelocity();
             byte decayVelocity = note.getDecayVelocity();
-            this.eventManager.addNoteEvents(note.getValue(), attackVelocity, decayVelocity, duration, !note.isEndOfTie(), !note.isStartOfTie());
+            this.eventManager.addNoteEvents(note.getValue(), attackVelocity, decayVelocity, durationInMillis, !note.isEndOfTie(), !note.isStartOfTie());
         }
     }
     
@@ -174,4 +188,15 @@ public class StreamingMidiRenderer implements ParserListener
     {
         this.eventManager.close();
     }
+    
+    private long getNoteDurationInMillis(Note note)
+    {
+        // Here we have to calculate the correct duration in milliseconds 
+        // based on the current tempo.
+        final double secondsPerWholeNote = 4 * (1.0 / currentTempo) * 60.0;
+        final long durationInMillis = note.getDuration() * (long) (1000.0 * secondsPerWholeNote / 128.0);
+        return durationInMillis;
+    }
+
+
 }

@@ -97,6 +97,7 @@ public final class StreamingPlayer
         setSequencer(sequencer);
         
         parser = new MusicStringParser();
+        parser.setDefaultTempoEnabled(false);
         renderer = new StreamingMidiRenderer();
         parser.addParserListener(renderer);
     }

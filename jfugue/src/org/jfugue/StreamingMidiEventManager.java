@@ -93,8 +93,8 @@ public class StreamingMidiEventManager
                             pauseForTheCause();
                         }
                     }
-                }
-            );
+                },
+            "StreamingMidiEventManager timer thread");
             timerThread.start();
     
     }
@@ -112,7 +112,7 @@ public class StreamingMidiEventManager
         if (lastCurrentTime != currentTime) {
             // Make sure the insertion time for all channels and layers 
             // keeps up with the current time.
-        	System.out.println("Time advancing by "+(currentTime-lastCurrentTime));
+        	//System.out.println("Time advancing by "+(currentTime-lastCurrentTime));
             for (int channel = 0; channel < CHANNELS; channel++) {
                 for (int layer = 0; layer < LAYERS; layer++) {
                     time[channel][layer] = time[channel][layer] + (currentTime - lastCurrentTime);

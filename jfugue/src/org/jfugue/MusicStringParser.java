@@ -44,7 +44,8 @@ public final class MusicStringParser extends Parser
 {
     private Map<String, Object> dictionaryMap;
     private byte keySig = 0;
-
+    private boolean defaultTempoEnabled = true;
+    
     /**
      * Creates a new Parser object, and populates the dictionary with initial entries.
      * @see JFugueDefinitions
@@ -54,6 +55,34 @@ public final class MusicStringParser extends Parser
         dictionaryMap = new HashMap<String, Object>();
         JFugueDefinitions.populateDictionary(dictionaryMap);
     }
+
+    /**
+     * Returns true if a default tempo event (120bpm) is generated when a pattern
+     * doesn't specify an initial tempo.
+     * 
+     * @return true if a default tempo event should be generated when a pattern is
+     *      parsed.
+     */
+    public boolean isDefaultTempoEnabled()
+    {
+        return defaultTempoEnabled;
+    }
+
+    /**
+     * Set whether a default tempo event (120bpm) should be generated at the beginning
+     * of any pattern that doesn't specify an initial tempo.
+     * 
+     * <p>When this value is <code>true</code> any pattern that doesn't start with a
+     * <code>Tempo</code> command will have an implicit <code>T120</code> command inserted.
+     *  
+     * @param defaultTempoEnabled true if a default tempo event should be generated when
+     *      a pattern with no tempo is parsed.
+     */
+    public void setDefaultTempoEnabled(boolean defaultTempoEnabled)
+    {
+        this.defaultTempoEnabled = defaultTempoEnabled;
+    }
+
 
 
     /**
@@ -80,7 +109,7 @@ public final class MusicStringParser extends Parser
         String[] tokens = pattern.getTokens();
 
         // If the user hasn't specified a tempo as the first token, use the default of 120
-        if (tokens.length > 0) {
+        if (isDefaultTempoEnabled() && tokens.length > 0) {
             if (tokens[0].toUpperCase().charAt(0) != 'T') {
                 parseTempoElement("T120");
             }
