@@ -203,7 +203,7 @@ public class GetPatternForVoiceTool extends ParserListenerAdapter
     {
         if (activeVoice == voice)
         {
-            pattern.add(element.getMusicString());
+            pattern.addElement(element);
         }
     }
     
