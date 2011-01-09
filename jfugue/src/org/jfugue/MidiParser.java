@@ -73,17 +73,14 @@ public final class MidiParser extends Parser
 
         // Get the MIDI tracks from the sequence.  Expect a maximum of 16 tracks.
         Track[] tracks = sequence.getTracks();
-        float divisionType = sequence.getDivisionType();
         this.resolution = sequence.getResolution();
-        System.out.println("divisionType == PPQ? "+ (divisionType == Sequence.PPQ));
-        System.out.println("resolution = "+sequence.getResolution());
         
-//        if (divisionType == Sequence.PPQ) {
-//        	resolution = sequence.getResolution();
-//        } else {
-//        	frames = sequence.get 
-//        }
-
+        if (sequence.getDivisionType() == Sequence.PPQ) { 
+        	this.tempo = resolution;
+            trace("PPQ with Tempo = " + resolution);
+        }
+        else this.tempo = DEFAULT_TEMPO;
+        
         // Compute the size of this adventure for the ParserProgressListener
         long totalCount = 0;
         long counter = 0;
