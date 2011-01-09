@@ -36,7 +36,9 @@ public class DurationPatternTool extends ParserListenerAdapter
 {
     private byte activeVoice = 0;
     private long voiceDuration[];
-
+    private long returnDuration = -1L;
+    public static int NUM_CHANNELS = 16;
+    
     public DurationPatternTool()
     {
         reset();
@@ -56,22 +58,55 @@ public class DurationPatternTool extends ParserListenerAdapter
 
     public void reset()
     {
-        voiceDuration = new long[16];
-        for (int i=0; i < 16; i++) {
+        voiceDuration = new long[NUM_CHANNELS];
+        for (int i=0; i < NUM_CHANNELS; i++) {
             voiceDuration[i] = 0L;
         }
+        returnDuration = -1L;
     }
 
     public long getDuration()
     {
-        long returnDuration = 0L;
-        for (int i=0; i < 16; i++) {
+        if (returnDuration >= 0) {
+        	return returnDuration;
+        }
+        
+        returnDuration = 0L;
+        for (int i=0; i < NUM_CHANNELS; i++) {
             if (voiceDuration[i] > returnDuration) {
                 returnDuration = voiceDuration[i];
             }
         }
 
         return returnDuration;
+    }
+    
+    /**
+     * Gets the duration of the specific voice
+     *
+     * @param voice
+     * @return the duration of voice
+     */
+    public long getVoiceDuration(byte voice) 
+    {
+        return voiceDuration[voice];
+    }
+ 
+    /**
+     * Executes this tool on a Pattern
+     *
+     * TODO: Pull this execute() method into a higher-level class so all tools can use it 
+     * 
+     * @param pattern
+     * @return duration
+     */
+    public long execute(Pattern pattern) 
+    {
+        MusicStringParser parser = new MusicStringParser();
+        parser.addParserListener(this);
+        reset();
+        parser.parse(pattern);
+        return getDuration();
     }
 }
 
