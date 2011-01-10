@@ -29,7 +29,6 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.EventListener;
 import java.util.HashMap;
@@ -48,6 +47,8 @@ import org.jfugue.extras.ReversePatternTransformer;
  * as patterns, JFugue gives users the opportunity to play around with pieces
  * of music in new and interesting ways.  Patterns may be added together, transformed,
  * or otherwise manipulated to expand the possibilities of creative music.
+ * 
+ * TODO Some methods such as <code>repeat</code> may belong elsewhere?
  *
  * @author David Koelle
  * @version 2.0
@@ -56,12 +57,19 @@ import org.jfugue.extras.ReversePatternTransformer;
  * @version 4.0.4 - properties and listenerList now use lazy initialization
  * @version 4.1 - Improved substring/replace methods to work on token index, instead of character index
  */
-public class Pattern implements Serializable
+public class Pattern implements JFugueElement
 {
-    private StringBuilder musicString;
+	
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4334276178935154938L;
+	private StringBuilder musicString;
     private Map<String, String> properties;  // uses lazy initialization, so access only through getProperties()
 
-    /**
+    public static final String TITLE = "Title";
+
+	/**
      * Instantiates a new pattern
      */
     public Pattern()
@@ -90,6 +98,7 @@ public class Pattern implements Serializable
         }
     }
 
+
     /**
      * This constructor creates a new Pattern that contains each of the given patterns
      * @version 4.0
@@ -100,6 +109,11 @@ public class Pattern implements Serializable
         for (Pattern p : patterns) {
             this.add(p);
         }
+    }
+    
+    public Pattern(JFugueElement... elements) {
+    	this();
+    	add(elements);
     }
 
     /**
@@ -246,6 +260,18 @@ public class Pattern implements Serializable
             add(string);
         }
     }
+    
+    /**
+     * Adds the {@link JFugueElement}s to the pattern.
+     * 
+     * @param elements
+     */
+    public void add(JFugueElement... elements) {
+    	// TODO Might we want to just add the contents of addElement?
+		for (JFugueElement jFugueElement : elements) {
+			addElement(jFugueElement);
+		}
+	}
 
     /**
      * Adds an individual element to the pattern.  This takes into
@@ -344,7 +370,9 @@ public class Pattern implements Serializable
             buddy.append("; ");
         }
         String result = buddy.toString();
-        return result.substring(0, result.length()-2); // Take off the last semicolon-space
+        return result.endsWith("; ")
+        			? result.substring(0, result.length()-2) // Take off the last semicolon-space
+        			: result;
     }
 
     /**
@@ -560,7 +588,33 @@ public class Pattern implements Serializable
     	return new Pattern(buddy.toString());
     }
 
-    /**
+    /* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((musicString == null) ? 0 : musicString.toString().hashCode());
+		result = prime * result
+				+ ((properties == null) ? 0 : getPropertiesAsSentence().hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof Pattern))
+			return false;
+		return hashCode() == obj.hashCode();
+	}
+
+	/**
      * Returns a Pattern that replaces a series of tokens with the new tokens.
      * 
      * @param index The index of the first token to replace
@@ -741,7 +795,7 @@ public class Pattern implements Serializable
     /**
      * @version 4.1
      */
-    public Class getReversePatternTransformerClass() 
+    public Class<ReversePatternTransformer> getReversePatternTransformerClass() 
     {
         return ReversePatternTransformer.class;
     }
@@ -825,5 +879,7 @@ public class Pattern implements Serializable
         return getMusicString();
     }
 
-    public static final String TITLE = "Title";
+    public String getVerifyString() {
+		return "Pattern: " + toString();
+	}
 }

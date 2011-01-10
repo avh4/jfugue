@@ -22,19 +22,17 @@
 
 package org.jfugue;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class is used to transform a pattern.  Extend this class to create your own
- * PatternTransformer, which
- * listens to parser events and can modify the events that are fired off by the parser.
- * Some sample
- * PatternTransformer subclasses are packaged with JFugue; refer to those to see examples
- * of transformers in action.
- *
+ * This class is used to transform a pattern. Extend this class to create your
+ * own PatternTransformer, which listens to parser events and can modify the
+ * events that are fired off by the parser. Some sample PatternTransformer
+ * subclasses are packaged with JFugue; refer to those to see examples of
+ * transformers in action.
+ * 
  * This feature is covered in detail in The Complete Guide to JFugue.
- *
+ * 
  * @see org.jfugue.extras.DiatonicIntervalPatternTransformer
  * @see org.jfugue.extras.DurationPatternTransformer
  * @see org.jfugue.extras.IntervalPatternTransformer
@@ -42,144 +40,170 @@ import java.util.Map;
  * @author David Koelle
  * @version 2.0
  */
-public class PatternTransformer implements ParserListener
-{
-    /**
-     * Contains the pattern to return at the end of the transformation.
-     * As of version 4.0, this variable is private.  Use the protected methods
-     * getReturnPattern() and setReturnPattern() to access the return pattern.
-     */
-    private Pattern returnPattern;
+public class PatternTransformer extends PatternTool<Pattern> {
 
-    /**
-     * Returns the pattern that the transformer is modifying
-     * @version 4.0
-     */
-    protected Pattern getReturnPattern()
-    {
-        return returnPattern;
-    }
+	/**
+	 * Transforms the pattern, according to the event method that you have
+	 * presumably extended. Just a conveince method to
+	 * {@link PatternTool#execute(Pattern)}.
+	 * 
+	 * @see PatternTool#execute(Pattern)
+	 */
+	public Pattern transform(Pattern pattern) {
+		return execute(pattern);
+		// setReturnPattern(new Pattern());
+		// MusicStringParser parser = new MusicStringParser();
+		// parser.addParserListener(this);
+		// try {
+		// parser.parse(p);
+		// } catch (JFugueException e)
+		// {
+		// e.printStackTrace();
+		// }
+		// return getReturnPattern();
+	}
 
-    /**
-     * Sets the pattern that the transformer is modifying
-     * @version 4.0
-     */
-    protected void setReturnPattern(Pattern pattern)
-    {
-        this.returnPattern = pattern;
-    }
+	/** Extend this method to make your transformer modify the voice. */
+	@Override
+	public void voiceEvent(Voice voice) {
+		getResult().addElement(voice);
+	}
 
-    /** Transforms the pattern, according to the event method that you have
-     *  presumably extended.
-     */
-    public Pattern transform(Pattern p)
-    {
-        setReturnPattern(new Pattern());
-        MusicStringParser parser = new MusicStringParser();
-        parser.addParserListener(this);
-        try {
-            parser.parse(p);
-        } catch (JFugueException e)
-        {
-            e.printStackTrace();
-        }
-        return getReturnPattern();
-    }
+	/** Extend this method to make your transformer modify the tempo. */
+	@Override
+	public void tempoEvent(Tempo tempo) {
+		getResult().addElement(tempo);
+	}
 
-    /** Extend this method to make your transformer modify the voice. */
-    public void voiceEvent(Voice voice)
-    {
-        returnPattern.addElement(voice);
-    }
+	/** Extend this method to make your transformer modify the instrument. */
+	@Override
+	public void instrumentEvent(Instrument instrument) {
+		getResult().addElement(instrument);
+	}
 
-    /** Extend this method to make your transformer modify the tempo. */
-    public void tempoEvent(Tempo tempo)
-    {
-        returnPattern.addElement(tempo);
-    }
+	/** Extend this method to make your transformer modify the layer. */
+	@Override
+	public void layerEvent(Layer layer) {
+		getResult().addElement(layer);
+	}
 
-    /** Extend this method to make your transformer modify the instrument. */
-    public void instrumentEvent(Instrument instrument)
-    {
-        returnPattern.addElement(instrument);
-    }
+	/** Extend this method to make your transformer modify the time. */
+	@Override
+	public void timeEvent(Time time) {
+		getResult().addElement(time);
+	}
 
-    /** Extend this method to make your transformer modify the layer. */
-    public void layerEvent(Layer layer)
-    {
-        returnPattern.addElement(layer);
-    }
+	/** Extend this method to make your transformer modify the key signature. */
+	@Override
+	public void keySignatureEvent(KeySignature keySig) {
+		getResult().addElement(keySig);
+	}
 
-    /** Extend this method to make your transformer modify the time. */
-    public void timeEvent(Time time)
-    {
-        returnPattern.addElement(time);
-    }
+	/** Extend this method to make your transformer modify sysex events. */
+	@Override
+	public void systemExclusiveEvent(SystemExclusiveEvent sysex) {
+		getResult().addElement(sysex);
+	}
 
-    /** Extend this method to make your transformer modify the key signature. */
-    public void keySignatureEvent(KeySignature keySig)
-    {
-        returnPattern.addElement(keySig);
-    }
+	/** Extend this method to make your transformer modify the measure. */
+	@Override
+	public void measureEvent(Measure measure) {
+		getResult().addElement(measure);
+	}
 
-    /** Extend this method to make your transformer modify sysex events. */
-    public void systemExclusiveEvent(SystemExclusiveEvent sysex)
-    {
-        returnPattern.addElement(sysex);
-    }
+	/**
+	 * Extend this method to make your transformer modify the controller
+	 * messages.
+	 */
+	@Override
+	public void controllerEvent(Controller controller) {
+		getResult().addElement(controller);
+	}
 
-    /** Extend this method to make your transformer modify the measure. */
-    public void measureEvent(Measure measure)
-    {
-        returnPattern.addElement(measure);
-    }
+	/**
+	 * Extend this method to make your transformer modify the channel pressure
+	 * messages.
+	 */
+	@Override
+	public void channelPressureEvent(ChannelPressure channelPressure) {
+		getResult().addElement(channelPressure);
+	}
 
-    /** Extend this method to make your transformer modify the controller messages. */
-    public void controllerEvent(Controller controller)
-    {
-        returnPattern.addElement(controller);
-    }
+	/**
+	 * Extend this method to make your transformer modify the polyphonic
+	 * pressure messages.
+	 */
+	@Override
+	public void polyphonicPressureEvent(PolyphonicPressure polyphonicPressure) {
+		getResult().addElement(polyphonicPressure);
+	}
 
-    /** Extend this method to make your transformer modify the channel pressure messages. */
-    public void channelPressureEvent(ChannelPressure channelPressure)
-    {
-        returnPattern.addElement(channelPressure);
-    }
+	/**
+	 * Extend this method to make your transformer modify the pitch bend
+	 * messages.
+	 */
+	@Override
+	public void pitchBendEvent(PitchBend pitchBend) {
+		getResult().addElement(pitchBend);
+	}
 
-    /** Extend this method to make your transformer modify the polyphonic pressure messages. */
-    public void polyphonicPressureEvent(PolyphonicPressure polyphonicPressure)
-    {
-        returnPattern.addElement(polyphonicPressure);
-    }
+	/**
+	 * Extend this method to make your transformer modify the note. Don't forget
+	 * to also extend sequentialNoteEvent and parallelNoteEvent.
+	 */
+	@Override
+	public void noteEvent(Note note) {
+		getResult().addElement(note);
+	}
 
-    /** Extend this method to make your transformer modify the pitch bend messages. */
-    public void pitchBendEvent(PitchBend pitchBend)
-    {
-        returnPattern.addElement(pitchBend);
-    }
+	/**
+	 * Extend this method to make your transformer modify the note. Don't forget
+	 * to also extend noteEvent and parallelNoteEvent.
+	 */
+	@Override
+	public void sequentialNoteEvent(Note note) {
+		getResult().addElement(note);
+	}
 
-    /** Extend this method to make your transformer modify the note.
-     *  Don't forget to also extend sequentialNoteEvent and parallelNoteEvent.
-     */
-    public void noteEvent(Note note)
-    {
-        returnPattern.addElement(note);
-    }
+	/**
+	 * Extend this method to make your transformer modify the note. Don't forget
+	 * to also extend noteEvent and sequentialNoteEvent.
+	 */
+	@Override
+	public void parallelNoteEvent(Note note) {
+		getResult().addElement(note);
+	}
 
-    /** Extend this method to make your transformer modify the note.
-     *  Don't forget to also extend noteEvent and parallelNoteEvent.
-     */
-    public void sequentialNoteEvent(Note note)
-    {
-        returnPattern.addElement(note);
-    }
+	@Override
+	protected Pattern initResult(Pattern pattern) {
+		Pattern nPattern = new Pattern();
+		for (Map.Entry<String, String> entries: pattern.getProperties().entrySet()) {
+			nPattern.setProperty(entries.getKey(), entries.getValue());
+		}
+		return nPattern;
+	}
 
-    /** Extend this method to make your transformer modify the note.
-     *  Don't forget to also extend noteEvent and sequentialNoteEvent.
-     */
-    public void parallelNoteEvent(Note note)
-    {
-        returnPattern.addElement(note);
-    }
+	/**
+	 * Returns the pattern that the transformer is modifying
+	 * 
+	 * @version 4.0
+	 * @deprecated
+	 * @see PatternTool#getResult()
+	 */
+	@Deprecated
+	protected Pattern getReturnPattern() {
+		return getResult();
+	}
+
+	/**
+	 * Sets the pattern that the transformer is modifying
+	 * 
+	 * @version 4.0
+	 * @deprecated
+	 * @see PatternTool#setResult(Object)
+	 */
+	@Deprecated
+	protected void setReturnPattern(Pattern pattern) {
+		setResult(pattern);
+	}
 }
-

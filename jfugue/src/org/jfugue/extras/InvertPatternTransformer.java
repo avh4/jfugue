@@ -71,13 +71,13 @@ public class InvertPatternTransformer extends PatternTransformer
         
         if (noteValue > fulcrumNoteValue) {
             note.setValue((byte)(fulcrumNoteValue - (noteValue - fulcrumNoteValue)));
-            getReturnPattern().addElement(note);
+            getResult().addElement(note);
         } else if (noteValue < fulcrumNoteValue) {
             note.setValue((byte)(fulcrumNoteValue - (fulcrumNoteValue - noteValue)));
-            getReturnPattern().addElement(note);
+            getResult().addElement(note);
         } else {
             //  No change in note value
-            getReturnPattern().addElement(note);
+        	getResult().addElement(note);
         }
     }
 }

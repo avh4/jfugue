@@ -22,6 +22,8 @@ import org.jfugue.Voice;
  * 
  * Prints output to stdout (uses displayMessage).
  * 
+ * TODO I don't know why Eclipse is complaining about overrides in here -Ska
+ * 
  * @author David Koelle
  * @version 4.1.0
  *
@@ -63,77 +65,77 @@ public class StatusTrackingParserListener implements ParserListener
 		System.out.println(message);
 	}
 	
-	@Override
+//	@Override
 	public void channelPressureEvent(ChannelPressure channelPressure) {
 		sendMessageToOutput(channelPressure.getVerifyString());
 	}
 
-	@Override
+//	@Override
 	public void controllerEvent(Controller controller) {
 		sendMessageToOutput(controller.getVerifyString());
 	}
 
-	@Override
+//	@Override
 	public void instrumentEvent(Instrument instrument) {
 		sendMessageToOutput(instrument.getVerifyString());
 	}
 
-	@Override
+//	@Override
 	public void keySignatureEvent(KeySignature keySig) {
 		sendMessageToOutput(keySig.getVerifyString());
 	}
 
-	@Override
+//	@Override
 	public void systemExclusiveEvent(SystemExclusiveEvent sysex) {
 		sendMessageToOutput(sysex.getVerifyString());
     }
 
-	@Override
+//	@Override
 	public void layerEvent(Layer layer) {
 		sendMessageToOutput(layer.getVerifyString());
 	}
 
-	@Override
+//	@Override
 	public void measureEvent(Measure measure) {
 		sendMessageToOutput(measure.getVerifyString());
 	}
 
-	@Override
+//	@Override
 	public void noteEvent(Note note) {
 		sendMessageToOutput(note.getVerifyString());
 	}
 
-	@Override
+//	@Override
 	public void parallelNoteEvent(Note note) {
 		sendMessageToOutput(note.getVerifyString());
 	}
 
-	@Override
+//	@Override
 	public void pitchBendEvent(PitchBend pitchBend) {
 		sendMessageToOutput(pitchBend.getVerifyString());
 	}
 
-	@Override
+//	@Override
 	public void polyphonicPressureEvent(PolyphonicPressure polyphonicPressure) {
 		sendMessageToOutput(polyphonicPressure.getVerifyString());
 	}
 
-	@Override
+//	@Override
 	public void sequentialNoteEvent(Note note) {
 		sendMessageToOutput(note.getVerifyString());
 	}
 
-	@Override
+//	@Override
 	public void tempoEvent(Tempo tempo) {
 		sendMessageToOutput(tempo.getVerifyString());
 	}
 
-	@Override
+//	@Override
 	public void timeEvent(Time time) {
 		sendMessageToOutput(time.getVerifyString());
 	}
 
-	@Override
+//	@Override
 	public void voiceEvent(Voice voice) {
 		sendMessageToOutput(voice.getVerifyString());
 	}
