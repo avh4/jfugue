@@ -59,6 +59,26 @@ public final class Voice implements JFugueElement
         return voice;
     }
 
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Voice other = (Voice) obj;
+        if (this.voice != other.voice) {
+            return false;
+        }
+        return true;
+    }
+
+    public int hashCode() {
+        int hash = 7;
+        hash = 29 * hash + this.voice;
+        return hash;
+    }
+
     /**
      * Returns the Music String representing this element and all of its settings.
      * For a Voice object, the Music String is <code>V</code><i>voice</i>

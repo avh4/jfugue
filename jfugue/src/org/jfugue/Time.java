@@ -85,4 +85,24 @@ public final class Time implements JFugueElement
         return buffy.toString();
     }
 
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Time other = (Time) obj;
+        if (this.time != other.time) {
+            return false;
+        }
+        return true;
+    }
+
+    public int hashCode() {
+        int hash = 7;
+        hash = 43 * hash + (int) (this.time ^ (this.time >>> 32));
+        return hash;
+    }
+
 }

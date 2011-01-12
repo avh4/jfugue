@@ -22,6 +22,11 @@
 
 package org.jfugue;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Pattern;
+
 /**
  * Contains all information necessary for a musical note, including
  * pitch, duration, attack velocity, and decay velocity.
@@ -37,7 +42,11 @@ package org.jfugue;
  */
 public final class Note implements JFugueElement
 {
-    private byte value = 0;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private byte value = 0;
     private long duration = 0;
     private double decimalDuration = 0.0;
     private boolean isStartOfTie = false;
@@ -62,35 +71,42 @@ public final class Note implements JFugueElement
      * Instantiates a new Note object with the given note value.
      * This constructor should only be called in cases where the
      * duration of the note is not important (for example,
-     * when specifying a root note for a IntervalNotation)
+     * when specifying a root note for a IntervalNotation).
+     * This sets it to a quarter note.
+     * 
      * @param value the numeric value of the note.  C5 is 60.
      */
     public Note(byte value)
     {
-        this(value, (long)1);
+        setValue(value);
+        
+        // Default duration is a quarter note
+        setDecimalDuration(0.25);
     }
 
     /**
      * Instantiates a new Note object with the given note value and duration.
+     * 
      * @param value the numeric value of the note.  C5 is 60.
      * @param duration the duration of the note, as milliseconds.
      */
     public Note(byte value, long duration)
     {
-        this.value = value;
-        this.duration = duration;
+    	setValue(value);
+    	setDuration(duration);
     }
 
     /**
      * Instantiates a new Note object with the given note value and duration.
+     * 
      * @param value the numeric value of the note.  C5 is 60.
      * @param duration the duration of the note, as a decimal fraction of a whole note.
      */
     public Note(byte value, double decimalDuration)
     {
-        this.value = value;
-        this.decimalDuration = decimalDuration;
-    }
+    	setValue(value);
+    	setDecimalDuration(decimalDuration);
+     }
 
     /**
      * Instantiates a new Note object with the given note value, duration, and attack and decay velocities.
@@ -99,10 +115,9 @@ public final class Note implements JFugueElement
      */
     public Note(byte value, long duration, byte attackVelocity, byte decayVelocity)
     {
-        this.value = value;
-        this.duration = duration;
-        this.attackVelocity = attackVelocity;
-        this.decayVelocity = decayVelocity;
+    	this(value, duration);
+    	setAttackVelocity(attackVelocity);
+    	setDecayVelocity(decayVelocity);
     }
 
     /**
@@ -112,10 +127,9 @@ public final class Note implements JFugueElement
      */
     public Note(byte value, double decimalDuration, byte attackVelocity, byte decayVelocity)
     {
-        this.value = value;
-        this.decimalDuration = decimalDuration;
-        this.attackVelocity = attackVelocity;
-        this.decayVelocity = decayVelocity;
+    	this(value, decimalDuration);
+    	setAttackVelocity(attackVelocity);
+    	setDecayVelocity(decayVelocity);
     }
 
     /**
@@ -172,6 +186,9 @@ public final class Note implements JFugueElement
     public void setDuration(long duration)
     {
         this.duration = duration;
+        
+        // duration = (long) (MusicStringParser.SEQUENCE_RES * decimalDuration);
+        this.decimalDuration = duration / MusicStringParser.SEQUENCE_RES;
     }
 
     /**
@@ -190,6 +207,7 @@ public final class Note implements JFugueElement
     public void setDecimalDuration(double duration)
     {
         this.decimalDuration = duration;
+        this.duration = (long) (MusicStringParser.SEQUENCE_RES * decimalDuration);
     }
 
     /**
@@ -623,6 +641,152 @@ public final class Note implements JFugueElement
 
     public static final byte MUTE_TRIANGLE = 80;
     public static final byte OPEN_TRIANGLE = 81;
+
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Note other = (Note) obj;
+        if (this.value != other.value) {
+            return false;
+        }
+        if (this.duration != other.duration) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.decimalDuration) != Double.doubleToLongBits(other.decimalDuration)) {
+            return false;
+        }
+        if (this.isStartOfTie != other.isStartOfTie) {
+            return false;
+        }
+        if (this.isEndOfTie != other.isEndOfTie) {
+            return false;
+        }
+        if (this.attackVelocity != other.attackVelocity) {
+            return false;
+        }
+        if (this.decayVelocity != other.decayVelocity) {
+            return false;
+        }
+        if (this.rest != other.rest) {
+            return false;
+        }
+        if (this.type != other.type) {
+            return false;
+        }
+        if (this.accompanyingNotes != other.accompanyingNotes) {
+            return false;
+        }
+        return true;
+    }
+
+    public int hashCode() {
+        int hash = 3;
+        hash = 37 * hash + this.value;
+        hash = 37 * hash + (int) (this.duration ^ (this.duration >>> 32));
+        hash = 37 * hash + (int) (Double.doubleToLongBits(this.decimalDuration) ^ (Double.doubleToLongBits(this.decimalDuration) >>> 32));
+        hash = 37 * hash + (this.isStartOfTie ? 1 : 0);
+        hash = 37 * hash + (this.isEndOfTie ? 1 : 0);
+        hash = 37 * hash + this.attackVelocity;
+        hash = 37 * hash + this.decayVelocity;
+        hash = 37 * hash + (this.rest ? 1 : 0);
+        hash = 37 * hash + this.type;
+        hash = 37 * hash + (this.accompanyingNotes ? 1 : 0);
+        return hash;
+    }
+
+    public static class NoteFactory extends JFugueElementFactory<Note> {
+    	public static final String NOTE_RE = Messages.getString("Note.NOTE_RE"); //$NON-NLS-1$
+		public static final Map<String,byte[]> CHORDS_MAP;
+    	public static final String CHORD_RE;
+    	public static final Pattern NOTE_REGEX = java.util.regex.Pattern.compile(NOTE_RE);
+    	
+    	private static Map<String,byte[]> chordMap = new HashMap<String, byte[]>();
+    	protected static void addChord(String name, int...is) {
+    		byte[] bs = new byte[is.length];
+    		for (int i = 0; i < bs.length; i++) {
+				bs[i] = (byte) is[i];
+			}
+			chordMap.put(name.toUpperCase(), bs);
+		}
+    	
+    	static {
+    		// Build the chord map
+    		Map<String,byte[]> chordMap = new HashMap<String, byte[]>();
+
+      		addChord("MAJ", 4, 7);
+      		addChord("MIN", 3, 7);
+      		addChord("AUG", 4, 8);
+      		addChord("MAJ", 3, 6);
+
+      		addChord("DOM7", 4, 7, 10);
+      		addChord("MAJ7", 4, 7, 11);
+      		addChord("MIN7", 3, 7, 10);
+      		addChord("SUS4", 5, 7);
+      		addChord("SUS2", 2, 7);
+      		addChord("MAJ6", 4, 7, 9);
+      		addChord("MIN6", 3, 7, 9);
+      		addChord("DOM9", 4, 7, 10, 14);
+      		addChord("MAJ9", 4, 7, 11, 14);
+      		addChord("MIN9", 3, 7, 10, 14);
+      		addChord("DIM7", 3, 6, 9);
+      		addChord("ADD9", 4, 7, 14);
+      		addChord("DAVE", 7, 14, 21);
+
+      		addChord("MIN11", 7, 10, 14, 15, 17);
+      		addChord("DOM11", 7, 10, 14, 17);
+      		addChord("DOM13", 7, 10, 14, 16, 21);
+      		addChord("MIN13", 7, 10, 14, 15, 21);
+      		addChord("MAJ13", 7, 11, 14, 16, 21);
+      		addChord("DOM7<5", 4, 6, 10);
+      		addChord("DOM7>5", 4, 8, 10);
+      		addChord("MAJ7<5", 4, 6, 11);
+      		addChord("MAJ7>5", 4, 8, 11);
+      		addChord("minmaj7",	3, 7, 11);
+      		addChord("DOM7<5<9", 4, 6, 10, 13);
+      		addChord("DOM7<5>9", 4, 6, 10, 15);
+      		addChord("DOM7>5<9", 4, 8, 10, 13);
+      		addChord("DOM7>5>9", 4, 8, 10, 15);
+
+    		CHORDS_MAP = Collections.unmodifiableMap(chordMap);
+    		
+    		StringBuilder sb = new StringBuilder();
+    		sb.append('(');
+    		for (String chord : CHORDS_MAP.keySet()) {
+				sb.append(chord + "|");
+			}
+    		String chords = sb.toString();
+    		if (chords.endsWith("|"))
+    			chords = chords.substring(0, chords.length());
+    		sb.append(')');
+//    		System.out.println(chords);
+    		CHORD_RE = sb.toString();
+    	}
+    	
+		public Note createElement(String token) throws IllegalArgumentException {
+			// TODO Auto-generated method stub
+			
+//			if (token.)
+//				throw new IllegalArgumentException("Token for note invalid: " + token);
+//			switch (token) {
+//			case value:
+//				
+//				break;
+//
+//			default:
+//				break;
+//			}
+			return null;
+		}
+		
+		public Class<Note> type() {
+			return Note.class;			
+		}
+    	
+    }
 
 }
 

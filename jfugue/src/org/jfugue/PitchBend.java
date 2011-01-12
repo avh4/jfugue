@@ -89,4 +89,28 @@ public final class PitchBend implements JFugueElement
         return buffy.toString();
     }
 
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final PitchBend other = (PitchBend) obj;
+        if (this.lsb != other.lsb) {
+            return false;
+        }
+        if (this.msb != other.msb) {
+            return false;
+        }
+        return true;
+    }
+
+    public int hashCode() {
+        int hash = 3;
+        hash = 43 * hash + this.lsb;
+        hash = 43 * hash + this.msb;
+        return hash;
+    }
+
 }

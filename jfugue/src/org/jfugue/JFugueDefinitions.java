@@ -22,6 +22,7 @@
 
 package org.jfugue;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -49,395 +50,814 @@ public final class JFugueDefinitions
      */
     protected static void populateDictionary(Map<String, Object> dictionaryMap)
     {
+    	dictionaryMap.putAll(DICT_MAP);
+//        //
+//        // Instrument names
+//        //
+//        dictionaryMap.put("PIANO"                    ,"0");
+//        dictionaryMap.put("ACOUSTIC_GRAND"           ,"0");
+//        dictionaryMap.put("BRIGHT_ACOUSTIC"          ,"1");
+//        dictionaryMap.put("ELECTRIC_GRAND"           ,"2");
+//        dictionaryMap.put("HONKEY_TONK"              ,"3");
+//        dictionaryMap.put("ELECTRIC_PIANO"           ,"4");
+//        dictionaryMap.put("ELECTRIC_PIANO_1"         ,"4");
+//        dictionaryMap.put("ELECTRIC_PIANO_2"         ,"5");
+//        dictionaryMap.put("HARPISCHORD"              ,"6");
+//        dictionaryMap.put("CLAVINET"                 ,"7");
+//        dictionaryMap.put("CELESTA"                  ,"8");
+//        dictionaryMap.put("GLOCKENSPIEL"             ,"9");
+//
+//        dictionaryMap.put("MUSIC_BOX"                ,"10");
+//        dictionaryMap.put("VIBRAPHONE"               ,"11");
+//        dictionaryMap.put("MARIMBA"                  ,"12");
+//        dictionaryMap.put("XYLOPHONE"                ,"13");
+//        dictionaryMap.put("TUBULAR_BELLS"            ,"14");
+//        dictionaryMap.put("DULCIMER"                 ,"15");
+//        dictionaryMap.put("DRAWBAR_ORGAN"            ,"16");
+//        dictionaryMap.put("PERCUSSIVE_ORGAN"         ,"17");
+//        dictionaryMap.put("ROCK_ORGAN"               ,"18");
+//        dictionaryMap.put("CHURCH_ORGAN"             ,"19");
+//
+//        dictionaryMap.put("REED_ORGAN"               ,"20");
+//        dictionaryMap.put("ACCORDIAN"                ,"21");
+//        dictionaryMap.put("HARMONICA"                ,"22");
+//        dictionaryMap.put("TANGO_ACCORDIAN"          ,"23");
+//        dictionaryMap.put("GUITAR"                   ,"24");
+//        dictionaryMap.put("NYLON_STRING_GUITAR"      ,"24");
+//        dictionaryMap.put("STEEL_STRING_GUITAR"      ,"25");
+//        dictionaryMap.put("ELECTRIC_JAZZ_GUITAR"     ,"26");
+//        dictionaryMap.put("ELECTRIC_CLEAN_GUITAR"    ,"27");
+//        dictionaryMap.put("ELECTRIC_MUTED_GUITAR"    ,"28");
+//        dictionaryMap.put("OVERDRIVEN_GUITAR"        ,"29");
+//
+//        dictionaryMap.put("DISTORTION_GUITAR"        ,"30");
+//        dictionaryMap.put("GUITAR_HARMONICS"         ,"31");
+//        dictionaryMap.put("ACOUSTIC_BASS"            ,"32");
+//        dictionaryMap.put("ELECTRIC_BASS_FINGER"     ,"33");
+//        dictionaryMap.put("ELECTRIC_BASS_PICK"       ,"34");
+//        dictionaryMap.put("FRETLESS_BASS"            ,"35");
+//        dictionaryMap.put("SLAP_BASS_1"              ,"36");
+//        dictionaryMap.put("SLAP_BASS_2"              ,"37");
+//        dictionaryMap.put("SYNTH_BASS_1"             ,"38");
+//        dictionaryMap.put("SYNTH_BASS_2"             ,"39");
+//
+//        dictionaryMap.put("VIOLIN"                   ,"40");
+//        dictionaryMap.put("VIOLA"                    ,"41");
+//        dictionaryMap.put("CELLO"                    ,"42");
+//        dictionaryMap.put("CONTRABASS"               ,"43");
+//        dictionaryMap.put("TREMOLO_STRINGS"          ,"44");
+//        dictionaryMap.put("PIZZICATO_STRINGS"        ,"45");
+//        dictionaryMap.put("ORCHESTRAL_STRINGS"       ,"46");
+//        dictionaryMap.put("TIMPANI"                  ,"47");
+//        dictionaryMap.put("STRING_ENSEMBLE_1"        ,"48");
+//        dictionaryMap.put("STRING_ENSEMBLE_2"        ,"49");
+//
+//        dictionaryMap.put("SYNTH_STRINGS_1"          ,"50");
+//        dictionaryMap.put("SYNTH_STRINGS_2"          ,"51");
+//        dictionaryMap.put("CHOIR_AAHS"               ,"52");
+//        dictionaryMap.put("VOICE_OOHS"               ,"53");
+//        dictionaryMap.put("SYNTH_VOICE"              ,"54");
+//        dictionaryMap.put("ORCHESTRA_HIT"            ,"55");
+//        dictionaryMap.put("TRUMPET"                  ,"56");
+//        dictionaryMap.put("TROMBONE"                 ,"57");
+//        dictionaryMap.put("TUBA"                     ,"58");
+//        dictionaryMap.put("MUTED_TRUMPET"            ,"59");
+//
+//        dictionaryMap.put("FRENCH_HORN"              ,"60");
+//        dictionaryMap.put("BRASS_SECTION"            ,"61");
+//        dictionaryMap.put("SYNTHBRASS_1"             ,"62");
+//        dictionaryMap.put("SYNTH_BRASS_1"            ,"62");
+//        dictionaryMap.put("SYNTHBRASS_2"             ,"63");
+//        dictionaryMap.put("SYNTH_BRASS_2"            ,"63");
+//        dictionaryMap.put("SOPRANO_SAX"              ,"64");
+//        dictionaryMap.put("ALTO_SAX"                 ,"65");
+//        dictionaryMap.put("TENOR_SAX"                ,"66");
+//        dictionaryMap.put("BARITONE_SAX"             ,"67");
+//        dictionaryMap.put("OBOE"                     ,"68");
+//        dictionaryMap.put("ENGLISH_HORN"             ,"69");
+//
+//        dictionaryMap.put("BASSOON"                  ,"70");
+//        dictionaryMap.put("CLARINET"                 ,"71");
+//        dictionaryMap.put("PICCOLO"                  ,"72");
+//        dictionaryMap.put("FLUTE"                    ,"73");
+//        dictionaryMap.put("RECORDER"                 ,"74");
+//        dictionaryMap.put("PAN_FLUTE"                ,"75");
+//        dictionaryMap.put("BLOWN_BOTTLE"             ,"76");
+//        dictionaryMap.put("SKAKUHACHI"               ,"77");
+//        dictionaryMap.put("WHISTLE"                  ,"78");
+//        dictionaryMap.put("OCARINA"                  ,"79");
+//
+//        dictionaryMap.put("LEAD_SQUARE"              ,"80");
+//        dictionaryMap.put("SQUARE"                   ,"80");
+//        dictionaryMap.put("LEAD_SAWTOOTH"            ,"81");
+//        dictionaryMap.put("SAWTOOTH"                 ,"81");
+//        dictionaryMap.put("LEAD_CALLIOPE"            ,"82");
+//        dictionaryMap.put("CALLIOPE"                 ,"82");
+//        dictionaryMap.put("LEAD_CHIFF"               ,"83");
+//        dictionaryMap.put("CHIFF"                    ,"83");
+//        dictionaryMap.put("LEAD_CHARANG"             ,"84");
+//        dictionaryMap.put("CHARANG"                  ,"84");
+//        dictionaryMap.put("LEAD_VOICE"               ,"85");
+//        dictionaryMap.put("VOICE"                    ,"85");
+//        dictionaryMap.put("LEAD_FIFTHS"              ,"86");
+//        dictionaryMap.put("FIFTHS"                   ,"86");
+//        dictionaryMap.put("LEAD_BASSLEAD"            ,"87");
+//        dictionaryMap.put("BASSLEAD"                 ,"87");
+//        dictionaryMap.put("PAD_NEW_AGE"              ,"88");
+//        dictionaryMap.put("NEW_AGE"                  ,"88");
+//        dictionaryMap.put("PAD_WARM"                 ,"89");
+//        dictionaryMap.put("WARM"                     ,"89");
+//
+//        dictionaryMap.put("PAD_POLYSYNTH"            ,"90");
+//        dictionaryMap.put("POLYSYNTH"                ,"90");
+//        dictionaryMap.put("PAD_CHOIR"                ,"91");
+//        dictionaryMap.put("CHOIR"                    ,"91");
+//        dictionaryMap.put("PAD_BOWED"                ,"92");
+//        dictionaryMap.put("BOWED"                    ,"92");
+//        dictionaryMap.put("PAD_METALLIC"             ,"93");
+//        dictionaryMap.put("METALLIC"                 ,"93");
+//        dictionaryMap.put("PAD_HALO"                 ,"94");
+//        dictionaryMap.put("HALO"                     ,"94");
+//        dictionaryMap.put("PAD_SWEEP"                ,"95");
+//        dictionaryMap.put("SWEEP"                    ,"95");
+//        dictionaryMap.put("FX_RAIN"                  ,"96");
+//        dictionaryMap.put("RAIN"                     ,"96");
+//        dictionaryMap.put("FX_SOUNDTRACK"            ,"97");
+//        dictionaryMap.put("SOUNDTRACK"               ,"97");
+//        dictionaryMap.put("FX_CRYSTAL"               ,"98");
+//        dictionaryMap.put("CRYSTAL"                  ,"98");
+//        dictionaryMap.put("FX_ATMOSPHERE"            ,"99");
+//        dictionaryMap.put("ATMOSPHERE"               ,"99");
+//
+//        dictionaryMap.put("FX_BRIGHTNESS"            ,"100");
+//        dictionaryMap.put("BRIGHTNESS"               ,"100");
+//        dictionaryMap.put("FX_GOBLINS"               ,"101");
+//        dictionaryMap.put("GOBLINS"                  ,"101");
+//        dictionaryMap.put("FX_ECHOES"                ,"102");
+//        dictionaryMap.put("ECHOES"                   ,"102");
+//        dictionaryMap.put("FX_SCI-FI"                ,"103");
+//        dictionaryMap.put("SCI-FI"                   ,"103");
+//        dictionaryMap.put("SITAR"                    ,"104");
+//        dictionaryMap.put("BANJO"                    ,"105");
+//        dictionaryMap.put("SHAMISEN"                 ,"106");
+//        dictionaryMap.put("KOTO"                     ,"107");
+//        dictionaryMap.put("KALIMBA"                  ,"108");
+//        dictionaryMap.put("BAGPIPE"                  ,"109");
+//
+//        dictionaryMap.put("FIDDLE"                   ,"110");
+//        dictionaryMap.put("SHANAI"                   ,"111");
+//        dictionaryMap.put("TINKLE_BELL"              ,"112");
+//        dictionaryMap.put("AGOGO"                    ,"113");
+//        dictionaryMap.put("STEEL_DRUMS"              ,"114");
+//        dictionaryMap.put("WOODBLOCK"                ,"115");
+//        dictionaryMap.put("TAIKO_DRUM"               ,"116");
+//        dictionaryMap.put("MELODIC_TOM"              ,"117");
+//        dictionaryMap.put("SYNTH_DRUM"               ,"118");
+//        dictionaryMap.put("REVERSE_CYMBAL"           ,"119");
+//
+//        dictionaryMap.put("GUITAR_FRET_NOISE"        ,"120");
+//        dictionaryMap.put("BREATH_NOISE"             ,"121");
+//        dictionaryMap.put("SEASHORE"                 ,"122");
+//        dictionaryMap.put("BIRD_TWEET"               ,"123");
+//        dictionaryMap.put("TELEPHONE_RING"           ,"124");
+//        dictionaryMap.put("HELICOPTER"               ,"125");
+//        dictionaryMap.put("APPLAUSE"                 ,"126");
+//        dictionaryMap.put("GUNSHOT"                  ,"127");
+//
+//        //
+//        // Percussion names
+//        //
+//        dictionaryMap.put("ACOUSTIC_BASS_DRUM"     ,"35");
+//        dictionaryMap.put("BASS_DRUM"              ,"36");
+//        dictionaryMap.put("SIDE_STICK"             ,"37");
+//        dictionaryMap.put("ACOUSTIC_SNARE"         ,"38");
+//        dictionaryMap.put("HAND_CLAP"              ,"39");
+//
+//        dictionaryMap.put("ELECTRIC_SNARE"         ,"40");
+//        dictionaryMap.put("LOW_FLOOR_TOM"          ,"41");
+//        dictionaryMap.put("CLOSED_HI_HAT"          ,"42");
+//        dictionaryMap.put("HIGH_FLOOR_TOM"         ,"43");
+//        dictionaryMap.put("PEDAL_HI_HAT"           ,"44");
+//        dictionaryMap.put("LOW_TOM"                ,"45");
+//        dictionaryMap.put("OPEN_HI_HAT"            ,"46");
+//        dictionaryMap.put("LOW_MID_TOM"            ,"47");
+//        dictionaryMap.put("HI_MID_TOM"             ,"48");
+//        dictionaryMap.put("CRASH_CYMBAL_1"         ,"49");
+//
+//        dictionaryMap.put("HIGH_TOM"               ,"50");
+//        dictionaryMap.put("RIDE_CYMBAL_1"          ,"51");
+//        dictionaryMap.put("CHINESE_CYMBAL"         ,"52");
+//        dictionaryMap.put("RIDE_BELL"              ,"53");
+//        dictionaryMap.put("TAMBOURINE"             ,"54");
+//        dictionaryMap.put("SPLASH_CYMBAL"          ,"55");
+//        dictionaryMap.put("COWBELL"                ,"56");
+//        dictionaryMap.put("CRASH_CYMBAL_2"         ,"57");
+//        dictionaryMap.put("VIBRASLAP"              ,"58");
+//        dictionaryMap.put("RIDE_CYMBAL_2"          ,"59");
+//
+//        dictionaryMap.put("HI_BONGO"               ,"60");
+//        dictionaryMap.put("LOW_BONGO"              ,"61");
+//        dictionaryMap.put("MUTE_HI_CONGA"          ,"62");
+//        dictionaryMap.put("OPEN_HI_CONGA"          ,"63");
+//        dictionaryMap.put("LOW_CONGA"              ,"64");
+//        dictionaryMap.put("HIGH_TIMBALE"           ,"65");
+//        dictionaryMap.put("LOW_TIMBALE"            ,"66");
+//        dictionaryMap.put("HIGH_AGOGO"             ,"67");
+//        dictionaryMap.put("LOW_AGOGO"              ,"68");
+//        dictionaryMap.put("CABASA"                 ,"69");
+//
+//        dictionaryMap.put("MARACAS"                ,"70");
+//        dictionaryMap.put("SHORT_WHISTLE"          ,"71");
+//        dictionaryMap.put("LONG_WHISTLE"           ,"72");
+//        dictionaryMap.put("SHORT_GUIRO"            ,"73");
+//        dictionaryMap.put("LONG_GUIRO"             ,"74");
+//        dictionaryMap.put("CLAVES"                 ,"75");
+//        dictionaryMap.put("HI_WOOD_BLOCK"          ,"76");
+//        dictionaryMap.put("LOW_WOOD_BLOCK"         ,"77");
+//        dictionaryMap.put("MUTE_CUICA"             ,"78");
+//        dictionaryMap.put("OPEN_CUICA"             ,"79");
+//
+//        dictionaryMap.put("MUTE_TRIANGLE"          ,"80");
+//        dictionaryMap.put("OPEN_TRIANGLE"          ,"81");
+//
+//        //
+//        // Controller names
+//        //
+//        dictionaryMap.put("BANK_SELECT_COARSE"          ,"0");
+//        dictionaryMap.put("MOD_WHEEL_COARSE"            ,"1");
+//        dictionaryMap.put("BREATH_COARSE"               ,"2");
+//        dictionaryMap.put("FOOT_PEDAL_COARSE"           ,"4");
+//        dictionaryMap.put("PORTAMENTO_TIME_COARSE"      ,"5");
+//        dictionaryMap.put("DATA_ENTRY_COARSE"           ,"6");
+//        dictionaryMap.put("VOLUME_COARSE"               ,"7");
+//        dictionaryMap.put("BALANCE_COARSE"              ,"8");
+//        dictionaryMap.put("PAN_POSITION_COARSE"         ,"10");
+//        dictionaryMap.put("EXPRESSION_COARSE"           ,"11");
+//        dictionaryMap.put("EFFECT_CONTROL_1_COARSE"     ,"12");
+//        dictionaryMap.put("EFFECT_CONTROL_2_COARSE"     ,"13");
+//
+//        dictionaryMap.put("SLIDER_1"                    ,"16");
+//        dictionaryMap.put("SLIDER_2"                    ,"17");
+//        dictionaryMap.put("SLIDER_3"                    ,"18");
+//        dictionaryMap.put("SLIDER_4"                    ,"19");
+//
+//        dictionaryMap.put("BANK_SELECT_FINE"            ,"32");
+//        dictionaryMap.put("MOD_WHEEL_FINE"              ,"33");
+//        dictionaryMap.put("BREATH_FINE"                 ,"34");
+//        dictionaryMap.put("FOOT_PEDAL_FINE"             ,"36");
+//        dictionaryMap.put("PORTAMENTO_TIME_FINE"        ,"37");
+//        dictionaryMap.put("DATA_ENTRY_FINE"             ,"38");
+//        dictionaryMap.put("VOLUME_FINE"                 ,"39");
+//        dictionaryMap.put("BALANCE_FINE"                ,"40");
+//        dictionaryMap.put("PAN_POSITION_FINE"           ,"42");
+//        dictionaryMap.put("EXPRESSION_FINE"             ,"43");
+//        dictionaryMap.put("EFFECT_CONTROL_1_FINE"       ,"44");
+//        dictionaryMap.put("EFFECT_CONTROL_2_FINE"       ,"45");
+//
+//        dictionaryMap.put("HOLD_PEDAL"                  ,"64");
+//        dictionaryMap.put("HOLD"                        ,"64");
+//        dictionaryMap.put("PORTAMENTO"                  ,"65");
+//        dictionaryMap.put("SUSTENUTO_PEDAL"             ,"66");
+//        dictionaryMap.put("SUSTENUTO"                   ,"66");
+//        dictionaryMap.put("SOFT_PEDAL"                  ,"67");
+//        dictionaryMap.put("SOFT"                        ,"67");
+//        dictionaryMap.put("LEGATO_PEDAL"                ,"68");
+//        dictionaryMap.put("LEGATO"                      ,"68");
+//        dictionaryMap.put("HOLD_2_PEDAL"                ,"69");
+//        dictionaryMap.put("HOLD_2"                      ,"69");
+//
+//        dictionaryMap.put("SOUND_VARIATION"             ,"70");
+//        dictionaryMap.put("VARIATION"                   ,"70");
+//        dictionaryMap.put("SOUND_TIMBRE"                ,"71");
+//        dictionaryMap.put("TIMBRE"                      ,"71");
+//        dictionaryMap.put("SOUND_RELEASE_TIME"          ,"72");
+//        dictionaryMap.put("RELEASE_TIME"                ,"72");
+//        dictionaryMap.put("SOUND_ATTACK_TIME"           ,"73");
+//        dictionaryMap.put("ATTACK_TIME"                 ,"73");
+//        dictionaryMap.put("SOUND_BRIGHTNESS"            ,"74");
+//        dictionaryMap.put("BRIGHTNESS"                  ,"74");
+//        dictionaryMap.put("SOUND_CONTROL_6"             ,"75");
+//        dictionaryMap.put("CONTROL_6"                   ,"75");
+//        dictionaryMap.put("SOUND_CONTROL_7"             ,"76");
+//        dictionaryMap.put("CONTROL_7"                   ,"76");
+//        dictionaryMap.put("SOUND_CONTROL_8"             ,"77");
+//        dictionaryMap.put("CONTROL_8"                   ,"77");
+//        dictionaryMap.put("SOUND_CONTROL_9"             ,"78");
+//        dictionaryMap.put("CONTROL_9"                   ,"78");
+//        dictionaryMap.put("SOUND_CONTROL_10"            ,"79");
+//        dictionaryMap.put("CONTROL_10"                  ,"79");
+//
+//        dictionaryMap.put("GENERAL_PURPOSE_BUTTON_1"    ,"80");
+//        dictionaryMap.put("GENERAL_BUTTON_1"            ,"80");
+//        dictionaryMap.put("BUTTON_1"                    ,"80");
+//        dictionaryMap.put("GENERAL_PURPOSE_BUTTON_2"    ,"81");
+//        dictionaryMap.put("GENERAL_BUTTON_2"            ,"81");
+//        dictionaryMap.put("BUTTON_2"                    ,"81");
+//        dictionaryMap.put("GENERAL_PURPOSE_BUTTON_3"    ,"82");
+//        dictionaryMap.put("GENERAL_BUTTON_3"            ,"82");
+//        dictionaryMap.put("BUTTON_3"                    ,"82");
+//        dictionaryMap.put("GENERAL_PURPOSE_BUTTON_4"    ,"83");
+//        dictionaryMap.put("GENERAL_BUTTON_4"            ,"83");
+//        dictionaryMap.put("BUTTON_4"                    ,"83");
+//
+//        dictionaryMap.put("EFFECTS_LEVEL"               ,"91");
+//        dictionaryMap.put("EFFECTS"                     ,"91");
+//        dictionaryMap.put("TREMULO_LEVEL"               ,"92");
+//        dictionaryMap.put("TREMULO"                     ,"92");
+//        dictionaryMap.put("CHORUS_LEVEL"                ,"93");
+//        dictionaryMap.put("CHORUS"                      ,"93");
+//        dictionaryMap.put("CELESTE_LEVEL"               ,"94");
+//        dictionaryMap.put("CELESTE"                     ,"94");
+//        dictionaryMap.put("PHASER_LEVEL"                ,"95");
+//        dictionaryMap.put("PHASER"                      ,"95");
+//
+//        dictionaryMap.put("DATA_BUTTON_INCREMENT"       ,"96");
+//        dictionaryMap.put("DATA_BUTTON_INC"             ,"96");
+//        dictionaryMap.put("BUTTON_INC"                  ,"96");
+//        dictionaryMap.put("DATA_BUTTON_DECREMENT"       ,"97");
+//        dictionaryMap.put("DATA_BUTTON_DEC"             ,"97");
+//        dictionaryMap.put("BUTTON_DEC"                  ,"97");
+//
+//        dictionaryMap.put("NON_REGISTERED_COARSE"       ,"98");
+//        dictionaryMap.put("NON_REGISTERED_FINE"         ,"99");
+//        dictionaryMap.put("REGISTERED_COARSE"           ,"100");
+//        dictionaryMap.put("REGISTERED_FINE"             ,"101");
+//
+//        dictionaryMap.put("ALL_SOUND_OFF"               ,"120");
+//        dictionaryMap.put("ALL_CONTROLLERS_OFF"         ,"121");
+//        dictionaryMap.put("LOCAL_KEYBOARD"              ,"122");
+//        dictionaryMap.put("ALL_NOTES_OFF"               ,"123");
+//        dictionaryMap.put("OMNI_MODE_OFF"               ,"124");
+//        dictionaryMap.put("OMNI_OFF"                    ,"124");
+//        dictionaryMap.put("OMNI_MODE_ON"                ,"125");
+//        dictionaryMap.put("OMNI_ON"                     ,"125");
+//        dictionaryMap.put("MONO_OPERATION"              ,"126");
+//        dictionaryMap.put("MONO"                        ,"126");
+//        dictionaryMap.put("POLY_OPERATION"              ,"127");
+//        dictionaryMap.put("POLY"                        ,"127");
+//
+//        //
+//        // Combined Controller names
+//        // (index = coarse_controller_index * 128 + fine_controller_index)
+//        //
+//        dictionaryMap.put("BANK_SELECT"                ,"16383");
+//        dictionaryMap.put("MOD_WHEEL"                  ,"161");
+//        dictionaryMap.put("BREATH"                     ,"290");
+//        dictionaryMap.put("FOOT_PEDAL"                 ,"548");
+//        dictionaryMap.put("PORTAMENTO_TIME"            ,"677");
+//        dictionaryMap.put("DATA_ENTRY"                 ,"806");
+//        dictionaryMap.put("VOLUME"                     ,"935");
+//        dictionaryMap.put("BALANCE"                    ,"1064");
+//        dictionaryMap.put("PAN_POSITION"               ,"1322");
+//        dictionaryMap.put("EXPRESSION"                 ,"1451");
+//        dictionaryMap.put("EFFECT_CONTROL_1"           ,"1580");
+//        dictionaryMap.put("EFFECT_CONTROL_2"           ,"1709");
+//        dictionaryMap.put("NON_REGISTERED"             ,"12770");
+//        dictionaryMap.put("REGISTERED"                 ,"13028");
+//
+//        //
+//        // Values for controllers
+//        //
+//        dictionaryMap.put("ON"                         ,"127");
+//        dictionaryMap.put("OFF"                        ,"0");
+//        dictionaryMap.put("DEFAULT"                    ,"64");
+//
+//        //
+//        // Tempo values
+//        // (NEW for JFugue 4.0)
+//        dictionaryMap.put("GRAVE"                      ,"40");
+//        dictionaryMap.put("LARGO"                      ,"45");
+//        dictionaryMap.put("LARGHETTO"                  ,"50");
+//        dictionaryMap.put("LENTO"                      ,"55");
+//        dictionaryMap.put("ADAGIO"                     ,"60");
+//        dictionaryMap.put("ADAGIETTO"                  ,"65");
+//
+//        dictionaryMap.put("ANDANTE"                    ,"70");
+//        dictionaryMap.put("ANDANTINO"                  ,"80");
+//        dictionaryMap.put("MODERATO"                   ,"95");
+//        dictionaryMap.put("ALLEGRETTO"                 ,"110");
+//
+//        dictionaryMap.put("ALLEGRO"                    ,"120");
+//        dictionaryMap.put("VIVACE"                     ,"145");
+//        dictionaryMap.put("PRESTO"                     ,"180");
+//        dictionaryMap.put("PRETISSIMO"                 ,"220");
+    }
+    
+    private static final String[][] DICT_ARRAY = new String[][] {
         //
         // Instrument names
         //
-        dictionaryMap.put("PIANO"                    ,"0");
-        dictionaryMap.put("ACOUSTIC_GRAND"           ,"0");
-        dictionaryMap.put("BRIGHT_ACOUSTIC"          ,"1");
-        dictionaryMap.put("ELECTRIC_GRAND"           ,"2");
-        dictionaryMap.put("HONKEY_TONK"              ,"3");
-        dictionaryMap.put("ELECTRIC_PIANO"           ,"4");
-        dictionaryMap.put("ELECTRIC_PIANO_1"         ,"4");
-        dictionaryMap.put("ELECTRIC_PIANO_2"         ,"5");
-        dictionaryMap.put("HARPISCHORD"              ,"6");
-        dictionaryMap.put("CLAVINET"                 ,"7");
-        dictionaryMap.put("CELESTA"                  ,"8");
-        dictionaryMap.put("GLOCKENSPIEL"             ,"9");
+        {"PIANO"                    ,"0"},
+        {"ACOUSTIC_GRAND"           ,"0"},
+        {"BRIGHT_ACOUSTIC"          ,"1"},
+        {"ELECTRIC_GRAND"           ,"2"},
+        {"HONKEY_TONK"              ,"3"},
+        {"ELECTRIC_PIANO"           ,"4"},
+        {"ELECTRIC_PIANO_1"         ,"4"},
+        {"ELECTRIC_PIANO_2"         ,"5"},
+        {"HARPISCHORD"              ,"6"},
+        {"CLAVINET"                 ,"7"},
+        {"CELESTA"                  ,"8"},
+        {"GLOCKENSPIEL"             ,"9"},
 
-        dictionaryMap.put("MUSIC_BOX"                ,"10");
-        dictionaryMap.put("VIBRAPHONE"               ,"11");
-        dictionaryMap.put("MARIMBA"                  ,"12");
-        dictionaryMap.put("XYLOPHONE"                ,"13");
-        dictionaryMap.put("TUBULAR_BELLS"            ,"14");
-        dictionaryMap.put("DULCIMER"                 ,"15");
-        dictionaryMap.put("DRAWBAR_ORGAN"            ,"16");
-        dictionaryMap.put("PERCUSSIVE_ORGAN"         ,"17");
-        dictionaryMap.put("ROCK_ORGAN"               ,"18");
-        dictionaryMap.put("CHURCH_ORGAN"             ,"19");
+        {"MUSIC_BOX"                ,"10"},
+        {"VIBRAPHONE"               ,"11"},
+        {"MARIMBA"                  ,"12"},
+        {"XYLOPHONE"                ,"13"},
+        {"TUBULAR_BELLS"            ,"14"},
+        {"DULCIMER"                 ,"15"},
+        {"DRAWBAR_ORGAN"            ,"16"},
+        {"PERCUSSIVE_ORGAN"         ,"17"},
+        {"ROCK_ORGAN"               ,"18"},
+        {"CHURCH_ORGAN"             ,"19"},
 
-        dictionaryMap.put("REED_ORGAN"               ,"20");
-        dictionaryMap.put("ACCORDIAN"                ,"21");
-        dictionaryMap.put("HARMONICA"                ,"22");
-        dictionaryMap.put("TANGO_ACCORDIAN"          ,"23");
-        dictionaryMap.put("GUITAR"                   ,"24");
-        dictionaryMap.put("NYLON_STRING_GUITAR"      ,"24");
-        dictionaryMap.put("STEEL_STRING_GUITAR"      ,"25");
-        dictionaryMap.put("ELECTRIC_JAZZ_GUITAR"     ,"26");
-        dictionaryMap.put("ELECTRIC_CLEAN_GUITAR"    ,"27");
-        dictionaryMap.put("ELECTRIC_MUTED_GUITAR"    ,"28");
-        dictionaryMap.put("OVERDRIVEN_GUITAR"        ,"29");
+        {"REED_ORGAN"               ,"20"},
+        {"ACCORDIAN"                ,"21"},
+        {"HARMONICA"                ,"22"},
+        {"TANGO_ACCORDIAN"          ,"23"},
+        {"GUITAR"                   ,"24"},
+        {"NYLON_STRING_GUITAR"      ,"24"},
+        {"STEEL_STRING_GUITAR"      ,"25"},
+        {"ELECTRIC_JAZZ_GUITAR"     ,"26"},
+        {"ELECTRIC_CLEAN_GUITAR"    ,"27"},
+        {"ELECTRIC_MUTED_GUITAR"    ,"28"},
+        {"OVERDRIVEN_GUITAR"        ,"29"},
 
-        dictionaryMap.put("DISTORTION_GUITAR"        ,"30");
-        dictionaryMap.put("GUITAR_HARMONICS"         ,"31");
-        dictionaryMap.put("ACOUSTIC_BASS"            ,"32");
-        dictionaryMap.put("ELECTRIC_BASS_FINGER"     ,"33");
-        dictionaryMap.put("ELECTRIC_BASS_PICK"       ,"34");
-        dictionaryMap.put("FRETLESS_BASS"            ,"35");
-        dictionaryMap.put("SLAP_BASS_1"              ,"36");
-        dictionaryMap.put("SLAP_BASS_2"              ,"37");
-        dictionaryMap.put("SYNTH_BASS_1"             ,"38");
-        dictionaryMap.put("SYNTH_BASS_2"             ,"39");
+        {"DISTORTION_GUITAR"        ,"30"},
+        {"GUITAR_HARMONICS"         ,"31"},
+        {"ACOUSTIC_BASS"            ,"32"},
+        {"ELECTRIC_BASS_FINGER"     ,"33"},
+        {"ELECTRIC_BASS_PICK"       ,"34"},
+        {"FRETLESS_BASS"            ,"35"},
+        {"SLAP_BASS_1"              ,"36"},
+        {"SLAP_BASS_2"              ,"37"},
+        {"SYNTH_BASS_1"             ,"38"},
+        {"SYNTH_BASS_2"             ,"39"},
 
-        dictionaryMap.put("VIOLIN"                   ,"40");
-        dictionaryMap.put("VIOLA"                    ,"41");
-        dictionaryMap.put("CELLO"                    ,"42");
-        dictionaryMap.put("CONTRABASS"               ,"43");
-        dictionaryMap.put("TREMOLO_STRINGS"          ,"44");
-        dictionaryMap.put("PIZZICATO_STRINGS"        ,"45");
-        dictionaryMap.put("ORCHESTRAL_STRINGS"       ,"46");
-        dictionaryMap.put("TIMPANI"                  ,"47");
-        dictionaryMap.put("STRING_ENSEMBLE_1"        ,"48");
-        dictionaryMap.put("STRING_ENSEMBLE_2"        ,"49");
+        {"VIOLIN"                   ,"40"},
+        {"VIOLA"                    ,"41"},
+        {"CELLO"                    ,"42"},
+        {"CONTRABASS"               ,"43"},
+        {"TREMOLO_STRINGS"          ,"44"},
+        {"PIZZICATO_STRINGS"        ,"45"},
+        {"ORCHESTRAL_STRINGS"       ,"46"},
+        {"TIMPANI"                  ,"47"},
+        {"STRING_ENSEMBLE_1"        ,"48"},
+        {"STRING_ENSEMBLE_2"        ,"49"},
 
-        dictionaryMap.put("SYNTH_STRINGS_1"          ,"50");
-        dictionaryMap.put("SYNTH_STRINGS_2"          ,"51");
-        dictionaryMap.put("CHOIR_AAHS"               ,"52");
-        dictionaryMap.put("VOICE_OOHS"               ,"53");
-        dictionaryMap.put("SYNTH_VOICE"              ,"54");
-        dictionaryMap.put("ORCHESTRA_HIT"            ,"55");
-        dictionaryMap.put("TRUMPET"                  ,"56");
-        dictionaryMap.put("TROMBONE"                 ,"57");
-        dictionaryMap.put("TUBA"                     ,"58");
-        dictionaryMap.put("MUTED_TRUMPET"            ,"59");
+        {"SYNTH_STRINGS_1"          ,"50"},
+        {"SYNTH_STRINGS_2"          ,"51"},
+        {"CHOIR_AAHS"               ,"52"},
+        {"VOICE_OOHS"               ,"53"},
+        {"SYNTH_VOICE"              ,"54"},
+        {"ORCHESTRA_HIT"            ,"55"},
+        {"TRUMPET"                  ,"56"},
+        {"TROMBONE"                 ,"57"},
+        {"TUBA"                     ,"58"},
+        {"MUTED_TRUMPET"            ,"59"},
 
-        dictionaryMap.put("FRENCH_HORN"              ,"60");
-        dictionaryMap.put("BRASS_SECTION"            ,"61");
-        dictionaryMap.put("SYNTHBRASS_1"             ,"62");
-        dictionaryMap.put("SYNTH_BRASS_1"            ,"62");
-        dictionaryMap.put("SYNTHBRASS_2"             ,"63");
-        dictionaryMap.put("SYNTH_BRASS_2"            ,"63");
-        dictionaryMap.put("SOPRANO_SAX"              ,"64");
-        dictionaryMap.put("ALTO_SAX"                 ,"65");
-        dictionaryMap.put("TENOR_SAX"                ,"66");
-        dictionaryMap.put("BARITONE_SAX"             ,"67");
-        dictionaryMap.put("OBOE"                     ,"68");
-        dictionaryMap.put("ENGLISH_HORN"             ,"69");
+        {"FRENCH_HORN"              ,"60"},
+        {"BRASS_SECTION"            ,"61"},
+        {"SYNTHBRASS_1"             ,"62"},
+        {"SYNTH_BRASS_1"            ,"62"},
+        {"SYNTHBRASS_2"             ,"63"},
+        {"SYNTH_BRASS_2"            ,"63"},
+        {"SOPRANO_SAX"              ,"64"},
+        {"ALTO_SAX"                 ,"65"},
+        {"TENOR_SAX"                ,"66"},
+        {"BARITONE_SAX"             ,"67"},
+        {"OBOE"                     ,"68"},
+        {"ENGLISH_HORN"             ,"69"},
 
-        dictionaryMap.put("BASSOON"                  ,"70");
-        dictionaryMap.put("CLARINET"                 ,"71");
-        dictionaryMap.put("PICCOLO"                  ,"72");
-        dictionaryMap.put("FLUTE"                    ,"73");
-        dictionaryMap.put("RECORDER"                 ,"74");
-        dictionaryMap.put("PAN_FLUTE"                ,"75");
-        dictionaryMap.put("BLOWN_BOTTLE"             ,"76");
-        dictionaryMap.put("SKAKUHACHI"               ,"77");
-        dictionaryMap.put("WHISTLE"                  ,"78");
-        dictionaryMap.put("OCARINA"                  ,"79");
+        {"BASSOON"                  ,"70"},
+        {"CLARINET"                 ,"71"},
+        {"PICCOLO"                  ,"72"},
+        {"FLUTE"                    ,"73"},
+        {"RECORDER"                 ,"74"},
+        {"PAN_FLUTE"                ,"75"},
+        {"BLOWN_BOTTLE"             ,"76"},
+        {"SKAKUHACHI"               ,"77"},
+        {"WHISTLE"                  ,"78"},
+        {"OCARINA"                  ,"79"},
 
-        dictionaryMap.put("LEAD_SQUARE"              ,"80");
-        dictionaryMap.put("SQUARE"                   ,"80");
-        dictionaryMap.put("LEAD_SAWTOOTH"            ,"81");
-        dictionaryMap.put("SAWTOOTH"                 ,"81");
-        dictionaryMap.put("LEAD_CALLIOPE"            ,"82");
-        dictionaryMap.put("CALLIOPE"                 ,"82");
-        dictionaryMap.put("LEAD_CHIFF"               ,"83");
-        dictionaryMap.put("CHIFF"                    ,"83");
-        dictionaryMap.put("LEAD_CHARANG"             ,"84");
-        dictionaryMap.put("CHARANG"                  ,"84");
-        dictionaryMap.put("LEAD_VOICE"               ,"85");
-        dictionaryMap.put("VOICE"                    ,"85");
-        dictionaryMap.put("LEAD_FIFTHS"              ,"86");
-        dictionaryMap.put("FIFTHS"                   ,"86");
-        dictionaryMap.put("LEAD_BASSLEAD"            ,"87");
-        dictionaryMap.put("BASSLEAD"                 ,"87");
-        dictionaryMap.put("PAD_NEW_AGE"              ,"88");
-        dictionaryMap.put("NEW_AGE"                  ,"88");
-        dictionaryMap.put("PAD_WARM"                 ,"89");
-        dictionaryMap.put("WARM"                     ,"89");
+        {"LEAD_SQUARE"              ,"80"},
+        {"SQUARE"                   ,"80"},
+        {"LEAD_SAWTOOTH"            ,"81"},
+        {"SAWTOOTH"                 ,"81"},
+        {"LEAD_CALLIOPE"            ,"82"},
+        {"CALLIOPE"                 ,"82"},
+        {"LEAD_CHIFF"               ,"83"},
+        {"CHIFF"                    ,"83"},
+        {"LEAD_CHARANG"             ,"84"},
+        {"CHARANG"                  ,"84"},
+        {"LEAD_VOICE"               ,"85"},
+        {"VOICE"                    ,"85"},
+        {"LEAD_FIFTHS"              ,"86"},
+        {"FIFTHS"                   ,"86"},
+        {"LEAD_BASSLEAD"            ,"87"},
+        {"BASSLEAD"                 ,"87"},
+        {"PAD_NEW_AGE"              ,"88"},
+        {"NEW_AGE"                  ,"88"},
+        {"PAD_WARM"                 ,"89"},
+        {"WARM"                     ,"89"},
 
-        dictionaryMap.put("PAD_POLYSYNTH"            ,"90");
-        dictionaryMap.put("POLYSYNTH"                ,"90");
-        dictionaryMap.put("PAD_CHOIR"                ,"91");
-        dictionaryMap.put("CHOIR"                    ,"91");
-        dictionaryMap.put("PAD_BOWED"                ,"92");
-        dictionaryMap.put("BOWED"                    ,"92");
-        dictionaryMap.put("PAD_METALLIC"             ,"93");
-        dictionaryMap.put("METALLIC"                 ,"93");
-        dictionaryMap.put("PAD_HALO"                 ,"94");
-        dictionaryMap.put("HALO"                     ,"94");
-        dictionaryMap.put("PAD_SWEEP"                ,"95");
-        dictionaryMap.put("SWEEP"                    ,"95");
-        dictionaryMap.put("FX_RAIN"                  ,"96");
-        dictionaryMap.put("RAIN"                     ,"96");
-        dictionaryMap.put("FX_SOUNDTRACK"            ,"97");
-        dictionaryMap.put("SOUNDTRACK"               ,"97");
-        dictionaryMap.put("FX_CRYSTAL"               ,"98");
-        dictionaryMap.put("CRYSTAL"                  ,"98");
-        dictionaryMap.put("FX_ATMOSPHERE"            ,"99");
-        dictionaryMap.put("ATMOSPHERE"               ,"99");
+        {"PAD_POLYSYNTH"            ,"90"},
+        {"POLYSYNTH"                ,"90"},
+        {"PAD_CHOIR"                ,"91"},
+        {"CHOIR"                    ,"91"},
+        {"PAD_BOWED"                ,"92"},
+        {"BOWED"                    ,"92"},
+        {"PAD_METALLIC"             ,"93"},
+        {"METALLIC"                 ,"93"},
+        {"PAD_HALO"                 ,"94"},
+        {"HALO"                     ,"94"},
+        {"PAD_SWEEP"                ,"95"},
+        {"SWEEP"                    ,"95"},
+        {"FX_RAIN"                  ,"96"},
+        {"RAIN"                     ,"96"},
+        {"FX_SOUNDTRACK"            ,"97"},
+        {"SOUNDTRACK"               ,"97"},
+        {"FX_CRYSTAL"               ,"98"},
+        {"CRYSTAL"                  ,"98"},
+        {"FX_ATMOSPHERE"            ,"99"},
+        {"ATMOSPHERE"               ,"99"},
 
-        dictionaryMap.put("FX_BRIGHTNESS"            ,"100");
-        dictionaryMap.put("BRIGHTNESS"               ,"100");
-        dictionaryMap.put("FX_GOBLINS"               ,"101");
-        dictionaryMap.put("GOBLINS"                  ,"101");
-        dictionaryMap.put("FX_ECHOES"                ,"102");
-        dictionaryMap.put("ECHOES"                   ,"102");
-        dictionaryMap.put("FX_SCI-FI"                ,"103");
-        dictionaryMap.put("SCI-FI"                   ,"103");
-        dictionaryMap.put("SITAR"                    ,"104");
-        dictionaryMap.put("BANJO"                    ,"105");
-        dictionaryMap.put("SHAMISEN"                 ,"106");
-        dictionaryMap.put("KOTO"                     ,"107");
-        dictionaryMap.put("KALIMBA"                  ,"108");
-        dictionaryMap.put("BAGPIPE"                  ,"109");
+        {"FX_BRIGHTNESS"            ,"100"},
+        {"BRIGHTNESS"               ,"100"},
+        {"FX_GOBLINS"               ,"101"},
+        {"GOBLINS"                  ,"101"},
+        {"FX_ECHOES"                ,"102"},
+        {"ECHOES"                   ,"102"},
+        {"FX_SCI-FI"                ,"103"},
+        {"SCI-FI"                   ,"103"},
+        {"SITAR"                    ,"104"},
+        {"BANJO"                    ,"105"},
+        {"SHAMISEN"                 ,"106"},
+        {"KOTO"                     ,"107"},
+        {"KALIMBA"                  ,"108"},
+        {"BAGPIPE"                  ,"109"},
 
-        dictionaryMap.put("FIDDLE"                   ,"110");
-        dictionaryMap.put("SHANAI"                   ,"111");
-        dictionaryMap.put("TINKLE_BELL"              ,"112");
-        dictionaryMap.put("AGOGO"                    ,"113");
-        dictionaryMap.put("STEEL_DRUMS"              ,"114");
-        dictionaryMap.put("WOODBLOCK"                ,"115");
-        dictionaryMap.put("TAIKO_DRUM"               ,"116");
-        dictionaryMap.put("MELODIC_TOM"              ,"117");
-        dictionaryMap.put("SYNTH_DRUM"               ,"118");
-        dictionaryMap.put("REVERSE_CYMBAL"           ,"119");
+        {"FIDDLE"                   ,"110"},
+        {"SHANAI"                   ,"111"},
+        {"TINKLE_BELL"              ,"112"},
+        {"AGOGO"                    ,"113"},
+        {"STEEL_DRUMS"              ,"114"},
+        {"WOODBLOCK"                ,"115"},
+        {"TAIKO_DRUM"               ,"116"},
+        {"MELODIC_TOM"              ,"117"},
+        {"SYNTH_DRUM"               ,"118"},
+        {"REVERSE_CYMBAL"           ,"119"},
 
-        dictionaryMap.put("GUITAR_FRET_NOISE"        ,"120");
-        dictionaryMap.put("BREATH_NOISE"             ,"121");
-        dictionaryMap.put("SEASHORE"                 ,"122");
-        dictionaryMap.put("BIRD_TWEET"               ,"123");
-        dictionaryMap.put("TELEPHONE_RING"           ,"124");
-        dictionaryMap.put("HELICOPTER"               ,"125");
-        dictionaryMap.put("APPLAUSE"                 ,"126");
-        dictionaryMap.put("GUNSHOT"                  ,"127");
+        {"GUITAR_FRET_NOISE"        ,"120"},
+        {"BREATH_NOISE"             ,"121"},
+        {"SEASHORE"                 ,"122"},
+        {"BIRD_TWEET"               ,"123"},
+        {"TELEPHONE_RING"           ,"124"},
+        {"HELICOPTER"               ,"125"},
+        {"APPLAUSE"                 ,"126"},
+        {"GUNSHOT"                  ,"127"},
 
         //
         // Percussion names
         //
-        dictionaryMap.put("ACOUSTIC_BASS_DRUM"     ,"35");
-        dictionaryMap.put("BASS_DRUM"              ,"36");
-        dictionaryMap.put("SIDE_STICK"             ,"37");
-        dictionaryMap.put("ACOUSTIC_SNARE"         ,"38");
-        dictionaryMap.put("HAND_CLAP"              ,"39");
+        {"ACOUSTIC_BASS_DRUM"     ,"35"},
+        {"BASS_DRUM"              ,"36"},
+        {"SIDE_STICK"             ,"37"},
+        {"ACOUSTIC_SNARE"         ,"38"},
+        {"HAND_CLAP"              ,"39"},
 
-        dictionaryMap.put("ELECTRIC_SNARE"         ,"40");
-        dictionaryMap.put("LOW_FLOOR_TOM"          ,"41");
-        dictionaryMap.put("CLOSED_HI_HAT"          ,"42");
-        dictionaryMap.put("HIGH_FLOOR_TOM"         ,"43");
-        dictionaryMap.put("PEDAL_HI_HAT"           ,"44");
-        dictionaryMap.put("LOW_TOM"                ,"45");
-        dictionaryMap.put("OPEN_HI_HAT"            ,"46");
-        dictionaryMap.put("LOW_MID_TOM"            ,"47");
-        dictionaryMap.put("HI_MID_TOM"             ,"48");
-        dictionaryMap.put("CRASH_CYMBAL_1"         ,"49");
+        {"ELECTRIC_SNARE"         ,"40"},
+        {"LOW_FLOOR_TOM"          ,"41"},
+        {"CLOSED_HI_HAT"          ,"42"},
+        {"HIGH_FLOOR_TOM"         ,"43"},
+        {"PEDAL_HI_HAT"           ,"44"},
+        {"LOW_TOM"                ,"45"},
+        {"OPEN_HI_HAT"            ,"46"},
+        {"LOW_MID_TOM"            ,"47"},
+        {"HI_MID_TOM"             ,"48"},
+        {"CRASH_CYMBAL_1"         ,"49"},
 
-        dictionaryMap.put("HIGH_TOM"               ,"50");
-        dictionaryMap.put("RIDE_CYMBAL_1"          ,"51");
-        dictionaryMap.put("CHINESE_CYMBAL"         ,"52");
-        dictionaryMap.put("RIDE_BELL"              ,"53");
-        dictionaryMap.put("TAMBOURINE"             ,"54");
-        dictionaryMap.put("SPLASH_CYMBAL"          ,"55");
-        dictionaryMap.put("COWBELL"                ,"56");
-        dictionaryMap.put("CRASH_CYMBAL_2"         ,"57");
-        dictionaryMap.put("VIBRASLAP"              ,"58");
-        dictionaryMap.put("RIDE_CYMBAL_2"          ,"59");
+        {"HIGH_TOM"               ,"50"},
+        {"RIDE_CYMBAL_1"          ,"51"},
+        {"CHINESE_CYMBAL"         ,"52"},
+        {"RIDE_BELL"              ,"53"},
+        {"TAMBOURINE"             ,"54"},
+        {"SPLASH_CYMBAL"          ,"55"},
+        {"COWBELL"                ,"56"},
+        {"CRASH_CYMBAL_2"         ,"57"},
+        {"VIBRASLAP"              ,"58"},
+        {"RIDE_CYMBAL_2"          ,"59"},
 
-        dictionaryMap.put("HI_BONGO"               ,"60");
-        dictionaryMap.put("LOW_BONGO"              ,"61");
-        dictionaryMap.put("MUTE_HI_CONGA"          ,"62");
-        dictionaryMap.put("OPEN_HI_CONGA"          ,"63");
-        dictionaryMap.put("LOW_CONGA"              ,"64");
-        dictionaryMap.put("HIGH_TIMBALE"           ,"65");
-        dictionaryMap.put("LOW_TIMBALE"            ,"66");
-        dictionaryMap.put("HIGH_AGOGO"             ,"67");
-        dictionaryMap.put("LOW_AGOGO"              ,"68");
-        dictionaryMap.put("CABASA"                 ,"69");
+        {"HI_BONGO"               ,"60"},
+        {"LOW_BONGO"              ,"61"},
+        {"MUTE_HI_CONGA"          ,"62"},
+        {"OPEN_HI_CONGA"          ,"63"},
+        {"LOW_CONGA"              ,"64"},
+        {"HIGH_TIMBALE"           ,"65"},
+        {"LOW_TIMBALE"            ,"66"},
+        {"HIGH_AGOGO"             ,"67"},
+        {"LOW_AGOGO"              ,"68"},
+        {"CABASA"                 ,"69"},
 
-        dictionaryMap.put("MARACAS"                ,"70");
-        dictionaryMap.put("SHORT_WHISTLE"          ,"71");
-        dictionaryMap.put("LONG_WHISTLE"           ,"72");
-        dictionaryMap.put("SHORT_GUIRO"            ,"73");
-        dictionaryMap.put("LONG_GUIRO"             ,"74");
-        dictionaryMap.put("CLAVES"                 ,"75");
-        dictionaryMap.put("HI_WOOD_BLOCK"          ,"76");
-        dictionaryMap.put("LOW_WOOD_BLOCK"         ,"77");
-        dictionaryMap.put("MUTE_CUICA"             ,"78");
-        dictionaryMap.put("OPEN_CUICA"             ,"79");
+        {"MARACAS"                ,"70"},
+        {"SHORT_WHISTLE"          ,"71"},
+        {"LONG_WHISTLE"           ,"72"},
+        {"SHORT_GUIRO"            ,"73"},
+        {"LONG_GUIRO"             ,"74"},
+        {"CLAVES"                 ,"75"},
+        {"HI_WOOD_BLOCK"          ,"76"},
+        {"LOW_WOOD_BLOCK"         ,"77"},
+        {"MUTE_CUICA"             ,"78"},
+        {"OPEN_CUICA"             ,"79"},
 
-        dictionaryMap.put("MUTE_TRIANGLE"          ,"80");
-        dictionaryMap.put("OPEN_TRIANGLE"          ,"81");
+        {"MUTE_TRIANGLE"          ,"80"},
+        {"OPEN_TRIANGLE"          ,"81"},
 
         //
         // Controller names
         //
-        dictionaryMap.put("BANK_SELECT_COARSE"          ,"0");
-        dictionaryMap.put("MOD_WHEEL_COARSE"            ,"1");
-        dictionaryMap.put("BREATH_COARSE"               ,"2");
-        dictionaryMap.put("FOOT_PEDAL_COARSE"           ,"4");
-        dictionaryMap.put("PORTAMENTO_TIME_COARSE"      ,"5");
-        dictionaryMap.put("DATA_ENTRY_COARSE"           ,"6");
-        dictionaryMap.put("VOLUME_COARSE"               ,"7");
-        dictionaryMap.put("BALANCE_COARSE"              ,"8");
-        dictionaryMap.put("PAN_POSITION_COARSE"         ,"10");
-        dictionaryMap.put("EXPRESSION_COARSE"           ,"11");
-        dictionaryMap.put("EFFECT_CONTROL_1_COARSE"     ,"12");
-        dictionaryMap.put("EFFECT_CONTROL_2_COARSE"     ,"13");
+        {"BANK_SELECT_COARSE"          ,"0"},
+        {"MOD_WHEEL_COARSE"            ,"1"},
+        {"BREATH_COARSE"               ,"2"},
+        {"FOOT_PEDAL_COARSE"           ,"4"},
+        {"PORTAMENTO_TIME_COARSE"      ,"5"},
+        {"DATA_ENTRY_COARSE"           ,"6"},
+        {"VOLUME_COARSE"               ,"7"},
+        {"BALANCE_COARSE"              ,"8"},
+        {"PAN_POSITION_COARSE"         ,"10"},
+        {"EXPRESSION_COARSE"           ,"11"},
+        {"EFFECT_CONTROL_1_COARSE"     ,"12"},
+        {"EFFECT_CONTROL_2_COARSE"     ,"13"},
 
-        dictionaryMap.put("SLIDER_1"                    ,"16");
-        dictionaryMap.put("SLIDER_2"                    ,"17");
-        dictionaryMap.put("SLIDER_3"                    ,"18");
-        dictionaryMap.put("SLIDER_4"                    ,"19");
+        {"SLIDER_1"                    ,"16"},
+        {"SLIDER_2"                    ,"17"},
+        {"SLIDER_3"                    ,"18"},
+        {"SLIDER_4"                    ,"19"},
 
-        dictionaryMap.put("BANK_SELECT_FINE"            ,"32");
-        dictionaryMap.put("MOD_WHEEL_FINE"              ,"33");
-        dictionaryMap.put("BREATH_FINE"                 ,"34");
-        dictionaryMap.put("FOOT_PEDAL_FINE"             ,"36");
-        dictionaryMap.put("PORTAMENTO_TIME_FINE"        ,"37");
-        dictionaryMap.put("DATA_ENTRY_FINE"             ,"38");
-        dictionaryMap.put("VOLUME_FINE"                 ,"39");
-        dictionaryMap.put("BALANCE_FINE"                ,"40");
-        dictionaryMap.put("PAN_POSITION_FINE"           ,"42");
-        dictionaryMap.put("EXPRESSION_FINE"             ,"43");
-        dictionaryMap.put("EFFECT_CONTROL_1_FINE"       ,"44");
-        dictionaryMap.put("EFFECT_CONTROL_2_FINE"       ,"45");
+        {"BANK_SELECT_FINE"            ,"32"},
+        {"MOD_WHEEL_FINE"              ,"33"},
+        {"BREATH_FINE"                 ,"34"},
+        {"FOOT_PEDAL_FINE"             ,"36"},
+        {"PORTAMENTO_TIME_FINE"        ,"37"},
+        {"DATA_ENTRY_FINE"             ,"38"},
+        {"VOLUME_FINE"                 ,"39"},
+        {"BALANCE_FINE"                ,"40"},
+        {"PAN_POSITION_FINE"           ,"42"},
+        {"EXPRESSION_FINE"             ,"43"},
+        {"EFFECT_CONTROL_1_FINE"       ,"44"},
+        {"EFFECT_CONTROL_2_FINE"       ,"45"},
 
-        dictionaryMap.put("HOLD_PEDAL"                  ,"64");
-        dictionaryMap.put("HOLD"                        ,"64");
-        dictionaryMap.put("PORTAMENTO"                  ,"65");
-        dictionaryMap.put("SUSTENUTO_PEDAL"             ,"66");
-        dictionaryMap.put("SUSTENUTO"                   ,"66");
-        dictionaryMap.put("SOFT_PEDAL"                  ,"67");
-        dictionaryMap.put("SOFT"                        ,"67");
-        dictionaryMap.put("LEGATO_PEDAL"                ,"68");
-        dictionaryMap.put("LEGATO"                      ,"68");
-        dictionaryMap.put("HOLD_2_PEDAL"                ,"69");
-        dictionaryMap.put("HOLD_2"                      ,"69");
+        {"HOLD_PEDAL"                  ,"64"},
+        {"HOLD"                        ,"64"},
+        {"PORTAMENTO"                  ,"65"},
+        {"SUSTENUTO_PEDAL"             ,"66"},
+        {"SUSTENUTO"                   ,"66"},
+        {"SOFT_PEDAL"                  ,"67"},
+        {"SOFT"                        ,"67"},
+        {"LEGATO_PEDAL"                ,"68"},
+        {"LEGATO"                      ,"68"},
+        {"HOLD_2_PEDAL"                ,"69"},
+        {"HOLD_2"                      ,"69"},
 
-        dictionaryMap.put("SOUND_VARIATION"             ,"70");
-        dictionaryMap.put("VARIATION"                   ,"70");
-        dictionaryMap.put("SOUND_TIMBRE"                ,"71");
-        dictionaryMap.put("TIMBRE"                      ,"71");
-        dictionaryMap.put("SOUND_RELEASE_TIME"          ,"72");
-        dictionaryMap.put("RELEASE_TIME"                ,"72");
-        dictionaryMap.put("SOUND_ATTACK_TIME"           ,"73");
-        dictionaryMap.put("ATTACK_TIME"                 ,"73");
-        dictionaryMap.put("SOUND_BRIGHTNESS"            ,"74");
-        dictionaryMap.put("BRIGHTNESS"                  ,"74");
-        dictionaryMap.put("SOUND_CONTROL_6"             ,"75");
-        dictionaryMap.put("CONTROL_6"                   ,"75");
-        dictionaryMap.put("SOUND_CONTROL_7"             ,"76");
-        dictionaryMap.put("CONTROL_7"                   ,"76");
-        dictionaryMap.put("SOUND_CONTROL_8"             ,"77");
-        dictionaryMap.put("CONTROL_8"                   ,"77");
-        dictionaryMap.put("SOUND_CONTROL_9"             ,"78");
-        dictionaryMap.put("CONTROL_9"                   ,"78");
-        dictionaryMap.put("SOUND_CONTROL_10"            ,"79");
-        dictionaryMap.put("CONTROL_10"                  ,"79");
+        {"SOUND_VARIATION"             ,"70"},
+        {"VARIATION"                   ,"70"},
+        {"SOUND_TIMBRE"                ,"71"},
+        {"TIMBRE"                      ,"71"},
+        {"SOUND_RELEASE_TIME"          ,"72"},
+        {"RELEASE_TIME"                ,"72"},
+        {"SOUND_ATTACK_TIME"           ,"73"},
+        {"ATTACK_TIME"                 ,"73"},
+        {"SOUND_BRIGHTNESS"            ,"74"},
+        {"BRIGHTNESS"                  ,"74"},
+        {"SOUND_CONTROL_6"             ,"75"},
+        {"CONTROL_6"                   ,"75"},
+        {"SOUND_CONTROL_7"             ,"76"},
+        {"CONTROL_7"                   ,"76"},
+        {"SOUND_CONTROL_8"             ,"77"},
+        {"CONTROL_8"                   ,"77"},
+        {"SOUND_CONTROL_9"             ,"78"},
+        {"CONTROL_9"                   ,"78"},
+        {"SOUND_CONTROL_10"            ,"79"},
+        {"CONTROL_10"                  ,"79"},
 
-        dictionaryMap.put("GENERAL_PURPOSE_BUTTON_1"    ,"80");
-        dictionaryMap.put("GENERAL_BUTTON_1"            ,"80");
-        dictionaryMap.put("BUTTON_1"                    ,"80");
-        dictionaryMap.put("GENERAL_PURPOSE_BUTTON_2"    ,"81");
-        dictionaryMap.put("GENERAL_BUTTON_2"            ,"81");
-        dictionaryMap.put("BUTTON_2"                    ,"81");
-        dictionaryMap.put("GENERAL_PURPOSE_BUTTON_3"    ,"82");
-        dictionaryMap.put("GENERAL_BUTTON_3"            ,"82");
-        dictionaryMap.put("BUTTON_3"                    ,"82");
-        dictionaryMap.put("GENERAL_PURPOSE_BUTTON_4"    ,"83");
-        dictionaryMap.put("GENERAL_BUTTON_4"            ,"83");
-        dictionaryMap.put("BUTTON_4"                    ,"83");
+        {"GENERAL_PURPOSE_BUTTON_1"    ,"80"},
+        {"GENERAL_BUTTON_1"            ,"80"},
+        {"BUTTON_1"                    ,"80"},
+        {"GENERAL_PURPOSE_BUTTON_2"    ,"81"},
+        {"GENERAL_BUTTON_2"            ,"81"},
+        {"BUTTON_2"                    ,"81"},
+        {"GENERAL_PURPOSE_BUTTON_3"    ,"82"},
+        {"GENERAL_BUTTON_3"            ,"82"},
+        {"BUTTON_3"                    ,"82"},
+        {"GENERAL_PURPOSE_BUTTON_4"    ,"83"},
+        {"GENERAL_BUTTON_4"            ,"83"},
+        {"BUTTON_4"                    ,"83"},
 
-        dictionaryMap.put("EFFECTS_LEVEL"               ,"91");
-        dictionaryMap.put("EFFECTS"                     ,"91");
-        dictionaryMap.put("TREMULO_LEVEL"               ,"92");
-        dictionaryMap.put("TREMULO"                     ,"92");
-        dictionaryMap.put("CHORUS_LEVEL"                ,"93");
-        dictionaryMap.put("CHORUS"                      ,"93");
-        dictionaryMap.put("CELESTE_LEVEL"               ,"94");
-        dictionaryMap.put("CELESTE"                     ,"94");
-        dictionaryMap.put("PHASER_LEVEL"                ,"95");
-        dictionaryMap.put("PHASER"                      ,"95");
+        {"EFFECTS_LEVEL"               ,"91"},
+        {"EFFECTS"                     ,"91"},
+        {"TREMULO_LEVEL"               ,"92"},
+        {"TREMULO"                     ,"92"},
+        {"CHORUS_LEVEL"                ,"93"},
+        {"CHORUS"                      ,"93"},
+        {"CELESTE_LEVEL"               ,"94"},
+        {"CELESTE"                     ,"94"},
+        {"PHASER_LEVEL"                ,"95"},
+        {"PHASER"                      ,"95"},
 
-        dictionaryMap.put("DATA_BUTTON_INCREMENT"       ,"96");
-        dictionaryMap.put("DATA_BUTTON_INC"             ,"96");
-        dictionaryMap.put("BUTTON_INC"                  ,"96");
-        dictionaryMap.put("DATA_BUTTON_DECREMENT"       ,"97");
-        dictionaryMap.put("DATA_BUTTON_DEC"             ,"97");
-        dictionaryMap.put("BUTTON_DEC"                  ,"97");
+        {"DATA_BUTTON_INCREMENT"       ,"96"},
+        {"DATA_BUTTON_INC"             ,"96"},
+        {"BUTTON_INC"                  ,"96"},
+        {"DATA_BUTTON_DECREMENT"       ,"97"},
+        {"DATA_BUTTON_DEC"             ,"97"},
+        {"BUTTON_DEC"                  ,"97"},
 
-        dictionaryMap.put("NON_REGISTERED_COARSE"       ,"98");
-        dictionaryMap.put("NON_REGISTERED_FINE"         ,"99");
-        dictionaryMap.put("REGISTERED_COARSE"           ,"100");
-        dictionaryMap.put("REGISTERED_FINE"             ,"101");
+        {"NON_REGISTERED_COARSE"       ,"98"},
+        {"NON_REGISTERED_FINE"         ,"99"},
+        {"REGISTERED_COARSE"           ,"100"},
+        {"REGISTERED_FINE"             ,"101"},
 
-        dictionaryMap.put("ALL_SOUND_OFF"               ,"120");
-        dictionaryMap.put("ALL_CONTROLLERS_OFF"         ,"121");
-        dictionaryMap.put("LOCAL_KEYBOARD"              ,"122");
-        dictionaryMap.put("ALL_NOTES_OFF"               ,"123");
-        dictionaryMap.put("OMNI_MODE_OFF"               ,"124");
-        dictionaryMap.put("OMNI_OFF"                    ,"124");
-        dictionaryMap.put("OMNI_MODE_ON"                ,"125");
-        dictionaryMap.put("OMNI_ON"                     ,"125");
-        dictionaryMap.put("MONO_OPERATION"              ,"126");
-        dictionaryMap.put("MONO"                        ,"126");
-        dictionaryMap.put("POLY_OPERATION"              ,"127");
-        dictionaryMap.put("POLY"                        ,"127");
+        {"ALL_SOUND_OFF"               ,"120"},
+        {"ALL_CONTROLLERS_OFF"         ,"121"},
+        {"LOCAL_KEYBOARD"              ,"122"},
+        {"ALL_NOTES_OFF"               ,"123"},
+        {"OMNI_MODE_OFF"               ,"124"},
+        {"OMNI_OFF"                    ,"124"},
+        {"OMNI_MODE_ON"                ,"125"},
+        {"OMNI_ON"                     ,"125"},
+        {"MONO_OPERATION"              ,"126"},
+        {"MONO"                        ,"126"},
+        {"POLY_OPERATION"              ,"127"},
+        {"POLY"                        ,"127"},
 
         //
         // Combined Controller names
-        // (index = coarse_controller_index * 128 + fine_controller_index)
+        // {index = coarse_controller_index * 128 + fine_controller_index)
         //
-        dictionaryMap.put("BANK_SELECT"                ,"16383");
-        dictionaryMap.put("MOD_WHEEL"                  ,"161");
-        dictionaryMap.put("BREATH"                     ,"290");
-        dictionaryMap.put("FOOT_PEDAL"                 ,"548");
-        dictionaryMap.put("PORTAMENTO_TIME"            ,"677");
-        dictionaryMap.put("DATA_ENTRY"                 ,"806");
-        dictionaryMap.put("VOLUME"                     ,"935");
-        dictionaryMap.put("BALANCE"                    ,"1064");
-        dictionaryMap.put("PAN_POSITION"               ,"1322");
-        dictionaryMap.put("EXPRESSION"                 ,"1451");
-        dictionaryMap.put("EFFECT_CONTROL_1"           ,"1580");
-        dictionaryMap.put("EFFECT_CONTROL_2"           ,"1709");
-        dictionaryMap.put("NON_REGISTERED"             ,"12770");
-        dictionaryMap.put("REGISTERED"                 ,"13028");
+        {"BANK_SELECT"                ,"16383"},
+        {"MOD_WHEEL"                  ,"161"},
+        {"BREATH"                     ,"290"},
+        {"FOOT_PEDAL"                 ,"548"},
+        {"PORTAMENTO_TIME"            ,"677"},
+        {"DATA_ENTRY"                 ,"806"},
+        {"VOLUME"                     ,"935"},
+        {"BALANCE"                    ,"1064"},
+        {"PAN_POSITION"               ,"1322"},
+        {"EXPRESSION"                 ,"1451"},
+        {"EFFECT_CONTROL_1"           ,"1580"},
+        {"EFFECT_CONTROL_2"           ,"1709"},
+        {"NON_REGISTERED"             ,"12770"},
+        {"REGISTERED"                 ,"13028"},
 
         //
         // Values for controllers
         //
-        dictionaryMap.put("ON"                         ,"127");
-        dictionaryMap.put("OFF"                        ,"0");
-        dictionaryMap.put("DEFAULT"                    ,"64");
+        {"ON"                         ,"127"},
+        {"OFF"                        ,"0"},
+        {"DEFAULT"                    ,"64"},
 
         //
         // Tempo values
-        // (NEW for JFugue 4.0)
-        dictionaryMap.put("GRAVE"                      ,"40");
-        dictionaryMap.put("LARGO"                      ,"45");
-        dictionaryMap.put("LARGHETTO"                  ,"50");
-        dictionaryMap.put("LENTO"                      ,"55");
-        dictionaryMap.put("ADAGIO"                     ,"60");
-        dictionaryMap.put("ADAGIETTO"                  ,"65");
+        // {NEW for JFugue 4.0)
+        {"GRAVE"                      ,"40"},
+        {"LARGO"                      ,"45"},
+        {"LARGHETTO"                  ,"50"},
+        {"LENTO"                      ,"55"},
+        {"ADAGIO"                     ,"60"},
+        {"ADAGIETTO"                  ,"65"},
 
-        dictionaryMap.put("ANDANTE"                    ,"70");
-        dictionaryMap.put("ANDANTINO"                  ,"80");
-        dictionaryMap.put("MODERATO"                   ,"95");
-        dictionaryMap.put("ALLEGRETTO"                 ,"110");
+        {"ANDANTE"                    ,"70"},
+        {"ANDANTINO"                  ,"80"},
+        {"MODERATO"                   ,"95"},
+        {"ALLEGRETTO"                 ,"110"},
 
-        dictionaryMap.put("ALLEGRO"                    ,"120");
-        dictionaryMap.put("VIVACE"                     ,"145");
-        dictionaryMap.put("PRESTO"                     ,"180");
-        dictionaryMap.put("PRETISSIMO"                 ,"220");
+        {"ALLEGRO"                    ,"120"},
+        {"VIVACE"                     ,"145"},
+        {"PRESTO"                     ,"180"},
+        {"PRETISSIMO"                 ,"220"},
+    };
+    
+    public static final Map<String, String> DICT_MAP;
+    static {
+//    	Map<String, String> map = new HashMap<String, String>(DICT_ARRAY.length);
+//    	for (String[] e : DICT_ARRAY) {
+//			map.put(e[0], e[1]);
+//		}
+//    	DICT_MAP = Collections.unmodifiableMap(map);
+    	DICT_MAP = initDict();
     }
+
+    /**
+     * This will eventually replace the static statements.  The purpose of this is to allow
+     * JFugueElements to define their own constants instead of sticking them all in here.
+     * I expect a very small performance hit on startup but not noticeable.
+     * 
+     * @return the dictionary
+     */
+    private static Map<String, String> initDict() {
+       	Map<String, String> map = new HashMap<String, String>(DICT_ARRAY.length);
+    	map.putAll(Instrument.DICT_MAP);
+    	map.putAll(Controller.DICT_MAP);
+       	map.putAll(Tempo.DICT_MAP);
+    	return map;
+	}
 }

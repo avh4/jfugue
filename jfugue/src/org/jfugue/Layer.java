@@ -87,4 +87,26 @@ public final class Layer implements JFugueElement
         buffy.append(getLayer());
         return buffy.toString();
     }
+
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Layer other = (Layer) obj;
+        if (this.layer != other.layer) {
+            return false;
+        }
+        return true;
+    }
+
+    public int hashCode() {
+        int hash = 7;
+        hash = 13 * hash + this.layer;
+        return hash;
+    }
+
+
 }

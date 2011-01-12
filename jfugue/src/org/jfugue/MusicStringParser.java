@@ -980,6 +980,11 @@ public final class MusicStringParser extends Parser
         return index;
     }
 
+    /**
+     * This is apparently the default {@link javax.sound.midi.Sequence} resolution.
+     */
+    public static final double SEQUENCE_RES = 128.0;
+    
     /** Returns the index with which to start parsing the next part of the string, once this method is done with its part */
     private int parseNoteDuration(String s, int slen, int index, NoteContext context)
     {
@@ -1005,7 +1010,7 @@ public final class MusicStringParser extends Parser
 
 //        context.duration = (long) (128.0 * 4.0 * context.decimalDuration); // javax.sound.midi.Sequence resolution is 120
         // 12/22/08 - As identified by E. Gingras, resolution should be 128, not 120, for better compatability with 128th notes (and other durations) 
-        context.duration = (long) (128.0 * context.decimalDuration); // DMK 9/27/08: The *4.0 makes quarter notes 4 times as long as they should be
+        context.duration = (long) (SEQUENCE_RES * context.decimalDuration); // DMK 9/27/08: The *4.0 makes quarter notes 4 times as long as they should be
 
 //        // Below is incorrect, as identified by M. Ahluwalia
 //        // Tempo is now in Beats Per Minute.  Convert this to Pulses Per Quarter (PPQ), then to

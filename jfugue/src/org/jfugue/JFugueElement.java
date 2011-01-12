@@ -51,6 +51,8 @@ public interface JFugueElement extends Serializable
      * For example:
      *     Note: value=60, duration=0.25
      *
+     * Should this just be toString? -Ska
+     *
      * @version 4.0
      */
     public String getVerifyString();

@@ -124,4 +124,30 @@ public final class KeySignature implements JFugueElement
 
     private static final String[] majorSigs = new String[] { "Cb", "Gb", "Db", "Ab", "Eb", "Bb", "F", "C", "G", "D", "A", "E", "B", "F#", "C#" };
     private static final String[] minorSigs = new String[] { "Ab", "Eb", "Bb", "F", "C", "G", "D", "A", "E", "B", "F#", "C#", "G#", "D#", "A#" };
+
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final KeySignature other = (KeySignature) obj;
+        if (this.keySig != other.keySig) {
+            return false;
+        }
+        if (this.scale != other.scale) {
+            return false;
+        }
+        return true;
+    }
+
+    public int hashCode() {
+        int hash = 7;
+        hash = 11 * hash + this.keySig;
+        hash = 11 * hash + this.scale;
+        return hash;
+    }
+
+    
 }

@@ -59,4 +59,19 @@ public final class Measure implements JFugueElement
     {
         return "Measure";
     }
+
+    // TODO This equals/hashCode is horrible but what am I gonna do?
+    public boolean equals(Object obj) {
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public int hashCode() {
+        int hash = 3;
+        hash = 67 * hash;
+        return hash;
+    }
 }

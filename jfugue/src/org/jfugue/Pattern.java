@@ -85,6 +85,11 @@ public class Pattern implements JFugueElement
     {
         setMusicString(musicString);
     }
+    
+    public Pattern(String... strings) {
+		this();
+		add(strings);
+	}
 
     /** Copy constructor */
     public Pattern(Pattern pattern)
@@ -99,17 +104,17 @@ public class Pattern implements JFugueElement
     }
 
 
-    /**
-     * This constructor creates a new Pattern that contains each of the given patterns
-     * @version 4.0
-     * */
-    public Pattern(Pattern... patterns)
-    {
-        this();
-        for (Pattern p : patterns) {
-            this.add(p);
-        }
-    }
+//    /**
+//     * This constructor creates a new Pattern that contains each of the given patterns
+//     * @version 4.0
+//     * */
+//    public Pattern(Pattern... patterns)
+//    {
+//        this();
+//        for (Pattern p : patterns) {
+//            this.add(p);
+//        }
+//    }
     
     public Pattern(JFugueElement... elements) {
     	this();
@@ -237,20 +242,21 @@ public class Pattern implements JFugueElement
         add(new Pattern(musicString), numTimes);
     }
 
-    /**
-     * Adds a number of patterns sequentially
-     * @param musicString the music string to add
-     * @version 4.0
-     */
-    public void add(Pattern... patterns)
-    {
-        for (Pattern pattern : patterns) {
-            add(pattern);
-        }
-    }
+//    /**
+//     * Adds a number of patterns sequentially
+//     * @param musicString the music string to add
+//     * @version 4.0
+//     */
+//    public void add(Pattern... patterns)
+//    {
+//        for (Pattern pattern : patterns) {
+//            add(pattern);
+//        }
+//    }
 
     /**
      * Adds a number of patterns sequentially
+     * 
      * @param musicString the music string to add
      * @version 4.0
      */
@@ -269,7 +275,10 @@ public class Pattern implements JFugueElement
     public void add(JFugueElement... elements) {
     	// TODO Might we want to just add the contents of addElement?
 		for (JFugueElement jFugueElement : elements) {
-			addElement(jFugueElement);
+			if (jFugueElement instanceof Pattern)
+				add((Pattern) jFugueElement);
+			else
+				addElement(jFugueElement);
 		}
 	}
 
@@ -277,6 +286,7 @@ public class Pattern implements JFugueElement
      * Adds an individual element to the pattern.  This takes into
      * account the possibility that the element may be a sequential or
      * parallel note, in which case no space is placed before it.
+     * 
      * @param element the element to add
      */
     public void addElement(JFugueElement element)

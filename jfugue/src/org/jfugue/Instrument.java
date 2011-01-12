@@ -22,6 +22,10 @@
 
 package org.jfugue;
 
+import java.util.Map;
+
+import org.jfugue.util.MapUtils;
+
 /**
  * Represents instrument changes, also known as <i>patch changes</i>.
  *
@@ -30,7 +34,12 @@ package org.jfugue;
  */
 public final class Instrument implements JFugueElement
 {
-    private byte instrument;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private byte instrument;
 
     /**
      * Creates a new Instrument object, with the specified instrument number.
@@ -407,4 +416,257 @@ public final class Instrument implements JFugueElement
     public static final byte APPLAUSE = 126;
     public static final byte GUNSHOT = 127;
 
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Instrument other = (Instrument) obj;
+        if (this.instrument != other.instrument) {
+            return false;
+        }
+        return true;
+    }
+
+    public int hashCode() {
+        int hash = 3;
+        hash = 67 * hash + this.instrument;
+        return hash;
+    }
+
+    public static final Map<String,String> DICT_MAP;
+    static {
+    	DICT_MAP = MapUtils.convertArrayToImutableMap(new String[][] {
+    	        //
+    	        // Instrument names
+    	        //
+    	        {"PIANO"                    ,"0"},
+    	        {"ACOUSTIC_GRAND"           ,"0"},
+    	        {"BRIGHT_ACOUSTIC"          ,"1"},
+    	        {"ELECTRIC_GRAND"           ,"2"},
+    	        {"HONKEY_TONK"              ,"3"},
+    	        {"ELECTRIC_PIANO"           ,"4"},
+    	        {"ELECTRIC_PIANO_1"         ,"4"},
+    	        {"ELECTRIC_PIANO_2"         ,"5"},
+    	        {"HARPISCHORD"              ,"6"},
+    	        {"CLAVINET"                 ,"7"},
+    	        {"CELESTA"                  ,"8"},
+    	        {"GLOCKENSPIEL"             ,"9"},
+
+    	        {"MUSIC_BOX"                ,"10"},
+    	        {"VIBRAPHONE"               ,"11"},
+    	        {"MARIMBA"                  ,"12"},
+    	        {"XYLOPHONE"                ,"13"},
+    	        {"TUBULAR_BELLS"            ,"14"},
+    	        {"DULCIMER"                 ,"15"},
+    	        {"DRAWBAR_ORGAN"            ,"16"},
+    	        {"PERCUSSIVE_ORGAN"         ,"17"},
+    	        {"ROCK_ORGAN"               ,"18"},
+    	        {"CHURCH_ORGAN"             ,"19"},
+
+    	        {"REED_ORGAN"               ,"20"},
+    	        {"ACCORDIAN"                ,"21"},
+    	        {"HARMONICA"                ,"22"},
+    	        {"TANGO_ACCORDIAN"          ,"23"},
+    	        {"GUITAR"                   ,"24"},
+    	        {"NYLON_STRING_GUITAR"      ,"24"},
+    	        {"STEEL_STRING_GUITAR"      ,"25"},
+    	        {"ELECTRIC_JAZZ_GUITAR"     ,"26"},
+    	        {"ELECTRIC_CLEAN_GUITAR"    ,"27"},
+    	        {"ELECTRIC_MUTED_GUITAR"    ,"28"},
+    	        {"OVERDRIVEN_GUITAR"        ,"29"},
+
+    	        {"DISTORTION_GUITAR"        ,"30"},
+    	        {"GUITAR_HARMONICS"         ,"31"},
+    	        {"ACOUSTIC_BASS"            ,"32"},
+    	        {"ELECTRIC_BASS_FINGER"     ,"33"},
+    	        {"ELECTRIC_BASS_PICK"       ,"34"},
+    	        {"FRETLESS_BASS"            ,"35"},
+    	        {"SLAP_BASS_1"              ,"36"},
+    	        {"SLAP_BASS_2"              ,"37"},
+    	        {"SYNTH_BASS_1"             ,"38"},
+    	        {"SYNTH_BASS_2"             ,"39"},
+
+    	        {"VIOLIN"                   ,"40"},
+    	        {"VIOLA"                    ,"41"},
+    	        {"CELLO"                    ,"42"},
+    	        {"CONTRABASS"               ,"43"},
+    	        {"TREMOLO_STRINGS"          ,"44"},
+    	        {"PIZZICATO_STRINGS"        ,"45"},
+    	        {"ORCHESTRAL_STRINGS"       ,"46"},
+    	        {"TIMPANI"                  ,"47"},
+    	        {"STRING_ENSEMBLE_1"        ,"48"},
+    	        {"STRING_ENSEMBLE_2"        ,"49"},
+
+    	        {"SYNTH_STRINGS_1"          ,"50"},
+    	        {"SYNTH_STRINGS_2"          ,"51"},
+    	        {"CHOIR_AAHS"               ,"52"},
+    	        {"VOICE_OOHS"               ,"53"},
+    	        {"SYNTH_VOICE"              ,"54"},
+    	        {"ORCHESTRA_HIT"            ,"55"},
+    	        {"TRUMPET"                  ,"56"},
+    	        {"TROMBONE"                 ,"57"},
+    	        {"TUBA"                     ,"58"},
+    	        {"MUTED_TRUMPET"            ,"59"},
+
+    	        {"FRENCH_HORN"              ,"60"},
+    	        {"BRASS_SECTION"            ,"61"},
+    	        {"SYNTHBRASS_1"             ,"62"},
+    	        {"SYNTH_BRASS_1"            ,"62"},
+    	        {"SYNTHBRASS_2"             ,"63"},
+    	        {"SYNTH_BRASS_2"            ,"63"},
+    	        {"SOPRANO_SAX"              ,"64"},
+    	        {"ALTO_SAX"                 ,"65"},
+    	        {"TENOR_SAX"                ,"66"},
+    	        {"BARITONE_SAX"             ,"67"},
+    	        {"OBOE"                     ,"68"},
+    	        {"ENGLISH_HORN"             ,"69"},
+
+    	        {"BASSOON"                  ,"70"},
+    	        {"CLARINET"                 ,"71"},
+    	        {"PICCOLO"                  ,"72"},
+    	        {"FLUTE"                    ,"73"},
+    	        {"RECORDER"                 ,"74"},
+    	        {"PAN_FLUTE"                ,"75"},
+    	        {"BLOWN_BOTTLE"             ,"76"},
+    	        {"SKAKUHACHI"               ,"77"},
+    	        {"WHISTLE"                  ,"78"},
+    	        {"OCARINA"                  ,"79"},
+
+    	        {"LEAD_SQUARE"              ,"80"},
+    	        {"SQUARE"                   ,"80"},
+    	        {"LEAD_SAWTOOTH"            ,"81"},
+    	        {"SAWTOOTH"                 ,"81"},
+    	        {"LEAD_CALLIOPE"            ,"82"},
+    	        {"CALLIOPE"                 ,"82"},
+    	        {"LEAD_CHIFF"               ,"83"},
+    	        {"CHIFF"                    ,"83"},
+    	        {"LEAD_CHARANG"             ,"84"},
+    	        {"CHARANG"                  ,"84"},
+    	        {"LEAD_VOICE"               ,"85"},
+    	        {"VOICE"                    ,"85"},
+    	        {"LEAD_FIFTHS"              ,"86"},
+    	        {"FIFTHS"                   ,"86"},
+    	        {"LEAD_BASSLEAD"            ,"87"},
+    	        {"BASSLEAD"                 ,"87"},
+    	        {"PAD_NEW_AGE"              ,"88"},
+    	        {"NEW_AGE"                  ,"88"},
+    	        {"PAD_WARM"                 ,"89"},
+    	        {"WARM"                     ,"89"},
+
+    	        {"PAD_POLYSYNTH"            ,"90"},
+    	        {"POLYSYNTH"                ,"90"},
+    	        {"PAD_CHOIR"                ,"91"},
+    	        {"CHOIR"                    ,"91"},
+    	        {"PAD_BOWED"                ,"92"},
+    	        {"BOWED"                    ,"92"},
+    	        {"PAD_METALLIC"             ,"93"},
+    	        {"METALLIC"                 ,"93"},
+    	        {"PAD_HALO"                 ,"94"},
+    	        {"HALO"                     ,"94"},
+    	        {"PAD_SWEEP"                ,"95"},
+    	        {"SWEEP"                    ,"95"},
+    	        {"FX_RAIN"                  ,"96"},
+    	        {"RAIN"                     ,"96"},
+    	        {"FX_SOUNDTRACK"            ,"97"},
+    	        {"SOUNDTRACK"               ,"97"},
+    	        {"FX_CRYSTAL"               ,"98"},
+    	        {"CRYSTAL"                  ,"98"},
+    	        {"FX_ATMOSPHERE"            ,"99"},
+    	        {"ATMOSPHERE"               ,"99"},
+
+    	        {"FX_BRIGHTNESS"            ,"100"},
+    	        {"BRIGHTNESS"               ,"100"},
+    	        {"FX_GOBLINS"               ,"101"},
+    	        {"GOBLINS"                  ,"101"},
+    	        {"FX_ECHOES"                ,"102"},
+    	        {"ECHOES"                   ,"102"},
+    	        {"FX_SCI-FI"                ,"103"},
+    	        {"SCI-FI"                   ,"103"},
+    	        {"SITAR"                    ,"104"},
+    	        {"BANJO"                    ,"105"},
+    	        {"SHAMISEN"                 ,"106"},
+    	        {"KOTO"                     ,"107"},
+    	        {"KALIMBA"                  ,"108"},
+    	        {"BAGPIPE"                  ,"109"},
+
+    	        {"FIDDLE"                   ,"110"},
+    	        {"SHANAI"                   ,"111"},
+    	        {"TINKLE_BELL"              ,"112"},
+    	        {"AGOGO"                    ,"113"},
+    	        {"STEEL_DRUMS"              ,"114"},
+    	        {"WOODBLOCK"                ,"115"},
+    	        {"TAIKO_DRUM"               ,"116"},
+    	        {"MELODIC_TOM"              ,"117"},
+    	        {"SYNTH_DRUM"               ,"118"},
+    	        {"REVERSE_CYMBAL"           ,"119"},
+
+    	        {"GUITAR_FRET_NOISE"        ,"120"},
+    	        {"BREATH_NOISE"             ,"121"},
+    	        {"SEASHORE"                 ,"122"},
+    	        {"BIRD_TWEET"               ,"123"},
+    	        {"TELEPHONE_RING"           ,"124"},
+    	        {"HELICOPTER"               ,"125"},
+    	        {"APPLAUSE"                 ,"126"},
+    	        {"GUNSHOT"                  ,"127"},
+
+    	        //
+    	        // Percussion names
+    	        //
+    	        {"ACOUSTIC_BASS_DRUM"     ,"35"},
+    	        {"BASS_DRUM"              ,"36"},
+    	        {"SIDE_STICK"             ,"37"},
+    	        {"ACOUSTIC_SNARE"         ,"38"},
+    	        {"HAND_CLAP"              ,"39"},
+
+    	        {"ELECTRIC_SNARE"         ,"40"},
+    	        {"LOW_FLOOR_TOM"          ,"41"},
+    	        {"CLOSED_HI_HAT"          ,"42"},
+    	        {"HIGH_FLOOR_TOM"         ,"43"},
+    	        {"PEDAL_HI_HAT"           ,"44"},
+    	        {"LOW_TOM"                ,"45"},
+    	        {"OPEN_HI_HAT"            ,"46"},
+    	        {"LOW_MID_TOM"            ,"47"},
+    	        {"HI_MID_TOM"             ,"48"},
+    	        {"CRASH_CYMBAL_1"         ,"49"},
+
+    	        {"HIGH_TOM"               ,"50"},
+    	        {"RIDE_CYMBAL_1"          ,"51"},
+    	        {"CHINESE_CYMBAL"         ,"52"},
+    	        {"RIDE_BELL"              ,"53"},
+    	        {"TAMBOURINE"             ,"54"},
+    	        {"SPLASH_CYMBAL"          ,"55"},
+    	        {"COWBELL"                ,"56"},
+    	        {"CRASH_CYMBAL_2"         ,"57"},
+    	        {"VIBRASLAP"              ,"58"},
+    	        {"RIDE_CYMBAL_2"          ,"59"},
+
+    	        {"HI_BONGO"               ,"60"},
+    	        {"LOW_BONGO"              ,"61"},
+    	        {"MUTE_HI_CONGA"          ,"62"},
+    	        {"OPEN_HI_CONGA"          ,"63"},
+    	        {"LOW_CONGA"              ,"64"},
+    	        {"HIGH_TIMBALE"           ,"65"},
+    	        {"LOW_TIMBALE"            ,"66"},
+    	        {"HIGH_AGOGO"             ,"67"},
+    	        {"LOW_AGOGO"              ,"68"},
+    	        {"CABASA"                 ,"69"},
+
+    	        {"MARACAS"                ,"70"},
+    	        {"SHORT_WHISTLE"          ,"71"},
+    	        {"LONG_WHISTLE"           ,"72"},
+    	        {"SHORT_GUIRO"            ,"73"},
+    	        {"LONG_GUIRO"             ,"74"},
+    	        {"CLAVES"                 ,"75"},
+    	        {"HI_WOOD_BLOCK"          ,"76"},
+    	        {"LOW_WOOD_BLOCK"         ,"77"},
+    	        {"MUTE_CUICA"             ,"78"},
+    	        {"OPEN_CUICA"             ,"79"},
+
+    	        {"MUTE_TRIANGLE"          ,"80"},
+    	        {"OPEN_TRIANGLE"          ,"81"},
+    	});
+    }
 }

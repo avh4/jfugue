@@ -112,4 +112,28 @@ public final class PolyphonicPressure implements JFugueElement
         return buffy.toString();
     }
 
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final PolyphonicPressure other = (PolyphonicPressure) obj;
+        if (this.key != other.key) {
+            return false;
+        }
+        if (this.pressure != other.pressure) {
+            return false;
+        }
+        return true;
+    }
+
+    public int hashCode() {
+        int hash = 7;
+        hash = 29 * hash + this.key;
+        hash = 29 * hash + this.pressure;
+        return hash;
+    }
+
 }

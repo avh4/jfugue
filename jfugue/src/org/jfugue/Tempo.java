@@ -22,6 +22,10 @@
 
 package org.jfugue;
 
+import java.util.Map;
+
+import org.jfugue.util.MapUtils;
+
 /**
  * Represents tempo changes.  Tempo is kept for the whole
  * song, and is independent of tracks.  You may change the
@@ -38,7 +42,11 @@ package org.jfugue;
  */
 public final class Tempo implements JFugueElement
 {
-    private int tempo;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private int tempo;
 
     /**
      * Creates a new Tempo object, with the specified tempo value (in BPM).
@@ -47,6 +55,16 @@ public final class Tempo implements JFugueElement
     public Tempo(int tempoInBPM)
     {
         setTempo(tempoInBPM);
+    }
+    
+    public Tempo(String tempoName) {
+    	String tempo = DICT_MAP.get(tempoName);
+    	if (tempo == null)
+    		setTempo(Integer.parseInt(tempo));
+    	else {
+			throw new IllegalArgumentException(
+					"Named tempo not found: " + tempoName);
+		}
     }
 
     /**
@@ -110,4 +128,48 @@ public final class Tempo implements JFugueElement
     public static final int PRESTO = 180;
     public static final int PRETISSIMO = 220;
 
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Tempo other = (Tempo) obj;
+        if (this.tempo != other.tempo) {
+            return false;
+        }
+        return true;
+    }
+
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + this.tempo;
+        return hash;
+    }
+
+    public static final Map<String,String> DICT_MAP;
+    static {
+    	DICT_MAP = MapUtils.convertArrayToImutableMap(new String[][] {
+    	        //
+    	        // Tempo values
+    	        // {NEW for JFugue 4.0)
+    	        {"GRAVE"                      ,"40"},
+    	        {"LARGO"                      ,"45"},
+    	        {"LARGHETTO"                  ,"50"},
+    	        {"LENTO"                      ,"55"},
+    	        {"ADAGIO"                     ,"60"},
+    	        {"ADAGIETTO"                  ,"65"},
+
+    	        {"ANDANTE"                    ,"70"},
+    	        {"ANDANTINO"                  ,"80"},
+    	        {"MODERATO"                   ,"95"},
+    	        {"ALLEGRETTO"                 ,"110"},
+
+    	        {"ALLEGRO"                    ,"120"},
+    	        {"VIVACE"                     ,"145"},
+    	        {"PRESTO"                     ,"180"},
+    	        {"PRETISSIMO"                 ,"220"},
+    	});
+    }
 }

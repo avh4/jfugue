@@ -30,7 +30,11 @@ package org.jfugue;
  */
 public final class ChannelPressure implements JFugueElement
 {
-    private byte pressure;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private byte pressure;
 
     /**
      * Creates a new channel pressure object, with the specified key and pressure values.
@@ -86,4 +90,25 @@ public final class ChannelPressure implements JFugueElement
         return buffy.toString();
     }
 
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ChannelPressure other = (ChannelPressure) obj;
+        if (this.pressure != other.pressure) {
+            return false;
+        }
+        return true;
+    }
+
+    public int hashCode() {
+        int hash = 5;
+        hash = 59 * hash + this.pressure;
+        return hash;
+    }
+
+    
 }
