@@ -22,7 +22,8 @@
 
 package org.jfugue.extras;
 
-import org.jfugue.*;
+import org.jfugue.Note;
+import org.jfugue.PatternTransformer;
 
 /**
  * The IntervalPatternTransformer alters music by changing the interval, or step, for each
@@ -57,7 +58,7 @@ public class IntervalPatternTransformer extends PatternTransformer
         noteValue += this.interval;
         note.setValue(noteValue);
 
-        getReturnPattern().addElement(note);
+        getResult().addElement(note);
     }
 
     /** Transforms the given note */
@@ -67,7 +68,7 @@ public class IntervalPatternTransformer extends PatternTransformer
         noteValue += this.interval;
         note.setValue(noteValue);
 
-        getReturnPattern().addElement(note);
+        getResult().addElement(note);
     }
 
     /** Transforms the given note */
@@ -77,6 +78,6 @@ public class IntervalPatternTransformer extends PatternTransformer
         noteValue += this.interval;
         note.setValue(noteValue);
 
-        getReturnPattern().addElement(note);
+        getResult().addElement(note);
     }
 }

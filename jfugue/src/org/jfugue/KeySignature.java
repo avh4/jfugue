@@ -35,7 +35,11 @@ package org.jfugue;
  */
 public final class KeySignature implements JFugueElement
 {
-    private byte keySig;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private byte keySig;
     private byte scale;
 
     /**

@@ -33,7 +33,11 @@ package org.jfugue;
  */
 public final class Layer implements JFugueElement
 {
-    private byte layer;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private byte layer;
 
     /**
      * Creates a new Layer object, with the specified layer number.

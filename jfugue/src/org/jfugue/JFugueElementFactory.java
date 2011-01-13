@@ -7,15 +7,24 @@ package org.jfugue;
  * 
  * @author joshua
  * 
- * @param <T> the type of {@link JFugueElement} this factory produces
+ * @param <T>
+ *            the type of {@link JFugueElement} this factory produces
  */
 public abstract class JFugueElementFactory<T extends JFugueElement> {
+
+	/**
+	 * This is only supposed to be called once per subclass to create a
+	 * singleton that gets registered with {@link JFugueElementFactoryManager}.
+	 */
+	protected JFugueElementFactory() {
+	}
 
 	/**
 	 * Create a {@link JFugueElement} of type {@code T} if possible from the
 	 * {@code token}, else throw an {@link IllegalArgumentException}.
 	 * 
-	 * @param token the MusicString token to be parsed
+	 * @param token
+	 *            the MusicString token to be parsed
 	 * @return an instance of {@code T}
 	 * @throws IllegalArgumentException
 	 */

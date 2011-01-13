@@ -576,6 +576,7 @@ public class MusicXmlRenderer implements ParserListener
 		metronome(120);
 	}
 	
+	@SuppressWarnings("unused")
 	private static void FrereJacquesRound()
 	{	File fileXML = new File("C:\\Documents and Settings\\Philip Sobolik\\My Documents\\"
 								+ "Visual Studio 2005\\WebSites\\NYSSMA3\\"
@@ -671,6 +672,7 @@ public class MusicXmlRenderer implements ParserListener
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	private static void Entertainer()
 	{	File fileSrc = new File("F:\\WIN\\JFugue\\org\\jfugue\\extras\\"
 								+ "entertainer.jfugue");

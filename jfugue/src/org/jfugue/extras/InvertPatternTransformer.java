@@ -22,7 +22,8 @@
 
 package org.jfugue.extras;
 
-import org.jfugue.*;
+import org.jfugue.Note;
+import org.jfugue.PatternTransformer;
 
 /**
  * Inverts the notes of the given pattern, around the provided "fulcrum" note.

@@ -22,7 +22,8 @@
 
 package org.jfugue.extras;
 
-import org.jfugue.*;
+import org.jfugue.Note;
+import org.jfugue.PatternTransformer;
 
 /**
  * The DiatonicIntervalPatternTransformer transposes all notes in the given
@@ -113,21 +114,21 @@ public class DiatonicIntervalPatternTransformer extends PatternTransformer
     public void noteEvent(Note note)
     {
         note = adjustNote(note, interval);
-        getReturnPattern().addElement(note);
+        getResult().addElement(note);
     }
 
     /** Transforms the given note */
     public void sequentialNoteEvent(Note note)
     {
         note = adjustNote(note, interval);
-        getReturnPattern().addElement(note);
+        getResult().addElement(note);
     }
 
     /** Transforms the given note */
     public void parallelNoteEvent(Note note)
     {
         note = adjustNote(note, interval);
-        getReturnPattern().addElement(note);
+        getResult().addElement(note);
     }
     
     /* Array to map a note value (0 .. 11) to the corresponding scale degree in C

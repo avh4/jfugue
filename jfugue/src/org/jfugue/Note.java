@@ -764,7 +764,17 @@ public final class Note implements JFugueElement
     		sb.append(')');
 //    		System.out.println(chords);
     		CHORD_RE = sb.toString();
+    		
+    		// Register the factory
+    		JFugueElementFactoryManager.addFactory(getInstance());
     	}
+    	
+    	private static NoteFactory instance;
+    	public static NoteFactory getInstance() {
+			if (instance == null)
+				instance = new NoteFactory();
+			return instance;
+		}
     	
 		public Note createElement(String token) throws IllegalArgumentException {
 			// TODO Auto-generated method stub

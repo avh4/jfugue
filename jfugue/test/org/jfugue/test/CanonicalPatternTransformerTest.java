@@ -1,6 +1,7 @@
 package org.jfugue.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import org.jfugue.Pattern;
 import org.jfugue.Tempo;

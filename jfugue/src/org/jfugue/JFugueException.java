@@ -31,6 +31,11 @@ package org.jfugue;
 public class JFugueException extends RuntimeException
 {
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
      * Create a new JFugueException.
      *
      * @param exc The string representing the exception.  

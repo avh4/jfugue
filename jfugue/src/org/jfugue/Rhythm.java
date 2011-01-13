@@ -47,7 +47,11 @@ import java.util.Map;
  */
 public class Rhythm implements Serializable
 {
-    private Map<Character, String> charToNote;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private Map<Character, String> charToNote;
     private String[] layers;
     private String[] voices;
     private String[] voiceDetails;

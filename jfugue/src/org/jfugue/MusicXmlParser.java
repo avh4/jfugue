@@ -660,7 +660,8 @@ public final class MusicXmlParser extends Parser
      * @returns the long value of the definition
      * @throws JFugueException if there is a problem getting a long from the dictionary look-up
      */
-    private long getLongFromDictionary(String bracketedString) throws JFugueException
+    @SuppressWarnings("unused")
+	private long getLongFromDictionary(String bracketedString) throws JFugueException
     {	String definition = dictionaryLookup(bracketedString);
         Long newlong = null;
         try {
@@ -677,7 +678,8 @@ public final class MusicXmlParser extends Parser
      * @returns the int value of the definition
      * @throws JFugueException if there is a problem getting a int from the dictionary look-up
      */
-    private int getIntFromDictionary(String bracketedString) throws JFugueException
+    @SuppressWarnings("unused")
+	private int getIntFromDictionary(String bracketedString) throws JFugueException
     {	String definition = dictionaryLookup(bracketedString);
         Integer newint = null;
         try {
@@ -694,7 +696,8 @@ public final class MusicXmlParser extends Parser
      * @returns the double value of the definition
      * @throws JFugueException if there is a problem getting a double from the dictionary look-up
      */
-    private double getDoubleFromDictionary(String bracketedString) throws JFugueException
+    @SuppressWarnings("unused")
+	private double getDoubleFromDictionary(String bracketedString) throws JFugueException
     {	String definition = dictionaryLookup(bracketedString);
         Double newdouble = null;
         try {

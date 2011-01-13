@@ -30,7 +30,11 @@ package org.jfugue;
  */
 public final class Voice implements JFugueElement
 {
-    private byte voice;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private byte voice;
 
     /**
      * Creates a new Voice object, with the specified voice value.

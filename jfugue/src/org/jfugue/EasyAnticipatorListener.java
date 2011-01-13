@@ -34,7 +34,8 @@ public abstract class EasyAnticipatorListener extends ParserListenerAdapter
         activeInstrument = new Instrument((byte)0);
     }
     
-    private int tempo;
+    @SuppressWarnings("unused")
+	private int tempo;
     
     public void tempoEvent(Tempo tempo)
     {
@@ -70,7 +71,8 @@ public abstract class EasyAnticipatorListener extends ParserListenerAdapter
 
     /** Duration is in PPQ, need to translate that into msec */
     // TODO: Is duration ALWAYS in PPQ, or does it depend on sequenceTiming?
-    private void sleep(long durationInPPQ)
+    @SuppressWarnings("unused")
+	private void sleep(long durationInPPQ)
     {
         try {
             long msec = ((durationInPPQ / 4 ) ); 

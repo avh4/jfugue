@@ -33,6 +33,11 @@ package org.jfugue;
 public final class Measure implements JFugueElement
 {
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
      * Creates a new Measure object, which is simply an indicator
      * that a measure line has been parsed in a MusicString
      */

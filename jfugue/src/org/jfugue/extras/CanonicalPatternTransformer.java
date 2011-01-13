@@ -1,12 +1,27 @@
 package org.jfugue.extras;
 
-import org.jfugue.*;
-
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
+
+import org.jfugue.ChannelPressure;
+import org.jfugue.Controller;
+import org.jfugue.Instrument;
+import org.jfugue.JFugueElement;
+import org.jfugue.KeySignature;
+import org.jfugue.Layer;
+import org.jfugue.Measure;
+import org.jfugue.Note;
+import org.jfugue.Pattern;
+import org.jfugue.PatternTransformer;
+import org.jfugue.PitchBend;
+import org.jfugue.PolyphonicPressure;
+import org.jfugue.SystemExclusiveEvent;
+import org.jfugue.Tempo;
+import org.jfugue.Time;
+import org.jfugue.Voice;
 
 /**
  * EXPIRIMENTAL: This {@link PatternTransformer} converts a {@link Pattern} to a

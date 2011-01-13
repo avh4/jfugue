@@ -48,6 +48,6 @@ public class IntervalTransformer extends PatternTransformer
         } else {
             note.setValue((byte)0);
         }
-        getReturnPattern().addElement(note);
+        getResult().addElement(note);
     }
 }

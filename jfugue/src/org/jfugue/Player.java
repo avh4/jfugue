@@ -25,7 +25,6 @@ package org.jfugue;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.sound.midi.InvalidMidiDataException;
@@ -59,7 +58,8 @@ public class Player
     private volatile boolean started = false;
     private volatile boolean finished = false;
     
-    private Map rememberedPatterns;
+//    @SuppressWarnings("unused")
+//	private Map rememberedPatterns;
 
     /**
      * Instantiates a new Player object, which is used for playing music.

@@ -30,7 +30,11 @@ package org.jfugue;
  */
 public final class SystemExclusiveEvent implements JFugueElement
 {
-    private byte[] data;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private byte[] data;
 
     /**
      * Creates a new SystemExclusiveEvent object, with the specified bytes.

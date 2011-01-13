@@ -1,7 +1,6 @@
 package org.jfugue.test;
 
 import org.jfugue.Pattern;
-import org.jfugue.Player;
 import org.jfugue.StreamingPlayer;
 
 

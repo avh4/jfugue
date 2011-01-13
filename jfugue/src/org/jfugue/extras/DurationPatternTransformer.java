@@ -22,7 +22,8 @@
 
 package org.jfugue.extras;
 
-import org.jfugue.*;
+import org.jfugue.Note;
+import org.jfugue.PatternTransformer;
 
 /**
  * The DurationPatternTransformer multiplies the duration of all notes in the given
@@ -64,7 +65,7 @@ public class DurationPatternTransformer extends PatternTransformer
         durationValue *= this.factor;
         note.setDecimalDuration(durationValue);
 
-        getReturnPattern().addElement(note);
+        getResult().addElement(note);
     }
 
     /** Transforms the given note */
@@ -74,7 +75,7 @@ public class DurationPatternTransformer extends PatternTransformer
         durationValue *= this.factor;
         note.setDecimalDuration(durationValue);
 
-        getReturnPattern().addElement(note);
+        getResult().addElement(note);
     }
 
     /** Transforms the given note */
@@ -84,6 +85,6 @@ public class DurationPatternTransformer extends PatternTransformer
         durationValue *= this.factor;
         note.setDecimalDuration(durationValue);
 
-        getReturnPattern().addElement(note);
+        getResult().addElement(note);
     }
 }

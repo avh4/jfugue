@@ -22,15 +22,8 @@
 
 package org.jfugue;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-
-import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MetaEventListener;
 import javax.sound.midi.MetaMessage;
-import javax.sound.midi.MidiChannel;
-import javax.sound.midi.MidiFileFormat;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequence;
@@ -86,7 +79,8 @@ public class AlwaysOpenPlayer extends Player
         super(synth);
     }
 
-    private void initSequencer()
+    @SuppressWarnings("unused")
+	private void initSequencer()
     {
         // Close the sequencer and synthesizer
         getSequencer().addMetaEventListener(new MetaEventListener() {

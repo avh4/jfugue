@@ -22,7 +22,17 @@
 
 package org.jfugue.extras;
 
-import org.jfugue.*;
+import org.jfugue.ChannelPressure;
+import org.jfugue.Controller;
+import org.jfugue.Instrument;
+import org.jfugue.KeySignature;
+import org.jfugue.Note;
+import org.jfugue.PatternTransformer;
+import org.jfugue.PitchBend;
+import org.jfugue.PolyphonicPressure;
+import org.jfugue.Tempo;
+import org.jfugue.Time;
+import org.jfugue.Voice;
 
 /**
  * Reverses a given pattern.
@@ -115,8 +125,8 @@ public class ReversePatternTransformer extends PatternTransformer
         StringBuilder buddy = new StringBuilder();
         buddy.append(string);
         buddy.append(connector);
-        buddy.append(getReturnPattern().getMusicString());
-        getReturnPattern().setMusicString(buddy.toString());
+        buddy.append(getResult().getMusicString());
+        getResult().setMusicString(buddy.toString());
     }
 
     public static final String INTERVAL = "interval";

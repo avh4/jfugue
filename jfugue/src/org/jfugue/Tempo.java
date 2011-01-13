@@ -172,4 +172,27 @@ public final class Tempo implements JFugueElement
     	        {"PRETISSIMO"                 ,"220"},
     	});
     }
+    
+    public static class TempoFactory extends JFugueElementFactory<Tempo> {
+    	
+    	private static Tempo.TempoFactory instance;
+		private TempoFactory() {}
+		public static Tempo.TempoFactory getInstance() {
+			if (instance == null)
+				instance = new Tempo.TempoFactory();
+			return instance;
+		}
+
+		public Tempo createElement(String token)
+				throws IllegalArgumentException {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public Class<Tempo> type() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+    	
+    }
 }
