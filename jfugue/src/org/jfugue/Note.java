@@ -715,7 +715,7 @@ public final class Note implements JFugueElement
     	
     	static {
     		// Build the chord map
-    		Map<String,byte[]> chordMap = new HashMap<String, byte[]>();
+    		chordMap = new HashMap<String, byte[]>();
 
       		addChord("MAJ", 4, 7);
       		addChord("MIN", 3, 7);
