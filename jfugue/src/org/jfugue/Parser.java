@@ -127,7 +127,7 @@ public class Parser
      */
     public ParserProgressListener[] getParserProgressListeners()
     {
-        ParserProgressListener[] listeners = listenerList.getListeners(ParserProgressListener.class);
+        ParserProgressListener[] listeners =  progressListenerList.getListeners(ParserProgressListener.class);
         return listeners;
     }
     
@@ -138,7 +138,7 @@ public class Parser
     {
         ParserProgressListener[] listeners = listenerList.getListeners(ParserProgressListener.class);
         for (ParserProgressListener listener : listeners) { 
-            listenerList.remove(ParserProgressListener.class, listener);
+             progressListenerList.remove(ParserProgressListener.class, listener);
         }
     }
 
