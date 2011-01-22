@@ -4,19 +4,17 @@ import static org.mockito.Mockito.*;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
 
 import static org.junit.Assert.*;
 
 import org.jfugue.ParserListener;
 import org.jfugue.ParserProgressListener;
 import org.jfugue.Parser;
+
 import org.jfugue.Voice;
+import org.jfugue.Tempo;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
@@ -113,7 +111,20 @@ public class ParserTest {
         assertEquals("Removing a ParserListener twice should have the same effect as removing it once", 0, parser.getParserListeners().length);
     }
 
-    private Object invokeParserMethod(String methodName, Class [] methodArgTypes,  Object [] methodArgs) {
+    private ParserListener getNotifiedListener(final String methodName, final Object arg) {
+        ParserListener mockListener = mock(ParserListener.class);
+        parser.addParserListener(mockListener);
+	callEventMethod(methodName,arg);
+	return mockListener;
+    }
+
+    private void callEventMethod(final String methodName, final Object arg) {
+	final Class [] argTypes = {arg.getClass()};
+	final Object [] args = {arg};
+	invokeParserMethod(methodName,argTypes,args);
+    }
+
+    private Object invokeParserMethod(final String methodName, final Class [] methodArgTypes,  final Object [] methodArgs) {
         try {
 	    Method method = Parser.class.getDeclaredMethod(methodName, methodArgTypes);
 	    method.setAccessible(true);
@@ -129,16 +140,16 @@ public class ParserTest {
         }
         return null;
     }
-
+    
     @Test 
     public void testfireVoiceEvent() {
-        Class [] argTypes = {Voice.class};
-	Voice voice = new Voice((byte)1);
-        Object [] args = {voice};
+	final Voice voice = new Voice((byte)0);
+        verify(getNotifiedListener("fireVoiceEvent", voice)).voiceEvent(voice);	
+    }
 
-        ParserListener mockListener = mock(ParserListener.class);
-        parser.addParserListener(mockListener);
-        Object o = invokeParserMethod("fireVoiceEvent",argTypes,args);
-        verify(mockListener).voiceEvent(voice);
+    @Test 
+    public void testfireTempoEvent() {
+	final Tempo tempo = new Tempo(0);
+        verify(getNotifiedListener("fireTempoEvent", tempo)).tempoEvent(tempo);
     }
 }
