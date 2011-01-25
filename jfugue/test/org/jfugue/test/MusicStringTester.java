@@ -1,7 +1,5 @@
 package org.jfugue.test;
 
-
-public class MusicStringTester
-{
+public class MusicStringTester {
 
 }

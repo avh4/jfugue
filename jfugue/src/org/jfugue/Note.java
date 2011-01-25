@@ -715,12 +715,10 @@ public final class Note implements JFugueElement
     	
     	static {
     		// Build the chord map
-    		chordMap = new HashMap<String, byte[]>();
-
       		addChord("MAJ", 4, 7);
       		addChord("MIN", 3, 7);
       		addChord("AUG", 4, 8);
-      		addChord("MAJ", 3, 6);
+      		addChord("DIM", 3, 6);
 
       		addChord("DOM7", 4, 7, 10);
       		addChord("MAJ7", 4, 7, 11);
@@ -777,7 +775,6 @@ public final class Note implements JFugueElement
 		}
     	
 		public Note createElement(String token) throws IllegalArgumentException {
-			// TODO Auto-generated method stub
 			
 //			if (token.)
 //				throw new IllegalArgumentException("Token for note invalid: " + token);

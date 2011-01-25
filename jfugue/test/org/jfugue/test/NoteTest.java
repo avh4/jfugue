@@ -1,8 +1,8 @@
 package org.jfugue.test;
 
+import static org.junit.Assert.*;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import java.util.Map;
 
 import org.jfugue.MusicStringParser;
 import org.jfugue.Note;
@@ -23,14 +23,33 @@ public class NoteTest {
 	@Test
 	public void testNoteDuration() throws Exception {
 		Note n1 = new Note((byte) 60, 0.5);
-		assertTrue("Decimal duration and long duration don't match when setting decimal duration", n1.getDecimalDuration() == n1.getDuration() / MusicStringParser.SEQUENCE_RES);
+		assertTrue(
+				"Decimal duration and long duration don't match when setting decimal duration",
+				n1.getDecimalDuration() == n1.getDuration()
+						/ MusicStringParser.SEQUENCE_RES);
 		n1 = new Note((byte) 60, (long) (MusicStringParser.SEQUENCE_RES * 0.5));
-		assertTrue("Decimal duration and long duration don't match when setting long duration", ((long) (MusicStringParser.SEQUENCE_RES * n1.getDecimalDuration())) == n1.getDuration());
+		assertTrue(
+				"Decimal duration and long duration don't match when setting long duration",
+				((long) (MusicStringParser.SEQUENCE_RES * n1
+						.getDecimalDuration())) == n1.getDuration());
 	}
-	
+
 	@Test
 	public void testChords() {
-		assertFalse("The chord map is empty", Note.NoteFactory.CHORDS_MAP.isEmpty());
+		Map<String, byte[]> chords = Note.NoteFactory.CHORDS_MAP;
+		assertFalse("The chord map is empty", chords.isEmpty());
+		assertTrue("MAJ is not in CHORDS_MAP", chords.containsKey("MAJ"));
+		byte[] bs = chords.get("MAJ");
+		assertArrayEquals("MAJ is not as it should be", new byte[] { 4, 7 }, bs);
+	}
+
+	@Test
+	public void testEquality() throws Exception {
+		String n1 = "Cb4/0.5", n2 = "D";
+		assertEquals("The two " + n1 + " are not equal", Note.createNote(n1),
+				Note.createNote(n1));
+		assertFalse(n1 + " and " + n2 + " report being equal",
+				Note.createNote(n1).equals(Note.createNote(n2)));
 	}
 
 }

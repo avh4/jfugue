@@ -31,9 +31,8 @@ public class CanonicalPatternTransformerTest extends TestCaseHelpers {
 	@Test
 	public void testTempo() {
 		Tempo tempo1 = new Tempo(120), tempo2 = new Tempo(240);
-		Pattern test1 = new Pattern(tempo1, abcd),
-				test2 =	new Pattern(test1, tempo2),
-				test3 = new Pattern(test2, tempo1);
+		Pattern test1 = new Pattern(tempo1, abcd), test2 = new Pattern(test1,
+				tempo2), test3 = new Pattern(test2, tempo1);
 		assertCanonEq(test1, new Pattern(test1, tempo1));
 		assertCononNotEq(test1, test2);
 		assertCononNotEq(test2, test3);
@@ -43,10 +42,10 @@ public class CanonicalPatternTransformerTest extends TestCaseHelpers {
 	private void assertCanonEq(Pattern one, Pattern two) {
 		assertEquals(cpt.execute(one), cpt.execute(two));
 	}
-	
+
 	private void assertCononNotEq(Pattern one, Pattern two) {
-		assertFalse(String.format("%s == %s", one, two),
-					cpt.execute(one).equals(cpt.execute(two)));
+		assertFalse(String.format("%s == %s", one, two), cpt.execute(one)
+				.equals(cpt.execute(two)));
 	}
 
 }

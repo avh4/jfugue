@@ -26,9 +26,14 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.EventListener;
 import java.util.HashMap;
@@ -656,9 +661,9 @@ public class Pattern implements JFugueElement
     }
 
     /**
-     * Loads a pattern from a text file.  Each line of the file should be either a
-     * collection of MusicString tokens, or a line that begins with a # character, indicating
-     * that the line is a comment.
+     * Load a {@code Pattern} from an {@code Reader} in {@code .jfugue} format.
+     * Each line be either a collection of MusicString tokens, or a line that begins
+     * with a # character, indicating that the line is a comment.
      * 
      * Commented lines may contain properties in the form of key:value.  For example,
      * <pre>
@@ -666,17 +671,17 @@ public class Pattern implements JFugueElement
      * </pre>
      * would create a property called 'Title' that would contain the value 'Inventio 13'.
      * 
-     * @param file
-     * @return
+     * @param reader
+     * @return the {@code Pattern} loaded
      * @throws IOException
      */
-    public static Pattern loadPattern(File file) throws IOException
+    public static Pattern loadPattern(Reader reader) throws IOException
     {
         StringBuilder buddy = new StringBuilder();
 
         Pattern pattern = new Pattern();
 
-        BufferedReader bread = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+        BufferedReader bread = new BufferedReader(reader);
         while (bread.ready()) {
             String s = bread.readLine();
             if ((s != null) && (s.length() > 1)) {
@@ -701,16 +706,38 @@ public class Pattern implements JFugueElement
 
         return pattern;
     }
+    
+    /**
+     * Load a {@code Pattern} from an {@code InputStream} in {@code .jfugue} format.
+     * 
+     * @param in
+     * @return
+     * @throws IOException
+     */
+    public static Pattern loadPattern(InputStream in) throws IOException {
+		return loadPattern(new InputStreamReader(in));
+	}
+    
+    /**
+     * Load a {@code Pattern} from an {@code File} in {@code .jfugue} format.
+     * 
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    public static Pattern loadPattern(File file) throws IOException {
+		return loadPattern(new FileInputStream(file));
+	}
 
     /**
-     * Saves the pattern as a text file.  The file passed in should ideally be named
-     * with a .jfugue extension.
+     * Saves {@code this} to {@code writer} in {@code .jfugue} format.
      * 
-     * @param filename the filename to save under
+     * @param writer
+     * @throws IOException
      */
-    public void savePattern(File file) throws IOException
+    public void savePattern(Writer writer) throws IOException
     {
-        BufferedWriter out = new BufferedWriter(new FileWriter(file));
+        BufferedWriter out = new BufferedWriter(writer);
         if ((getProperties().size() > 0) || (getTitle() != null)) {
             out.write("#\n");
             if (getTitle() != null) {
@@ -749,6 +776,27 @@ public class Pattern implements JFugueElement
         out.close();
     }
 
+    /**
+     * Saves {@code this} to {@code out} in {@code .jfugue} format.
+     * 
+     * @param out
+     * @throws IOException
+     */
+    public void savePattern(OutputStream out) throws IOException {
+    	savePattern(new OutputStreamWriter(out));
+    }
+    
+    /**
+     * Saves {@code this} to {@code file} in {@code .jfugue} format.
+     * The {@code file} should ideally have an extension of {@code .jfugue}.
+     * 
+     * @param file
+     * @throws IOException
+     */
+    public void savePattern(File file) throws IOException {
+    	savePattern(new FileOutputStream(file));
+    }
+    
     /**
      * Returns an array of strings representing each token in the Pattern.
      * @return

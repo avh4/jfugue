@@ -1,5 +1,6 @@
 package org.jfugue.test;
 
+import java.io.File;
 
 import org.jfugue.Pattern;
 import org.jfugue.Player;
@@ -8,6 +9,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class PatternTest {
+
+	public static final String FRERE_JACQUAS = "FrereJacques.jfugue";
 	
 	protected Player player = new Player();
 
@@ -18,9 +21,8 @@ public class PatternTest {
 	@After
 	public void tearDown() throws Exception {
 	}
-	
-	@Test
-	public void testFrereJacques() {		
+
+	public Pattern getFrereJacques() {
 		// "Frere Jacques"
 		Pattern pattern1 = new Pattern("C5q D5q E5q C5q");
 
@@ -39,7 +41,7 @@ public class PatternTest {
 		song.add(pattern2, 2); // Adds 'pattern2' to 'song' twice
 		song.add(pattern3, 2); // Adds 'pattern3' to 'song' twice
 		song.add(pattern4, 2); // Adds 'pattern4' to 'song' twice
-		
+
 		Pattern doubleMeasureRest = new Pattern("Rw Rw");
 
 		// Create the first voice
@@ -62,13 +64,33 @@ public class PatternTest {
 		roundSong.add(round2);
 		roundSong.add(round3);
 
-		// Play the song!
-		player.play(roundSong);
+		roundSong.setProperty(Pattern.TITLE, "Frere Jacques");
+		return roundSong;
 	}
-	
+
+	@Test
+	public void testSave() throws Exception {
+		Pattern song = getFrereJacques();
+		song.savePattern(new File(FRERE_JACQUAS));
+	}
+
+	@Test
+	public void testLoad() throws Exception {
+		Pattern song = Pattern.loadPattern(getClass().getResourceAsStream(FRERE_JACQUAS));
+		System.out.println(getClass().getResource(FRERE_JACQUAS));
+		System.out.println(song.getPropertiesAsParagraph());
+		System.out.println(song.getMusicString());
+	}
+
 	@Test
 	public void testInstruments() {
 		player.play("I[Piano] C D E G Rh I[Flute] G F A B");
+	}
+
+	@Test
+	public void testFrereJacques() {
+		Pattern song = getFrereJacques();
+		player.play(song);
 	}
 
 }
