@@ -33,7 +33,7 @@ import javax.swing.event.EventListenerList;
  * @author David Koelle
  *
  */
-public class Parser 
+public abstract class Parser 
 {
     public Parser() 
     { 

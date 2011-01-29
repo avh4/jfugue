@@ -1,5 +1,7 @@
 package org.jfugue.test;
 
+import static org.junit.Assert.*;
+
 import java.io.File;
 
 import org.jfugue.Pattern;
@@ -10,7 +12,7 @@ import org.junit.Test;
 
 public class PatternTest {
 
-	public static final String FRERE_JACQUAS = "FrereJacques.jfugue";
+	public static final String FRERE_JACQUAS_FILE = "FrereJacques.jfugue";
 	
 	protected Player player = new Player();
 
@@ -71,13 +73,13 @@ public class PatternTest {
 	@Test
 	public void testSave() throws Exception {
 		Pattern song = getFrereJacques();
-		song.savePattern(new File(FRERE_JACQUAS));
+		song.savePattern(new File(FRERE_JACQUAS_FILE));
 	}
 
 	@Test
 	public void testLoad() throws Exception {
-		Pattern song = Pattern.loadPattern(getClass().getResourceAsStream(FRERE_JACQUAS));
-		System.out.println(getClass().getResource(FRERE_JACQUAS));
+		Pattern song = Pattern.loadPattern(getClass().getResourceAsStream(FRERE_JACQUAS_FILE));
+		System.out.println(getClass().getResource(FRERE_JACQUAS_FILE));
 		System.out.println(song.getPropertiesAsParagraph());
 		System.out.println(song.getMusicString());
 	}
@@ -92,5 +94,5 @@ public class PatternTest {
 		Pattern song = getFrereJacques();
 		player.play(song);
 	}
-
+	
 }

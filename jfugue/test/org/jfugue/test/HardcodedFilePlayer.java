@@ -30,7 +30,7 @@ public class HardcodedFilePlayer {
 		Player player = new Player();
 		Pattern pattern = null;
 		try {
-			pattern = Pattern.loadPattern(getClass().getResourceAsStream(PatternTest.FRERE_JACQUAS));
+			pattern = Pattern.loadPattern(getClass().getResourceAsStream(PatternTest.FRERE_JACQUAS_FILE));
 			player.play(pattern);
 		} catch (IOException e) {
 			e.printStackTrace();

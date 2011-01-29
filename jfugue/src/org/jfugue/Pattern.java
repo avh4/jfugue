@@ -69,8 +69,8 @@ public class Pattern implements JFugueElement
 	 * 
 	 */
 	private static final long serialVersionUID = 4334276178935154938L;
-	private StringBuilder musicString;
-    private Map<String, String> properties;  // uses lazy initialization, so access only through getProperties()
+	protected StringBuilder musicString;
+	protected Map<String, String> properties;  // uses lazy initialization, so access only through getProperties()
 
     public static final String TITLE = "Title";
 
@@ -88,7 +88,9 @@ public class Pattern implements JFugueElement
      */
     public Pattern(String musicString)
     {
-        setMusicString(musicString);
+//        setMusicString(musicString);
+    	this.musicString = new StringBuilder();
+        this.musicString.append(musicString);
     }
     
     public Pattern(String... strings) {
