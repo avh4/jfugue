@@ -34,7 +34,8 @@ import org.jfugue.util.MapUtils;
  */
 public final class Controller implements JFugueElement
 {
-    /**
+
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
@@ -142,7 +143,11 @@ public final class Controller implements JFugueElement
         return buffy.toString();
     }
 
-    public static final byte BANK_SELECT_COARSE = 0;
+    public void acceptVisitor(ElementVisitor visitor) {
+		visitor.visitController(this);		
+	}
+
+	public static final byte BANK_SELECT_COARSE = 0;
     public static final byte MOD_WHEEL_COARSE = 1;
     public static final byte BREATH_COARSE = 2;
     public static final byte FOOT_PEDAL_COARSE = 4;
@@ -451,4 +456,5 @@ public final class Controller implements JFugueElement
     	        {"DEFAULT"                    ,"64"},  			
     	});
     }
+	
 }

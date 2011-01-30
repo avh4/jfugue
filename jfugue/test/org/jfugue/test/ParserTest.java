@@ -20,11 +20,14 @@ import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 
 public class ParserTest {
-    private Parser parser;
+    public class TestParser extends Parser {
+	}
+
+	private Parser parser;
 
     @Before
     public void setUp() {
-        parser = new Parser();
+        parser = new TestParser();
     }
 
     @Test 
@@ -152,4 +155,6 @@ public class ParserTest {
 	final Tempo tempo = new Tempo(0);
         verify(getNotifiedListener("fireTempoEvent", tempo)).tempoEvent(tempo);
     }
+    
+    
 }

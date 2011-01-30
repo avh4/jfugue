@@ -116,7 +116,11 @@ public final class PolyphonicPressure implements JFugueElement
         return buffy.toString();
     }
 
-    public boolean equals(Object obj) {
+    public void acceptVisitor(ElementVisitor visitor) {
+		visitor.visitPolyphonicPressure(this);		
+	}
+
+	public boolean equals(Object obj) {
         if (obj == null) {
             return false;
         }

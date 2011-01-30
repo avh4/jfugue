@@ -35,9 +35,11 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EventListener;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -45,6 +47,7 @@ import java.util.StringTokenizer;
 import javax.swing.event.EventListenerList;
 
 import org.jfugue.extras.GetInstrumentsUsedTool;
+import org.jfugue.extras.ListenerToVisitorAdaptor;
 import org.jfugue.extras.ReversePatternTransformer;
 
 /**
@@ -71,10 +74,12 @@ public class Pattern implements JFugueElement
 	private static final long serialVersionUID = 4334276178935154938L;
 	protected StringBuilder musicString;
 	protected Map<String, String> properties;  // uses lazy initialization, so access only through getProperties()
+	protected List<JFugueElement> elements = new LinkedList<JFugueElement>();
+	protected List<JFugueElement> iElements = Collections.unmodifiableList(elements);
 
     public static final String TITLE = "Title";
 
-	/**
+    /**
      * Instantiates a new pattern
      */
     public Pattern()
@@ -88,6 +93,9 @@ public class Pattern implements JFugueElement
      */
     public Pattern(String musicString)
     {
+    	/* This is to make it work with ImmutablePatterns.  I'm
+    	 * not quite sure why I need this.  -ska
+    	 */
 //        setMusicString(musicString);
     	this.musicString = new StringBuilder();
         this.musicString.append(musicString);
@@ -941,5 +949,13 @@ public class Pattern implements JFugueElement
 
     public String getVerifyString() {
 		return "Pattern: " + toString();
+	}
+
+	public void acceptVisitor(ElementVisitor visitor) {
+		// TODO	make this not use the parser
+		visitor.visitPattern(this);
+		MusicStringParser msp = new MusicStringParser();
+		msp.addParserListener(new ListenerToVisitorAdaptor(visitor));
+		msp.parse(this);
 	}
 }

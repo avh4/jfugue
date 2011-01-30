@@ -407,7 +407,21 @@ public final class Note implements JFugueElement
         return buddy.toString();
     }
 
-    public static String createVerifyString(int value, double duration)
+    public void acceptVisitor(ElementVisitor visitor) {
+		switch (type) {
+		case FIRST:
+			visitor.visitNote(this);
+			break;
+		case PARALLEL:
+			visitor.visitParallelNote(this);
+		case SEQUENTIAL:
+			visitor.visitSequentialNote(this);
+		default:
+			break;
+		}		
+	}
+
+	public static String createVerifyString(int value, double duration)
     {
         return createVerifyString(value, duration, false, false, (byte)64, (byte)64, true, false, false);
     }

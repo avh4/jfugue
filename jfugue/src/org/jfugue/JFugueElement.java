@@ -56,5 +56,13 @@ public interface JFugueElement extends Serializable
      * @version 4.0
      */
     public String getVerifyString();
+    
+    /**
+     * Takes a {@link ElementVisitor} and calls the appropriate methods on it
+     * depending what class {@code this} is.
+     * 
+     * @param visitor
+     */
+    public void acceptVisitor(ElementVisitor visitor);
 }
 

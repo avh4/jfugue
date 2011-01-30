@@ -47,8 +47,8 @@ public final class Tempo implements JFugueElement
 	 */
 	private static final long serialVersionUID = 1L;
 	private int tempo;
-
-    /**
+	
+	/**
      * Creates a new Tempo object, with the specified tempo value (in BPM).
      * @param tempo the tempo for this object, in Beats Per Minute
      */
@@ -111,7 +111,11 @@ public final class Tempo implements JFugueElement
         return buffy.toString();
     }
 
-    public static final int GRAVE = 40;
+    public void acceptVisitor(ElementVisitor visitor) {
+		visitor.visitTempo(this);		
+	}
+
+	public static final int GRAVE = 40;
     public static final int LARGO = 45;
     public static final int LARGHETTO = 50;
     public static final int LENTO = 55;
