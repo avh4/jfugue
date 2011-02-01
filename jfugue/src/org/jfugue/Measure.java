@@ -22,6 +22,11 @@
 
 package org.jfugue;
 
+import java.io.IOException;
+import java.io.PushbackReader;
+
+import org.jfugue.factories.JFugueElementFactory;
+
 /**
  * Represents a measure marker.  This has no bearing on the audio produced,
  * but is useful for making music strings more readable, and for listening
@@ -87,4 +92,23 @@ public final class Measure implements JFugueElement
         return hash;
     }
     
+    protected static class MeasureFactory extends JFugueElementFactory<Measure> {
+
+		public Measure parseElement(PushbackReader reader, Environment environment)
+				throws IllegalArgumentException {
+			try {
+				if (reader.ready()) {
+					int codePoint = reader.read();
+					if (((char) codePoint) == '|')
+						return new Measure();
+				}
+			} catch (IOException e) {}
+			throw new IllegalArgumentException("Cannot parse measure");
+		}
+
+		public Class<Measure> type() {
+			return Measure.class;
+		}
+
+    }
 }

@@ -22,6 +22,8 @@
 
 package org.jfugue;
 
+import java.io.IOException;
+import java.io.PushbackReader;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -30,6 +32,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.jfugue.factories.JFugueElementFactory;
+import org.jfugue.factories.JFugueElementFactoryManager;
 
 /**
  * Contains all information necessary for a musical note, including
@@ -826,23 +831,18 @@ public final class Note implements JFugueElement
 			return Note.class;			
 		}
 
-//		public Note parseElement(PushbackReader reader, Environment environment)
-//				throws IllegalArgumentException, IOException {
-//			if (reader.ready())
-//				throw new IllegalArgumentException();
-//			int codePoint = reader.read();
-//			char ch = Character.toUpperCase((char) codePoint);
-//			
-//			if ('A' <= ch && ch <= 'G') {
-//			} else if (ch == '[') {
-//			} else
-//				throw new IllegalArgumentException();
-//			
-//			return null;
-//		}
-
-		public Note createElement(String token) throws IllegalArgumentException {
-			// TODO Auto-generated method stub
+		public Note parseElement(PushbackReader reader, Environment environment)
+				throws IllegalArgumentException, IOException {
+			if (reader.ready())
+				throw new IllegalArgumentException();
+			int codePoint = reader.read();
+			char ch = Character.toUpperCase((char) codePoint);
+			
+			if ('A' <= ch && ch <= 'G') {
+			} else if (ch == '[') {
+			} else
+				throw new IllegalArgumentException();
+			
 			return null;
 		}
     	

@@ -28,7 +28,7 @@ import java.util.List;
 import org.jfugue.Instrument;
 import org.jfugue.MusicStringParser;
 import org.jfugue.ParserListenerAdapter;
-import org.jfugue.Pattern;
+import org.jfugue.PatternInterface;
 
 /**
  * Returns a List<Byte> containing all of the instruments used in the given pattern.
@@ -55,7 +55,7 @@ public class GetInstrumentsUsedTool extends ParserListenerAdapter
         }
     }
 
-    public List<Byte> getInstrumentsUsedInPattern(Pattern pattern)
+    public List<Byte> getInstrumentsUsedInPattern(PatternInterface pattern)
     {
         MusicStringParser parser = new MusicStringParser();
         parser.addParserListener(this);

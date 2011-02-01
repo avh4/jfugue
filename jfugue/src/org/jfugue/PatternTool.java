@@ -3,7 +3,7 @@ package org.jfugue;
 public abstract class PatternTool<R> extends ParserListenerAdapter {
 
     private R result;
-    private Pattern pattern;
+    private PatternInterface pattern;
 
     public R getResult() {
         if (result == null) {
@@ -18,7 +18,7 @@ public abstract class PatternTool<R> extends ParserListenerAdapter {
 
     protected abstract R initResult(Pattern pattern);
 
-    public Pattern getPattern() {
+    public PatternInterface getPattern() {
         return pattern;
     }
 
@@ -43,8 +43,8 @@ public abstract class PatternTool<R> extends ParserListenerAdapter {
     /**
      * This is for post processing results if there is a need.
      */
-    protected R processResult(R result) {
-    	return result;
+    protected R processResult(R r) {
+    	return r;
 	}
 
 	public void reset(Pattern pattern) {

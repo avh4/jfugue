@@ -27,7 +27,7 @@ import java.io.IOException;
 
 import javax.sound.midi.InvalidMidiDataException;
 
-import org.jfugue.Pattern;
+import org.jfugue.PatternInterface;
 import org.jfugue.Player;
 
 public class Midi2JFugue
@@ -41,7 +41,7 @@ public class Midi2JFugue
         }
         
         Player player = new Player();
-        Pattern pattern = null;
+        PatternInterface pattern = null;
         try {
             pattern = player.loadMidi(new File(args[1]));
             pattern.savePattern(new File(args[2]));

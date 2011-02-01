@@ -168,7 +168,7 @@ public final class StreamingPlayer
      * 
      * @param singleToken
      */
-    public void stream(Pattern singleToken)
+    public void stream(PatternInterface singleToken)
     {
         parser.parse(singleToken);
     }

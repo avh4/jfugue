@@ -193,7 +193,7 @@ public class Player
      * @param pattern the pattern to play
      * @see MidiRenderer
      */
-    public void play(Pattern pattern)
+    public void play(PatternInterface pattern)
     {
         Sequence sequence = getSequence(pattern);
         play(sequence);
@@ -206,7 +206,7 @@ public class Player
      */
     public void play(Pattern... patterns)
     {
-    	Pattern allPatterns = new Pattern();
+    	PatternInterface allPatterns = new Pattern();
     	for (Pattern p : patterns) {
     		allPatterns.add(p);
     	}
@@ -218,9 +218,9 @@ public class Player
      * @param context A map of pattern identifiers to Pattern objects
      * @param pattern The pattern to play
      */
-    public void play(Map<String, Pattern> context, Pattern pattern)
+    public void play(Map<String, Pattern> context, PatternInterface pattern)
     {
-    	Pattern contextPattern = Pattern.createPattern(context, pattern);
+    	PatternInterface contextPattern = Pattern.createPattern(context, pattern);
     	play(contextPattern);
     }
     
@@ -232,7 +232,7 @@ public class Player
      */
     public void play(Map<String, Pattern> context, Pattern... patterns)
     {
-    	Pattern contextPattern = Pattern.createPattern(context, patterns);
+    	PatternInterface contextPattern = Pattern.createPattern(context, patterns);
     	play(contextPattern);
     }
     
@@ -243,7 +243,7 @@ public class Player
      */
     public void play(Rhythm rhythm)
     {
-        Pattern pattern = rhythm.getPattern();
+        PatternInterface pattern = rhythm.getPattern();
         Sequence sequence = getSequence(pattern);
         play(sequence);
     }
@@ -312,7 +312,7 @@ public class Player
             throw new JFugueException(JFugueException.PLAYS_STRING_NOT_FILE_EXC);
         }
 
-        Pattern pattern = new Pattern(musicString);
+        PatternInterface pattern = new Pattern(musicString);
         play(pattern);
     }
 
@@ -343,7 +343,7 @@ public class Player
         play(sequence);
     }
 
-    public void play(Anticipator anticipator, Pattern pattern, long offset)
+    public void play(Anticipator anticipator, PatternInterface pattern, long offset)
     {
         Sequence sequence = getSequence(pattern);
         Sequence sequence2 = getSequence(pattern);
@@ -375,13 +375,13 @@ public class Player
      * @param patterns The patterns to play in harmony
      * @return The combined pattern, including voice tokens
      */
-    public Pattern playInHarmony(Pattern... patterns)
+    public PatternInterface playInHarmony(Pattern... patterns)
     {
         if (patterns.length > 15) {
             throw new IllegalArgumentException("playInHarmony no more than 15 patterns; "+patterns.length+" were passed in");
         }
         
-        Pattern retVal = new Pattern();
+        PatternInterface retVal = new Pattern();
         int voice = 0;
         for (int i=0; i < patterns.length; i++) {
             retVal.add("V"+voice);
@@ -481,7 +481,7 @@ public class Player
      * @param pattern the pattern to save
      * @param file the File to save the pattern to.  Should include file extension, such as .mid
      */
-    public void saveMidi(Pattern pattern, File file) throws IOException
+    public void saveMidi(PatternInterface pattern, File file) throws IOException
     {
         Sequence sequence = getSequence(pattern);
 
@@ -498,7 +498,7 @@ public class Player
      */
     public void saveMidi(String musicString, File file) throws IOException
     {
-        Pattern pattern = new Pattern(musicString);
+        PatternInterface pattern = new Pattern(musicString);
         saveMidi(pattern, file);
     }
 
@@ -518,7 +518,7 @@ public class Player
      * @throws IOException If there is a problem opening the MIDI file
      * @throws InvalidMidiDataException If there is a problem obtaining MIDI resources
      */
-    public Pattern loadMidi(File file) throws IOException, InvalidMidiDataException
+    public PatternInterface loadMidi(File file) throws IOException, InvalidMidiDataException
     {
         MidiFileFormat format = MidiSystem.getMidiFileFormat(file);
         this.sequenceTiming = format.getDivisionType();
@@ -528,7 +528,7 @@ public class Player
         MusicStringRenderer renderer = new MusicStringRenderer();
         parser.addParserListener(renderer);
         parser.parse(MidiSystem.getSequence(file));
-        Pattern pattern = new Pattern(renderer.getPattern().getMusicString());
+        PatternInterface pattern = new Pattern(renderer.getPattern().getMusicString());
 
         return pattern;
     }
@@ -586,7 +586,7 @@ public class Player
      * Returns the sequence containing the MIDI data from the given pattern.
      * @return the Sequence from the given pattern
      */
-    public Sequence getSequence(Pattern pattern)
+    public Sequence getSequence(PatternInterface pattern)
     {
         this.renderer.reset();
         this.parser.parse(pattern);

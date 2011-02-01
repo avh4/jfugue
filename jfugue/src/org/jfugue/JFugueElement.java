@@ -37,6 +37,9 @@ import java.io.Serializable;
  */
 public interface JFugueElement extends Serializable
 {
+
+	public static String FACTORY = null;
+	
     /**
      * Returns the Music String representing this element and all of its settings.
      * @return the Music String for this element

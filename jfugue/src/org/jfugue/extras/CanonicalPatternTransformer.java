@@ -15,6 +15,7 @@ import org.jfugue.Layer;
 import org.jfugue.Measure;
 import org.jfugue.Note;
 import org.jfugue.Pattern;
+import org.jfugue.PatternInterface;
 import org.jfugue.PatternTransformer;
 import org.jfugue.PitchBend;
 import org.jfugue.PolyphonicPressure;
@@ -47,7 +48,7 @@ public class CanonicalPatternTransformer extends PatternTransformer {
 	 * 
 	 * @see org.jfugue.PatternTool#processResult(java.lang.Object)
 	 */
-	protected Pattern processResult(Pattern result) {
+	protected PatternInterface processResult(PatternInterface result) {
 		for (JFugueElement element : getElements()) {
 			result.add(element);
 		}
@@ -148,14 +149,14 @@ public class CanonicalPatternTransformer extends PatternTransformer {
 	 * 
 	 * @see org.jfugue.PatternTransformer#initResult(org.jfugue.Pattern)
 	 */
-	protected Pattern initResult(Pattern pattern) {
+	protected PatternInterface initResult(Pattern pattern) {
 		elements.clear();
 		last.clear();
 
 		// The defaults
 		last.putAll(lastDef);
 
-		Pattern nPattern = new Pattern(pattern);
+		PatternInterface nPattern = new Pattern(pattern);
 		nPattern.setMusicString("");
 		return nPattern;
 	}

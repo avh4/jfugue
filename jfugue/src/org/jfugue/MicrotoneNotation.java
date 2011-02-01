@@ -96,7 +96,7 @@ public class MicrotoneNotation
         return (" &8192"); // Reset the pitch wheel.  8192 = original pitch wheel position
     }
 
-    public Pattern getPattern(String notation)
+    public PatternInterface getPattern(String notation)
     {
         StringBuilder buddy = new StringBuilder();
         String[] tokens = notation.split(" ");

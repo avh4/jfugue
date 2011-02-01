@@ -22,33 +22,15 @@
 
 package org.jfugue;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.Writer;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.EventListener;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
-import javax.swing.event.EventListenerList;
 
 import org.jfugue.extras.GetInstrumentsUsedTool;
 import org.jfugue.extras.ListenerToVisitorAdaptor;
-import org.jfugue.extras.ReversePatternTransformer;
 
 /**
  * This class represents a segment of music.  By representing segments of music
@@ -65,7 +47,7 @@ import org.jfugue.extras.ReversePatternTransformer;
  * @version 4.0.4 - properties and listenerList now use lazy initialization
  * @version 4.1 - Improved substring/replace methods to work on token index, instead of character index
  */
-public class Pattern implements JFugueElement
+public class Pattern extends AbstractPattern implements JFugueElement, PatternInterface
 {
 	
     /**
@@ -73,11 +55,10 @@ public class Pattern implements JFugueElement
 	 */
 	private static final long serialVersionUID = 4334276178935154938L;
 	protected StringBuilder musicString;
-	protected Map<String, String> properties;  // uses lazy initialization, so access only through getProperties()
 	protected List<JFugueElement> elements = new LinkedList<JFugueElement>();
 	protected List<JFugueElement> iElements = Collections.unmodifiableList(elements);
-
-    public static final String TITLE = "Title";
+	protected List<JFugueElement> elements = new LinkedList<JFugueElement>();
+	protected List<JFugueElement> iElements = Collections.unmodifiableList(elements);
 
     /**
      * Instantiates a new pattern
@@ -140,7 +121,7 @@ public class Pattern implements JFugueElement
      * 
      * @version 4.0
      * */
-    public static Pattern createPattern(Map<String, Pattern> context, Pattern pattern)
+    public static PatternInterface createPattern(Map<String, Pattern> context, PatternInterface pattern)
     {
     	StringBuilder buddy = new StringBuilder();
     	
@@ -164,10 +145,10 @@ public class Pattern implements JFugueElement
      * 
      * @version 4.0
      * */
-    public static Pattern createPattern(Map<String, Pattern> context, Pattern... patterns)
+    public static PatternInterface createPattern(Map<String, Pattern> context, Pattern... patterns)
     {
     	
-    	Pattern allPatterns = new Pattern();
+    	PatternInterface allPatterns = new Pattern();
     	for (Pattern p : patterns) {
     		allPatterns.add(p);
     	}
@@ -175,10 +156,9 @@ public class Pattern implements JFugueElement
     	return createPattern(context, allPatterns);
     }
     
-    /**
-     * Sets the music string kept by this pattern.
-     * @param s the music string
-     */
+    /* (non-Javadoc)
+	 * @see org.jfugue.PatternInterface#setMusicString(java.lang.String)
+	 */
     public void setMusicString(String musicString)
     {
         this.musicString = new StringBuilder();
@@ -203,21 +183,18 @@ public class Pattern implements JFugueElement
         return this.musicString.toString();
     }
 
-    /**
-     * Inserts a MusicString before this music string.
-     * NOTE - this does not call fragmentAdded!
-     * @param musicString the string to insert
-     */
+    /* (non-Javadoc)
+	 * @see org.jfugue.PatternInterface#insert(java.lang.String)
+	 */
     public void insert(String musicString)
     {
        this.musicString.insert(0, " ");
        this.musicString.insert(0, musicString);
     }
 
-    /**
-     * Adds an additional pattern to the end of this pattern.
-     * @param pattern the pattern to add
-     */
+    /* (non-Javadoc)
+	 * @see org.jfugue.PatternInterface#add(org.jfugue.Pattern)
+	 */
     public void add(Pattern pattern)
     {
         fireFragmentAdded(pattern);
@@ -225,19 +202,17 @@ public class Pattern implements JFugueElement
         appendMusicString(pattern.getMusicString());
     }
 
-    /**
-     * Adds a music string to the end of this pattern.
-     * @param musicString the music string to add
-     */
+    /* (non-Javadoc)
+	 * @see org.jfugue.PatternInterface#add(java.lang.String)
+	 */
     public void add(String musicString)
     {
         add(new Pattern(musicString));
     }
 
-    /**
-     * Adds an additional pattern to the end of this pattern.
-     * @param pattern the pattern to add
-     */
+    /* (non-Javadoc)
+	 * @see org.jfugue.PatternInterface#add(org.jfugue.Pattern, int)
+	 */
     public void add(Pattern pattern, int numTimes)
     {
         for (int i=0; i < numTimes; i++)
@@ -248,10 +223,9 @@ public class Pattern implements JFugueElement
         }
     }
 
-    /**
-     * Adds a music string to the end of this pattern.
-     * @param musicString the music string to add
-     */
+    /* (non-Javadoc)
+	 * @see org.jfugue.PatternInterface#add(java.lang.String, int)
+	 */
     public void add(String musicString, int numTimes)
     {
         add(new Pattern(musicString), numTimes);
@@ -269,12 +243,9 @@ public class Pattern implements JFugueElement
 //        }
 //    }
 
-    /**
-     * Adds a number of patterns sequentially
-     * 
-     * @param musicString the music string to add
-     * @version 4.0
-     */
+    /* (non-Javadoc)
+	 * @see org.jfugue.PatternInterface#add(java.lang.String)
+	 */
     public void add(String... musicStrings)
     {
         for (String string : musicStrings) {
@@ -282,11 +253,9 @@ public class Pattern implements JFugueElement
         }
     }
     
-    /**
-     * Adds the {@link JFugueElement}s to the pattern.
-     * 
-     * @param elements
-     */
+    /* (non-Javadoc)
+	 * @see org.jfugue.PatternInterface#add(org.jfugue.JFugueElement)
+	 */
     public void add(JFugueElement... elements) {
     	// TODO Might we want to just add the contents of addElement?
 		for (JFugueElement jFugueElement : elements) {
@@ -297,13 +266,9 @@ public class Pattern implements JFugueElement
 		}
 	}
 
-    /**
-     * Adds an individual element to the pattern.  This takes into
-     * account the possibility that the element may be a sequential or
-     * parallel note, in which case no space is placed before it.
-     * 
-     * @param element the element to add
-     */
+    /* (non-Javadoc)
+	 * @see org.jfugue.PatternInterface#addElement(org.jfugue.JFugueElement)
+	 */
     public void addElement(JFugueElement element)
     {
         String elementMusicString = element.getMusicString();
@@ -323,117 +288,9 @@ public class Pattern implements JFugueElement
     //  PROPERTIES
     //
     
-    /**
-     * Sets the title for this Pattern.
-     * As of JFugue 4.0, the title is set as a property with the key Pattern.TITLE
-     * @param title the title for this Pattern
-     */
-    public void setTitle(String title)
-    {
-        setProperty(TITLE, title);
-    }
-
-    /**
-     * Returns the title of this Pattern
-     * As of JFugue 4.0, the title is set as a property with the key Pattern.TITLE
-     * @return the title of this Pattern
-     */
-    public String getTitle()
-    {
-        return getProperty(TITLE);
-    }
-
-    /**
-     * Get a property on this pattern, such as "author" or "date".
-     * @version 4.0
-     */
-    public String getProperty(String key)
-    {
-        return getProperties().get(key);
-    }
-
-    /**
-     * Set a property on this pattern, such as "author" or "date".
-     * @version 4.0
-     */
-    public void setProperty(String key, String value)
-    {
-        getProperties().put(key, value);
-    }
-
-    /**
-     * Get all properties set on this pattern, such as "author" or "date".
-     * @version 4.0
-     */
-    public Map<String, String> getProperties()
-    {
-        if (properties == null) {
-            properties = new HashMap<String, String>();
-        }
-        return properties;
-    }
-
-    /**
-     * Returns a String containing key-value pairs stored in this object's properties,
-     * separated by semicolons and spaces.
-     * Values are returned in the following form:
-     * key1: value1; key2: value2; key3: value3
-     *
-     * @return a String containing key-value pairs stored in this object's properties, separated by semicolons and spaces
-     * @version 4.0
-     */
-    public String getPropertiesAsSentence()
-    {
-        StringBuilder buddy = new StringBuilder();
-        Iterator<String> iter = getProperties().keySet().iterator();
-        while (iter.hasNext()) {
-            String key = iter.next();
-            String value = getProperty(key);
-            buddy.append(key);
-            buddy.append(": ");
-            buddy.append(value);
-            buddy.append("; ");
-        }
-        String result = buddy.toString();
-        return result.endsWith("; ")
-        			? result.substring(0, result.length()-2) // Take off the last semicolon-space
-        			: result;
-    }
-
-    /**
-     * Returns a String containing key-value pairs stored in this object's properties,
-     * separated by newline characters.
-     *
-     * Values are returned in the following form:
-     * key1: value1\n
-     * key2: value2\n
-     * key3: value3\n
-     *
-     * @return a String containing key-value pairs stored in this object's properties, separated by newline characters
-     * @version 4.0
-     */
-    public String getPropertiesAsParagraph()
-    {
-        StringBuilder buddy = new StringBuilder();
-        Iterator<String> iter = getProperties().keySet().iterator();
-        while (iter.hasNext()) {
-            String key = iter.next();
-            String value = getProperty(key);
-            buddy.append(key);
-            buddy.append(": ");
-            buddy.append(value);
-            buddy.append("\n");
-        }
-        String result = buddy.toString();
-        return result.substring(0, result.length());
-    }
-
-    /**
-     * Changes all timestamp values by the offsetTime passed in.
-     * NOTE: This method is only useful for patterns that have been converted from a MIDI file
-     * (i.e., that have time tokens, indicated with an @ sign).
-     * @param offsetTime
-     */
+    /* (non-Javadoc)
+	 * @see org.jfugue.PatternInterface#offset(long)
+	 */
     public void offset(long offsetTime)
     {
         StringBuilder buddy = new StringBuilder();
@@ -462,57 +319,33 @@ public class Pattern implements JFugueElement
     //  PATTERN MANIPULATION
     //
     
-    /**
-     * Repeats the music string in this pattern
-     * by the given number of times.
-     * Example: If the pattern is "A B", calling <code>repeat(4)</code> will
-     * make the pattern "A B A B A B A B".
-     * @version 3.0
-     */
+    /* (non-Javadoc)
+	 * @see org.jfugue.PatternInterface#repeat(int)
+	 */
     public void repeat(int times)
     {
         repeat(null, getMusicString(), times, null);
     }
 
-    /**
-     * Only repeats the portion of this music string
-     * that starts at the string index
-     * provided.  This allows some initial header information to only be specified
-     * once in a repeated pattern.
-     * Example: If the pattern is "T0 A B", calling <code>repeat(4, 3)</code> will
-     * make the pattern "T0 A B A B A B A B".
-     * 
-     * In Version 4.1, this is fixed to work on the index of the token in the pattern, 
-     * as opposed to the index of the string.
-     *   
-     * @version 3.0
-     **/
+    /* (non-Javadoc)
+	 * @see org.jfugue.PatternInterface#repeat(int, int)
+	 */
     public void repeat(int times, int beginIndex)
     {
-        Pattern patternUpToBeingIndex = getSubPattern(0, beginIndex-1);
-        Pattern repeatingPattern = getSubPattern(beginIndex);
+        PatternInterface patternUpToBeingIndex = getSubPattern(0, beginIndex-1);
+        PatternInterface repeatingPattern = getSubPattern(beginIndex);
         
         repeat(patternUpToBeingIndex.toString(), repeatingPattern.toString(), times, null);
     }
 
-    /**
-     * Only repeats the portion of this music string
-     * that starts and ends at the
-     * string indices provided.  This allows some initial header information and
-     * trailing information to only be specified once in a repeated pattern.
-     * Example: If the pattern is "T0 A B C", calling <code>repeat(4, 3, 5)</code>
-     * will make the pattern "T0 A B A B A B A B C".
-     * 
-     * In Version 4.1, this is fixed to work on the index of the token in the pattern, 
-     * as opposed to the index of the string.
-     *   
-     * @version 3.0
-     */
+    /* (non-Javadoc)
+	 * @see org.jfugue.PatternInterface#repeat(int, int, int)
+	 */
     public void repeat(int times, int beginIndex, int endIndex)
     {
-        Pattern patternUpToBeingIndex = getSubPattern(0, beginIndex-1);
-        Pattern repeatingPattern = getSubPattern(beginIndex, endIndex);
-        Pattern patternAfterEndIndex = getSubPattern(endIndex + 1);
+        PatternInterface patternUpToBeingIndex = getSubPattern(0, beginIndex-1);
+        PatternInterface repeatingPattern = getSubPattern(beginIndex, endIndex);
+        PatternInterface patternAfterEndIndex = getSubPattern(endIndex + 1);
         
         repeat(patternUpToBeingIndex.toString(), repeatingPattern.toString(), times, patternAfterEndIndex.toString());
     }
@@ -546,29 +379,19 @@ public class Pattern implements JFugueElement
         this.setMusicString(buddy.toString());
     }
 
-    /**
-     * Returns a new Pattern that is a subpattern of this pattern.
-     * @return subpattern of this pattern.
-     * 
-     * Version 4.1.0 improves on previous versions of this method by
-     * returning tokens instead of substring of the pattern.
-     * @version 4.1.0
-     */
-    public Pattern getSubPattern(int beginIndex)
+    /* (non-Javadoc)
+	 * @see org.jfugue.PatternInterface#getSubPattern(int)
+	 */
+    public PatternInterface getSubPattern(int beginIndex)
     {
     	String[] tokens = getTokens();
     	return getSubPattern(beginIndex, tokens.length);
     }
 
-    /**
-     * Returns a new Pattern that is a subpattern of this pattern.
-     * @return subpattern of this pattern
-     * 
-     * Version 4.1.0 improves on previous versions of this method by
-     * returning tokens instead of substring of the pattern.
-     * @version 4.1.0
-     */
-    public Pattern getSubPattern(int beginIndex, int endIndex)
+    /* (non-Javadoc)
+	 * @see org.jfugue.PatternInterface#getSubPattern(int, int)
+	 */
+    public PatternInterface getSubPattern(int beginIndex, int endIndex)
     {
     	String[] tokens = getTokens();
     	if (endIndex >= tokens.length) {
@@ -586,16 +409,10 @@ public class Pattern implements JFugueElement
         return new Pattern(buddy.toString());
     }
 
-    /**
-     * Returns a Pattern that replaces the token at the provided index with the new token.
-     * 
-     * Use this if, for example, you have two musical phrases that are very similar except for a few notes.
-     * 
-     * @param index The index of the token to replace
-     * @param newToken The new token to place at the specified index
-     * @return The new Pattern
-     */
-    public Pattern replace(int index, String newToken)
+    /* (non-Javadoc)
+	 * @see org.jfugue.PatternInterface#replace(int, java.lang.String)
+	 */
+    public PatternInterface replace(int index, String newToken)
     {
     	StringBuilder buddy = new StringBuilder();
     	String[] tokens = getTokens();
@@ -639,14 +456,10 @@ public class Pattern implements JFugueElement
 		return hashCode() == obj.hashCode();
 	}
 
-	/**
-     * Returns a Pattern that replaces a series of tokens with the new tokens.
-     * 
-     * @param index The index of the first token to replace
-     * @param newTokens An array of tokens that will be placed into the pattern
-     * @return The new Pattern
-     */
-    public Pattern replace(int startingIndex, String... newTokens)
+	/* (non-Javadoc)
+	 * @see org.jfugue.PatternInterface#replace(int, java.lang.String)
+	 */
+    public PatternInterface replace(int startingIndex, String... newTokens)
     {
     	String[] tokens = getTokens();
     	if (startingIndex + newTokens.length > tokens.length) {
@@ -670,171 +483,9 @@ public class Pattern implements JFugueElement
     	return new Pattern(buddy.toString());
     }
 
-    /**
-     * Load a {@code Pattern} from an {@code Reader} in {@code .jfugue} format.
-     * Each line be either a collection of MusicString tokens, or a line that begins
-     * with a # character, indicating that the line is a comment.
-     * 
-     * Commented lines may contain properties in the form of key:value.  For example,
-     * <pre>
-     * # Title: Inventio 13
-     * </pre>
-     * would create a property called 'Title' that would contain the value 'Inventio 13'.
-     * 
-     * @param reader
-     * @return the {@code Pattern} loaded
-     * @throws IOException
-     */
-    public static Pattern loadPattern(Reader reader) throws IOException
-    {
-        StringBuilder buddy = new StringBuilder();
-
-        Pattern pattern = new Pattern();
-
-        BufferedReader bread = new BufferedReader(reader);
-        while (bread.ready()) {
-            String s = bread.readLine();
-            if ((s != null) && (s.length() > 1)) {
-                if (s.charAt(0) != '#') {
-                    buddy.append(" ");
-                    buddy.append(s);
-                } else {
-                    if (s.indexOf(':') > -1) {
-                        String key = s.substring(1, s.indexOf(':')).trim();
-                        String value = s.substring(s.indexOf(':')+1, s.length()).trim();
-                        if (key.equalsIgnoreCase(TITLE)) {
-                            pattern.setTitle(value);
-                        } else {
-                            pattern.setProperty(key, value);
-                        }
-                    }
-                }
-            }
-        }
-        bread.close();
-        pattern.setMusicString(buddy.toString());
-
-        return pattern;
-    }
-    
-    /**
-     * Load a {@code Pattern} from an {@code InputStream} in {@code .jfugue} format.
-     * 
-     * @param in
-     * @return
-     * @throws IOException
-     */
-    public static Pattern loadPattern(InputStream in) throws IOException {
-		return loadPattern(new InputStreamReader(in));
-	}
-    
-    /**
-     * Load a {@code Pattern} from an {@code File} in {@code .jfugue} format.
-     * 
-     * @param file
-     * @return
-     * @throws IOException
-     */
-    public static Pattern loadPattern(File file) throws IOException {
-		return loadPattern(new FileInputStream(file));
-	}
-
-    /**
-     * Saves {@code this} to {@code writer} in {@code .jfugue} format.
-     * 
-     * @param writer
-     * @throws IOException
-     */
-    public void savePattern(Writer writer) throws IOException
-    {
-        BufferedWriter out = new BufferedWriter(writer);
-        if ((getProperties().size() > 0) || (getTitle() != null)) {
-            out.write("#\n");
-            if (getTitle() != null) {
-                out.write("# ");
-                out.write("Title: ");
-                out.write(getTitle());
-                out.write("\n");
-            }
-            Iterator<String> iter = getProperties().keySet().iterator();
-            while (iter.hasNext()) {
-                String key = iter.next();
-                if (!key.equals(TITLE)) {
-                    String value = getProperty(key);
-                    out.write("# ");
-                    out.write(key);
-                    out.write(": ");
-                    out.write(value);
-                    out.write("\n");
-                }
-            }
-            out.write("#\n");
-            out.write("\n");
-        }
-        String musicString = getMusicString();
-        while (musicString.length() > 0) {
-            if ((musicString.length() > 80) && (musicString.indexOf(' ', 80) > -1)) {
-                int indexOf80ColumnSpace = musicString.indexOf(' ', 80);
-                out.write(musicString.substring(0, indexOf80ColumnSpace));
-                out.newLine();
-                musicString = musicString.substring(indexOf80ColumnSpace, musicString.length());
-            } else {
-                out.write(musicString);
-                musicString = "";
-            }
-        }
-        out.close();
-    }
-
-    /**
-     * Saves {@code this} to {@code out} in {@code .jfugue} format.
-     * 
-     * @param out
-     * @throws IOException
-     */
-    public void savePattern(OutputStream out) throws IOException {
-    	savePattern(new OutputStreamWriter(out));
-    }
-    
-    /**
-     * Saves {@code this} to {@code file} in {@code .jfugue} format.
-     * The {@code file} should ideally have an extension of {@code .jfugue}.
-     * 
-     * @param file
-     * @throws IOException
-     */
-    public void savePattern(File file) throws IOException {
-    	savePattern(new FileOutputStream(file));
-    }
-    
-    /**
-     * Returns an array of strings representing each token in the Pattern.
-     * @return
-     */
-    public String[] getTokens()
-    {
-        StringTokenizer strtok = new StringTokenizer(musicString.toString()," \n\t");
-
-        List<String> list = new ArrayList<String>();
-        while (strtok.hasMoreTokens()) {
-            String token = strtok.nextToken();
-            if (token != null) {
-                list.add(token);
-            }
-        }
-
-        String[] retVal = new String[list.size()];
-        list.toArray(retVal);
-        return retVal;
-    }
-
-    /**
-     * Indicates whether this pattern is composed of valid elements
-     * that can be parsed by the MusicStringParser.
-     * @param musicString the musicString to test
-     * @return whether the musicString is valid
-     * @version 4.1
-     */
+    /* (non-Javadoc)
+	 * @see org.jfugue.PatternInterface#isValid()
+	 */
     public boolean isValid()
     {
         try {
@@ -851,29 +502,21 @@ public class Pattern implements JFugueElement
     //  TRANSFORMERS AND TOOLS
     //
     
-    /**
-     * @version 4.1
-     */
+    /* (non-Javadoc)
+	 * @see org.jfugue.PatternInterface#getInstruments()
+	 */
     public List<Byte> getInstruments()
     {
         GetInstrumentsUsedTool ifinder = new GetInstrumentsUsedTool();
         return ifinder.getInstrumentsUsedInPattern(this);
     }
     
-    /**
-     * @version 4.1
-     */
-    public Class<ReversePatternTransformer> getReversePatternTransformerClass() 
+    /* (non-Javadoc)
+	 * @see org.jfugue.PatternInterface#reverse()
+	 */
+    public PatternInterface reverse()
     {
-        return ReversePatternTransformer.class;
-    }
-    
-    /**
-     * @version 4.1
-     */
-    public Pattern reverse()
-    {
-        Pattern reverse = null;
+        PatternInterface reverse = null;
         try {
             PatternTransformer rpt = (PatternTransformer)getReversePatternTransformerClass().newInstance();
             reverse = rpt.transform(this);
@@ -889,47 +532,8 @@ public class Pattern implements JFugueElement
     //  LISTENERS
     //
 
-    /** List of ParserListeners */
-    protected EventListenerList listenerList; // uses lazy initialization, so access only through getEventListenerList()
-
-    /**
-     * Adds a <code>PatternListener</code>.  The listener will receive events when new
-     * parts are added to the pattern.
-     *
-     * @param listener the listener that is to be notified when new parts are added to the pattern
-     */
-    public void addPatternListener(PatternListener l) {
-        getEventListenerList().add(PatternListener.class, l);
-    }
-
-    /**
-     * Removes a <code>PatternListener</code>.
-     *
-     * @param listener the listener to remove
-     */
-    public void removePatternListener(PatternListener l) {
-        getEventListenerList().remove(PatternListener.class, l);
-    }
-
-    protected void clearPatternListeners() {
-        EventListener[] l = getEventListenerList().getListeners (PatternListener.class);
-        int numListeners = l.length;
-        for (int i = 0; i < numListeners; i++) {
-            getEventListenerList().remove(PatternListener.class, (PatternListener)l[i]);
-        }
-    }
-
-    /** @version 4.0.4 */
-    protected EventListenerList getEventListenerList()
-    {
-        if (listenerList == null) {
-            listenerList = new EventListenerList();
-        }
-        return listenerList;
-    }
-    
     /** Tells all PatternListener interfaces that a fragment has been added. */
-    private void fireFragmentAdded(Pattern fragment)
+    private void fireFragmentAdded(PatternInterface fragment)
     {
         Object[] listeners = getEventListenerList().getListenerList ();
         for (int i = listeners.length - 2; i >= 0; i -= 2) {
@@ -939,9 +543,9 @@ public class Pattern implements JFugueElement
         }
     }
 
-    /**
-     * @version 3.0
-     */
+    /* (non-Javadoc)
+	 * @see org.jfugue.PatternInterface#toString()
+	 */
     public String toString()
     {
         return getMusicString();
@@ -951,6 +555,9 @@ public class Pattern implements JFugueElement
 		return "Pattern: " + toString();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.jfugue.PatternInterface#acceptVisitor(org.jfugue.ElementVisitor)
+	 */
 	public void acceptVisitor(ElementVisitor visitor) {
 		// TODO	make this not use the parser
 		visitor.visit(this);

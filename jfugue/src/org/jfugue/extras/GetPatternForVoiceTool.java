@@ -32,6 +32,7 @@ import org.jfugue.Measure;
 import org.jfugue.Note;
 import org.jfugue.ParserListenerAdapter;
 import org.jfugue.Pattern;
+import org.jfugue.PatternInterface;
 import org.jfugue.PitchBend;
 import org.jfugue.PolyphonicPressure;
 import org.jfugue.Tempo;
@@ -49,7 +50,7 @@ public class GetPatternForVoiceTool extends ParserListenerAdapter
 {
     private byte voice = 0;
     private byte activeVoice = 0;
-    private Pattern pattern;
+    private PatternInterface pattern;
 
     public GetPatternForVoiceTool(int voice)
     {
@@ -207,7 +208,7 @@ public class GetPatternForVoiceTool extends ParserListenerAdapter
         }
     }
     
-    public Pattern getPattern()
+    public PatternInterface getPattern()
     {
         return pattern;
     }

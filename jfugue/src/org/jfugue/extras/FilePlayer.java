@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.jfugue.Pattern;
+import org.jfugue.PatternInterface;
 import org.jfugue.Player;
 
 /**
@@ -88,7 +89,7 @@ public class FilePlayer
 
         // Create a player, and play the music!
         try {
-            Pattern pattern = Pattern.loadPattern(new File(inFilename));
+            PatternInterface pattern = Pattern.loadPattern(new File(inFilename));
             Player player = new Player();
             player.saveMidi(pattern, new File(outFilename));
             player.play(pattern);

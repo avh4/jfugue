@@ -830,7 +830,7 @@ public final class MusicXmlParser extends Parser
 		    MusicXMLIn.parse(fileXML);
 		    
 		    //	display the MusicString
-		    Pattern p = MusicStringOut.getPattern();
+		    PatternInterface p = MusicStringOut.getPattern();
 		    p.insert("T60");
 		    
 	        System.out.println(p.toString());

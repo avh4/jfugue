@@ -124,7 +124,7 @@ public class DeviceThatWillTransmitMidi
         stopListening();
     }
     
-    public Pattern getPatternFromListening()
+    public PatternInterface getPatternFromListening()
     {
         return this.mrftd.getPattern();
     }
@@ -180,7 +180,7 @@ public class DeviceThatWillTransmitMidi
             sequencerReceiver.close();
         }
         
-        public Pattern getPattern()
+        public PatternInterface getPattern()
         {
             return renderer.getPattern();
         }

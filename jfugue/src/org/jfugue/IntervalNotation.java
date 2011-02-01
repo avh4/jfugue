@@ -49,18 +49,18 @@ public class IntervalNotation
     }
 
 
-    public Pattern getPatternForRootNote(String musicString)
+    public PatternInterface getPatternForRootNote(String musicString)
     {
         return getPatternForRootNote(new Pattern(musicString));
     }
 
-    public Pattern getPatternForRootNote(Pattern pattern)
+    public PatternInterface getPatternForRootNote(PatternInterface pattern)
     {
         Note rootNote = MusicStringParser.getNote(pattern);
         return getPatternForRootNote(rootNote);
     }
 
-    public Pattern getPatternForRootNote(Note rootNote)
+    public PatternInterface getPatternForRootNote(Note rootNote)
     {
         StringBuilder buddy = new StringBuilder();
         String[] tokens = getMusicStringWithIntervals().split(" ");

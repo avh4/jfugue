@@ -637,7 +637,7 @@ public class MusicXmlRenderer implements ParserListener
 		    round3.add(song);
 
 		    // Put the voices together
-		    Pattern roundSong = new Pattern();
+		    PatternInterface roundSong = new Pattern();
 		    roundSong.add(round1);
 		    roundSong.add(round2);
 		    roundSong.add(round3);
@@ -696,7 +696,7 @@ public class MusicXmlRenderer implements ParserListener
 		    BufferedReader brSrc = new BufferedReader(new FileReader(fileSrc));
 	    	LineNumberReader lnrSrc = new LineNumberReader(brSrc);
 	    	
-	    	Pattern song = new Pattern();
+	    	PatternInterface song = new Pattern();
 	    	for (String s = lnrSrc.readLine(); s != null; s = lnrSrc.readLine())
 	    	{	if (s.length() > 0)
 	    			if (s.charAt(0) != '#')
@@ -737,7 +737,7 @@ public class MusicXmlRenderer implements ParserListener
 
 	private static void metronome(int bpm)
 	{
-		Pattern p = new Pattern("T" + Integer.toString((60 * 240) / bpm));
+		PatternInterface p = new Pattern("T" + Integer.toString((60 * 240) / bpm));
 		p.add("A4q", bpm);	//	should play for 1 minute
 		Player pl = new Player();
 		pl.play(p);

@@ -41,5 +41,5 @@ public interface PatternListener extends EventListener
      * Called when a new fragment has been added to a pattern
      * @param pattern the fragment that has been added
      */
-    public void fragmentAdded(Pattern fragment);
+    public void fragmentAdded(PatternInterface fragment);
 }

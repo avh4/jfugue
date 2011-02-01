@@ -22,6 +22,7 @@
 
 package org.jfugue;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -104,7 +105,7 @@ public final class MusicStringParser extends Parser
      * @param pattern the <code>Pattern</code> to parse
      * @throws Exception if there is an error parsing the pattern
      */
-    public void parse(Pattern pattern) throws JFugueException
+    public void parse(PatternInterface pattern) throws JFugueException
     {
         String[] tokens = pattern.getTokens();
 
@@ -518,6 +519,7 @@ public final class MusicStringParser extends Parser
         long duration                   = 0L;
         byte attackVelocity             = Note.DEFAULT_VELOCITY;
         byte decayVelocity              = Note.DEFAULT_VELOCITY;
+        String chordName                = null;
 
         public NoteContext() {
             for (int i=0; i < 5; i++) {
@@ -575,6 +577,7 @@ public final class MusicStringParser extends Parser
         NoteContext context = new NoteContext();
 
         while (context.existAnotherNote) {
+        	int startChord;
             trace(" ");
         	trace("--Parsing note from token "+s);
         	context.isRest = false;
@@ -583,9 +586,12 @@ public final class MusicStringParser extends Parser
             int slen = s.length(); // We pass the length of the string because it is an invariant value that is used often
             index = parseNoteRoot(s, slen, index, context);
             index = parseNoteOctave(s, slen, index, context);
+            startChord = index;
             index = parseNoteChord(s, slen, index, context);
             computeNoteValue(context);
             index = parseNoteChordInversion(s, slen, index, context);
+            if (context.isChord)
+            	context.chordName = s.substring(startChord, index);
             index = parseNoteDuration(s, slen, index, context);
             index = parseNoteVelocity(s, slen, index, context);
             s = parseNoteConnector(s, slen, index, context);
@@ -904,30 +910,103 @@ public final class MusicStringParser extends Parser
             if (index < slen)
             {
                 switch(s.charAt(index)) {
-                    case '^' : index++; inversionCount++; break;
-                    case 'C' : index++; inversionRootNote = 0; break;
-                    case 'D' : index++; inversionRootNote = 2; break;
-                    case 'E' : index++; inversionRootNote = 4; break;
-                    case 'F' : index++; inversionRootNote = 5; break;
-                    case 'G' : index++; inversionRootNote = 7; break;
-                    case 'A' : index++; inversionRootNote = 9; break;
-                    // For 'B', need to differentiate between B note and 'b' flat
-                    case 'B' : index++; if (inversionRootNote == -1) { inversionRootNote = 11; } else { inversionRootNote--; } break;
-                    case '#' : index++; inversionRootNote++; break;
-                    // For '0', need to differentiate between initial 0 and 0 as a second digit (i.e., 10)
-                    case '0' : index++; if (inversionOctave == -1) { inversionOctave = 0; } else { inversionOctave = inversionOctave*10; } break;
-                    case '1' : index++; inversionOctave = 1; break;
-                    case '2' : index++; inversionOctave = 2; break;
-                    case '3' : index++; inversionOctave = 3; break;
-                    case '4' : index++; inversionOctave = 4; break;
-                    case '5' : index++; inversionOctave = 5; break;
-                    case '6' : index++; inversionOctave = 6; break;
-                    case '7' : index++; inversionOctave = 7; break;
-                    case '8' : index++; inversionOctave = 8; break;
-                    case '9' : index++; inversionOctave = 9; break;
-                    // If [, whoo boy, we're checking for a note number
-                    case '[' : int indexEndBracket = s.indexOf(']', index); inversionRootNote = Integer.parseInt(s.substring(index+1, indexEndBracket-1)); index = indexEndBracket+1; break;
-                    default : checkForInversion = false; break;
+				case '^':
+					index++;
+					inversionCount++;
+					break;
+				case 'C':
+					index++;
+					inversionRootNote = 0;
+					break;
+				case 'D':
+					index++;
+					inversionRootNote = 2;
+					break;
+				case 'E':
+					index++;
+					inversionRootNote = 4;
+					break;
+				case 'F':
+					index++;
+					inversionRootNote = 5;
+					break;
+				case 'G':
+					index++;
+					inversionRootNote = 7;
+					break;
+				case 'A':
+					index++;
+					inversionRootNote = 9;
+					break;
+				// For 'B', need to differentiate between B note and 'b' flat
+				case 'B':
+					index++;
+					if (inversionRootNote == -1) {
+						inversionRootNote = 11;
+					} else {
+						inversionRootNote--;
+					}
+					break;
+				case '#':
+					index++;
+					inversionRootNote++;
+					break;
+				// For '0', need to differentiate between initial 0 and 0 as a
+				// second digit (i.e., 10)
+				case '0':
+					index++;
+					if (inversionOctave == -1) {
+						inversionOctave = 0;
+					} else {
+						inversionOctave = inversionOctave * 10;
+					}
+					break;
+				case '1':
+					index++;
+					inversionOctave = 1;
+					break;
+				case '2':
+					index++;
+					inversionOctave = 2;
+					break;
+				case '3':
+					index++;
+					inversionOctave = 3;
+					break;
+				case '4':
+					index++;
+					inversionOctave = 4;
+					break;
+				case '5':
+					index++;
+					inversionOctave = 5;
+					break;
+				case '6':
+					index++;
+					inversionOctave = 6;
+					break;
+				case '7':
+					index++;
+					inversionOctave = 7;
+					break;
+				case '8':
+					index++;
+					inversionOctave = 8;
+					break;
+				case '9':
+					index++;
+					inversionOctave = 9;
+					break;
+				// If [, whoo boy, we're checking for a note number
+				case '[':
+					int indexEndBracket = s.indexOf(']', index);
+					inversionRootNote = Integer.parseInt(s.substring(index + 1,
+							indexEndBracket - 1));
+					index = indexEndBracket + 1;
+					break;
+				default:
+					checkForInversion = false;
+					break;
                 }
             } else {
                 checkForInversion = false;
@@ -1278,6 +1357,7 @@ public final class MusicStringParser extends Parser
         }
 
         if (context.isChord) {
+        	note.setChord(context.chordName, Arrays.copyOf(context.halfsteps, context.numHalfsteps));
             for (int i=0; i < context.numHalfsteps; i++) {
                 Note chordNote = new Note((byte)(context.noteNumber+context.halfsteps[i]), context.duration);
                 chordNote.setDecimalDuration(context.decimalDuration); // This won't have any effect on the note, but it's good bookkeeping to have it around.
@@ -1484,7 +1564,7 @@ public final class MusicStringParser extends Parser
      * @param pattern The Pattern that contains one token with a note, like "C5"
      * @return a Note object representing the note parsed from the pattern
      */
-    public static Note getNote(Pattern pattern)
+    public static Note getNote(PatternInterface pattern)
     {
         final Note rootNote = new Note();
 

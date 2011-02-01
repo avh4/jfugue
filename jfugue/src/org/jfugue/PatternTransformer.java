@@ -40,7 +40,7 @@ import java.util.Map;
  * @author David Koelle
  * @version 2.0
  */
-public class PatternTransformer extends PatternTool<Pattern> {
+public class PatternTransformer extends PatternTool<PatternInterface> {
 
 	/**
 	 * Transforms the pattern, according to the event method that you have
@@ -49,7 +49,7 @@ public class PatternTransformer extends PatternTool<Pattern> {
 	 * 
 	 * @see PatternTool#execute(Pattern)
 	 */
-	public Pattern transform(Pattern pattern) {
+	public PatternInterface transform(Pattern pattern) {
 		return execute(pattern);
 		// setReturnPattern(new Pattern());
 		// MusicStringParser parser = new MusicStringParser();
@@ -175,8 +175,8 @@ public class PatternTransformer extends PatternTool<Pattern> {
 	}
 
 	@Override
-	protected Pattern initResult(Pattern pattern) {
-		Pattern nPattern = new Pattern();
+	protected PatternInterface initResult(Pattern pattern) {
+		PatternInterface nPattern = new Pattern();
 		for (Map.Entry<String, String> entries: pattern.getProperties().entrySet()) {
 			nPattern.setProperty(entries.getKey(), entries.getValue());
 		}
@@ -191,7 +191,7 @@ public class PatternTransformer extends PatternTool<Pattern> {
 	 * @see PatternTool#getResult()
 	 */
 	@Deprecated
-	protected Pattern getReturnPattern() {
+	protected PatternInterface getReturnPattern() {
 		return getResult();
 	}
 

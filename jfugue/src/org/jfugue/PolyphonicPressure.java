@@ -115,6 +115,10 @@ public final class PolyphonicPressure implements JFugueElement
         buffy.append(getPressure());
         return buffy.toString();
     }
+    
+    public void acceptVisitor(ElementVisitor visitor) {
+    	visitor.visit(this);
+    }
 
     public void acceptVisitor(ElementVisitor visitor) {
 		visitor.visit(this);		

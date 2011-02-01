@@ -22,8 +22,10 @@
 
 package org.jfugue;
 
+import java.io.PushbackReader;
 import java.util.Map;
 
+import org.jfugue.factories.JFugueElementFactory;
 import org.jfugue.util.MapUtils;
 
 /**
@@ -186,19 +188,12 @@ public final class Tempo implements JFugueElement
 				instance = new Tempo.TempoFactory();
 			return instance;
 		}
-//		public Tempo parseElement(PushbackReader reader, Environment environment)
-//				throws IllegalArgumentException {
-//			// TODO Auto-generated method stub
-//			return null;
-//		}
-		public Class<Tempo> type() {
+		public Tempo parseElement(PushbackReader reader, Environment environment)
+				throws IllegalArgumentException {
 			// TODO Auto-generated method stub
 			return null;
 		}
-public Tempo createElement(String token) throws IllegalArgumentException {
-	// TODO Auto-generated method stub
-	return null;
-}
+	}
 
 	}
     	

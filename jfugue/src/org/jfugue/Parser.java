@@ -339,4 +339,87 @@ public abstract class Parser
     //
     // End ParserListener methods
     /////////////////////////////////////////////////////////////////////////
+
+    protected final FireParserEvent eventProxy = this.new ParserEventProxy();
+    protected class ParserEventProxy implements FireParserEvent {
+
+		public void addParserListener(ParserListener listener) {
+			Parser.this.addParserListener(listener);
+		}
+
+		public void removeParserListener(ParserListener listener) {
+			Parser.this.removeParserListener(listener);
+		}
+
+		public ParserListener[] getParserListeners() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public void clearParserListeners() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public void fireVoiceEvent(Voice event) {
+			Parser.this.fireVoiceEvent(event);
+		}
+
+		public void fireTempoEvent(Tempo event) {
+			Parser.this.fireTempoEvent(event);
+		}
+
+		public void fireInstrumentEvent(Instrument event) {
+			Parser.this.fireInstrumentEvent(event);
+		}
+
+		public void fireLayerEvent(Layer event) {
+			Parser.this.fireLayerEvent(event);
+		}
+
+		public void fireTimeEvent(Time event) {
+			Parser.this.fireTimeEvent(event);
+		}
+
+		public void fireSystemExclusiveEvent(SystemExclusiveEvent event) {
+			Parser.this.fireSystemExclusiveEvent(event);
+		}
+
+		public void fireKeySignatureEvent(KeySignature event) {
+			Parser.this.fireKeySignatureEvent(event);
+		}
+
+		public void fireMeasureEvent(Measure event) {
+			Parser.this.fireMeasureEvent(event);
+		}
+
+		public void fireControllerEvent(Controller event) {
+			Parser.this.fireControllerEvent(event);
+		}
+
+		public void fireChannelPressureEvent(ChannelPressure event) {
+			Parser.this.fireChannelPressureEvent(event);
+		}
+
+		public void firePolyphonicPressureEvent(PolyphonicPressure event) {
+			Parser.this.firePolyphonicPressureEvent(event);
+		}
+
+		public void firePitchBendEvent(PitchBend event) {
+			Parser.this.firePitchBendEvent(event);
+		}
+
+		public void fireNoteEvent(Note event) {
+			Parser.this.fireNoteEvent(event);
+		}
+
+		public void fireSequentialNoteEvent(Note event) {
+			Parser.this.fireSequentialNoteEvent(event);
+		}
+
+		public void fireParallelNoteEvent(Note event) {
+			Parser.this.fireParallelNoteEvent(event);
+		}
+    	
+    }
 }

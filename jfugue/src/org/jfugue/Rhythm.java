@@ -246,24 +246,24 @@ public class Rhythm implements Serializable
         return generateMusicString(); 
     }
     
-    public Pattern getPattern()
+    public PatternInterface getPattern()
     {
         return new Pattern(generateMusicString());
     }
 
-    public Pattern getPatternWithInterval(Pattern pattern)
+    public PatternInterface getPatternWithInterval(PatternInterface pattern)
     {
         IntervalNotation interval = new IntervalNotation(getMusicString());
         return interval.getPatternForRootNote(pattern);
     }
 
-    public Pattern getPatternWithInterval(String string)
+    public PatternInterface getPatternWithInterval(String string)
     {
         IntervalNotation interval = new IntervalNotation(getMusicString());
         return interval.getPatternForRootNote(string);
     }
 
-    public Pattern getPatternWithInterval(Note rootNote)
+    public PatternInterface getPatternWithInterval(Note rootNote)
     {
         IntervalNotation interval = new IntervalNotation(getMusicString());
         return interval.getPatternForRootNote(rootNote);

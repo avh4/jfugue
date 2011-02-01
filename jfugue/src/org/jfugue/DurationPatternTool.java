@@ -99,7 +99,7 @@ public class DurationPatternTool extends ParserListenerAdapter
      * @param pattern
      * @return duration
      */
-    public long execute(Pattern pattern) 
+    public long execute(PatternInterface pattern) 
     {
         MusicStringParser parser = new MusicStringParser();
         parser.addParserListener(this);

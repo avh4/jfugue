@@ -57,7 +57,7 @@ public class MusicalEffects
      * @param duration Value representing total duration for the resulting pattern.  1.0=whole note
      * @param numHammers Number of times to repeat each note
      */
-    public static Pattern hammerOn(Note note1, Note note2, double duration, int numHammers)
+    public static PatternInterface hammerOn(Note note1, Note note2, double duration, int numHammers)
     {
         StringBuilder buddy = new StringBuilder();
         double durationPerHammer = duration / numHammers;
@@ -70,7 +70,7 @@ public class MusicalEffects
         buddy.append("]/");
         buddy.append(durationPerHammer / 2.0);
 
-        Pattern pattern = new Pattern(buddy.toString());
+        PatternInterface pattern = new Pattern(buddy.toString());
         pattern.repeat(numHammers);
         return pattern;
     }
@@ -88,7 +88,7 @@ public class MusicalEffects
      * the pitch wheel messages should cause the note to change while it is playing.
      * This implementation may require one or more new methods in MicrotoneNotation.
      */
-    public static Pattern slide(Note note1, Note note2, double duration, int numSteps)
+    public static PatternInterface slide(Note note1, Note note2, double duration, int numSteps)
     {
         StringBuilder buddy = new StringBuilder();
         double durationPerStep = duration / numSteps;
@@ -106,7 +106,7 @@ public class MusicalEffects
             freq1 += differencePerStep;
         }
 
-        Pattern pattern = new Pattern(buddy.toString());
+        PatternInterface pattern = new Pattern(buddy.toString());
         return pattern;
     }
 
@@ -114,7 +114,7 @@ public class MusicalEffects
      * Right now, this is a pass-through to hammerOn()
      * @see hammerOn
      */
-    public static Pattern trill(Note note1, Note note2, double duration, int numSteps)
+    public static PatternInterface trill(Note note1, Note note2, double duration, int numSteps)
     {
         return hammerOn(note1, note2, duration, numSteps);
     }
@@ -127,7 +127,7 @@ public class MusicalEffects
      * @param baseNote Note value and duration.
      * @return Pattern for the calculated effect.
      */
-    public static Pattern graceNote(Note graceNote, Note baseNote){
+    public static PatternInterface graceNote(Note graceNote, Note baseNote){
     	return graceNote(graceNote, baseNote, THIRTY_SECOND);
     }
     
@@ -139,7 +139,7 @@ public class MusicalEffects
      * @param graceNoteDuration Duration for the sound of the grace note.
      * @return Pattern for the calculated effect.
      */
-    public static Pattern graceNote(Note graceNote, Note baseNote, double graceNoteDuration){
+    public static PatternInterface graceNote(Note graceNote, Note baseNote, double graceNoteDuration){
     	Pattern gracePattern = new Pattern(graceNote.getMusicString());
     	return addOrnament(gracePattern, baseNote, graceNoteDuration);
     }
@@ -151,7 +151,7 @@ public class MusicalEffects
      * @param baseNote Note value and duration.
      * @return Pattern for the calculated effect.
      */
-    public static Pattern addOrnament(Pattern ornament, Note baseNote){
+    public static PatternInterface addOrnament(Pattern ornament, Note baseNote){
     	return addOrnament(ornament, baseNote, THIRTY_SECOND);
     }
     
@@ -166,7 +166,7 @@ public class MusicalEffects
      *                                duration.
      * @return Pattern for the calculated effect.
      */
-    public static Pattern addOrnament(Pattern ornament, Note baseNote, double longestOrnamentDuration){
+    public static PatternInterface addOrnament(Pattern ornament, Note baseNote, double longestOrnamentDuration){
     	PatternInvestigator investigator = new PatternInvestigator();
     	MusicStringParser stringParser = new MusicStringParser();
     	
@@ -178,7 +178,7 @@ public class MusicalEffects
     	
     	DurationPatternTransformer transformer = new DurationPatternTransformer(durationChange);
     	
-    	Pattern result = transformer.transform(ornament);
+    	PatternInterface result = transformer.transform(ornament);
     	
     	stringParser.removeParserListener(investigator);
     	investigator = new PatternInvestigator();
@@ -209,7 +209,7 @@ public class MusicalEffects
      * @param singleSoundDuration duration of each individual note of the trill.
      * @return Pattern for the calculated trill.
      */
-    public static Pattern trill(Note baseNote, char trillDirection, double singleSoundDuration){
+    public static PatternInterface trill(Note baseNote, char trillDirection, double singleSoundDuration){
         
     	StringBuilder musicStringBuilder = new StringBuilder();
         
@@ -263,7 +263,7 @@ public class MusicalEffects
      * @param trillDirection Describes if the patter should trill up or down.
      * @return Pattern for the calculated trill.
      */
-    public static Pattern trill(Note baseNote, char trillDirection){
+    public static PatternInterface trill(Note baseNote, char trillDirection){
     	return trill(baseNote, trillDirection, THIRTY_SECOND);
     }
     
@@ -278,7 +278,7 @@ public class MusicalEffects
      * @param baseNote Note value and duration for the trill.
      * @return Pattern for the calculated trill.
      */
-    public static Pattern trill(Note baseNote){
+    public static PatternInterface trill(Note baseNote){
     	return trill(baseNote, EFFECT_DIRECTION_UP);
     }
     
