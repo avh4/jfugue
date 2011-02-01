@@ -7,13 +7,14 @@ import java.util.List;
 
 import org.jfugue.ChannelPressure;
 import org.jfugue.Controller;
-import org.jfugue.ElementVisitor;
+import org.jfugue.DefaultElementVistior;
 import org.jfugue.Instrument;
 import org.jfugue.JFugueElement;
 import org.jfugue.KeySignature;
 import org.jfugue.Layer;
 import org.jfugue.Measure;
 import org.jfugue.Note;
+import org.jfugue.Note.Chord;
 import org.jfugue.Pattern;
 import org.jfugue.PitchBend;
 import org.jfugue.PolyphonicPressure;
@@ -22,7 +23,7 @@ import org.jfugue.Tempo;
 import org.jfugue.Time;
 import org.jfugue.Voice;
 
-public class LoggingVisitor implements ElementVisitor {
+public class LoggingVisitor extends DefaultElementVistior {
 	
 	public static class Entry {
 		protected String name;
@@ -87,40 +88,36 @@ public class LoggingVisitor implements ElementVisitor {
 		return sb.toString();
 	}
 
-	public void visitChannelPressure(ChannelPressure channelPressure) {
+	public void visit(ChannelPressure channelPressure) {
 		log.add(new Entry("visitChannelPressure", channelPressure));
 	}
 
-	public void visitController(Controller controller) {
+	public void visit(Controller controller) {
 		log.add(new Entry("visitController", controller));
 	}
 
-	public void visitInstrument(Instrument instrument) {
+	public void visit(Instrument instrument) {
 		log.add(new Entry("visitInstrument", instrument));
 	}
 
-	public void visitKeySignature(KeySignature keySignature) {
+	public void visit(KeySignature keySignature) {
 		log.add(new Entry("visitKeySignature", keySignature));
 	}
 
-	public void visitLayer(Layer layer) {
+	public void visit(Layer layer) {
 		log.add(new Entry("visitLayer", layer));
 	}
 
-	public void visitMeasure(Measure measure) {
+	public void visit(Measure measure) {
 		log.add(new Entry("visitMeasure", measure));
 	}
 
-	public void visitNote(Note note) {
+	public void visit(Note note) {
 		log.add(new Entry("visitNote", note));
 	}
 
-	public void visitPattern(Pattern pattern) {
+	public void visit(Pattern pattern) {
 		log.add(new Entry("visitPattern", pattern));
-	}
-
-	public void visitPichBend(PitchBend pitchBend) {
-		log.add(new Entry("visitPichBend", pitchBend));
 	}
 
 	public void visitVoice(Voice voice) {
@@ -143,6 +140,10 @@ public class LoggingVisitor implements ElementVisitor {
 	public void visitPolyphonicPressure(
 			PolyphonicPressure polyphonicPressure) {
 		log.add(new Entry("visitPolyphonicPressure", polyphonicPressure));
+	}
+
+	public void visitChord(Chord chord) {
+		log.add(new Entry("visitChord", chord));
 	}
 
 	public void visitParallelNote(Note note) {

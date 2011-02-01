@@ -35,8 +35,8 @@ public final class Time implements JFugueElement
 	 */
 	private static final long serialVersionUID = 1L;
 	private long time;
-	
-	/**
+
+    /**
      * Creates a new Time object, with the specified time number.
      * @param time the number of the time to use
      */
@@ -88,11 +88,12 @@ public final class Time implements JFugueElement
         buffy.append(getTime());
         return buffy.toString();
     }
-
+    
     public void acceptVisitor(ElementVisitor visitor) {
-		visitor.visitTime(this);		
-	}
-	public boolean equals(Object obj) {
+    	visitor.visit(this);
+    }
+
+    public boolean equals(Object obj) {
         if (obj == null) {
             return false;
         }

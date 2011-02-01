@@ -22,9 +22,13 @@
 
 package org.jfugue;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -42,7 +46,8 @@ import java.util.regex.Pattern;
  */
 public final class Note implements JFugueElement
 {
-    /**
+ 
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
@@ -56,6 +61,7 @@ public final class Note implements JFugueElement
     private boolean rest = false;
     private byte type = 0;
     private boolean accompanyingNotes = false;
+    private Chord chord = null;
 
     /**
      * Instantiates a new Note object.
@@ -131,6 +137,17 @@ public final class Note implements JFugueElement
     	setAttackVelocity(attackVelocity);
     	setDecayVelocity(decayVelocity);
     }
+    
+    public Note(Note note) {
+		this(note.getValue(), note.getDuration(), note.getAttackVelocity(), note.getDecayVelocity());
+		setEndOfTie(note.isEndOfTie());
+		setHasAccompanyingNotes(note.accompanyingNotes);
+		setRest(note.isRest());
+		setStartOfTie(note.isStartOfTie());
+		setType(note.getType());
+		if (getChord() != null)
+			setChord(this.new Chord(note.getChord()));
+	}
 
     /**
      * Parses a string which should contain only one token, which is a note.
@@ -326,6 +343,19 @@ public final class Note implements JFugueElement
     {
         return this.type;
     }
+    
+    public Chord getChord() {
+		return chord;
+	}
+    
+    public void setChord(String name, byte...bs) {
+		chord = this.new Chord(name, bs);
+	}
+    
+    public void setChord(Chord chord) {
+		if (chord != null && chord.getRoot() == this)
+			this.chord = chord;
+	}
 
     /** Indicates that this note is the first note in the token. */
     public static final byte FIRST      = 0;
@@ -406,22 +436,26 @@ public final class Note implements JFugueElement
 
         return buddy.toString();
     }
-
+    
     public void acceptVisitor(ElementVisitor visitor) {
-		switch (type) {
-		case FIRST:
-			visitor.visitNote(this);
-			break;
-		case PARALLEL:
-			visitor.visitParallelNote(this);
-		case SEQUENTIAL:
-			visitor.visitSequentialNote(this);
-		default:
-			break;
-		}		
-	}
+//    	switch (getType()) {
+//		case FIRST:
+//			visitor.visitNote(this);
+//			break;
+//		case PARALLEL:
+//			visitor.visitParallelNote(this);
+//			break;
+//		case SEQUENTIAL:
+//			visitor.visitSequentialNote(this);
+//		default:
+//			break;
+//		}
+    	visitor.visit(this);
+    	if (chord != null)
+    		chord.acceptVisitor(visitor);
+    }
 
-	public static String createVerifyString(int value, double duration)
+    public static String createVerifyString(int value, double duration)
     {
         return createVerifyString(value, duration, false, false, (byte)64, (byte)64, true, false, false);
     }
@@ -497,6 +531,7 @@ public final class Note implements JFugueElement
         return buddy.toString();
     }
 
+    
     /**
      * Returns the frequency, in Hertz, for the given note value.
      * For example, the frequency for A5 (MIDI note 69) is 440.0
@@ -670,9 +705,6 @@ public final class Note implements JFugueElement
         if (this.duration != other.duration) {
             return false;
         }
-        if (Double.doubleToLongBits(this.decimalDuration) != Double.doubleToLongBits(other.decimalDuration)) {
-            return false;
-        }
         if (this.isStartOfTie != other.isStartOfTie) {
             return false;
         }
@@ -694,6 +726,7 @@ public final class Note implements JFugueElement
         if (this.accompanyingNotes != other.accompanyingNotes) {
             return false;
         }
+        // TODO Modify to compare chords.  I'm not sure how to do this since it's recursive. -ska
         return true;
     }
 
@@ -709,6 +742,7 @@ public final class Note implements JFugueElement
         hash = 37 * hash + (this.rest ? 1 : 0);
         hash = 37 * hash + this.type;
         hash = 37 * hash + (this.accompanyingNotes ? 1 : 0);
+        // TODO Modify to compare chords.  I'm not sure how to do this since it's recursive. -ska
         return hash;
     }
 
@@ -788,26 +822,302 @@ public final class Note implements JFugueElement
 			return instance;
 		}
     	
-		public Note createElement(String token) throws IllegalArgumentException {
-			
-//			if (token.)
-//				throw new IllegalArgumentException("Token for note invalid: " + token);
-//			switch (token) {
-//			case value:
-//				
-//				break;
-//
-//			default:
-//				break;
-//			}
-			return null;
-		}
-		
 		public Class<Note> type() {
 			return Note.class;			
 		}
+
+//		public Note parseElement(PushbackReader reader, Environment environment)
+//				throws IllegalArgumentException, IOException {
+//			if (reader.ready())
+//				throw new IllegalArgumentException();
+//			int codePoint = reader.read();
+//			char ch = Character.toUpperCase((char) codePoint);
+//			
+//			if ('A' <= ch && ch <= 'G') {
+//			} else if (ch == '[') {
+//			} else
+//				throw new IllegalArgumentException();
+//			
+//			return null;
+//		}
+
+		public Note createElement(String token) throws IllegalArgumentException {
+			// TODO Auto-generated method stub
+			return null;
+		}
     	
     }
+
+	public static final java.util.regex.Pattern CHORD_PAT = java.util.regex.Pattern
+			.compile("([\\w<>]*)((?:[\\^a-g#0-9]|\\[\\d+])*)",
+					java.util.regex.Pattern.CASE_INSENSITIVE);
+	public static final java.util.regex.Pattern INV_PAT = java.util.regex.Pattern
+			.compile("(\\^|[a-b]([b#]?)|10|\\d|\\[\\d+\\])", java.util.regex.Pattern.CASE_INSENSITIVE);
+    
+    @SuppressWarnings("serial")
+	public class Chord implements JFugueElement {
+    	
+    	private String fullname;
+    	private String chordName;
+    	private String inversion;
+    	private byte[] halfsteps;
+    	private List<Note> noteList = null;
+    	
+    	/**
+		 * @param name
+		 * @param halfsteps
+		 */
+		public Chord(String name) {
+			super();
+			fullname = name;
+			parseChord(name);
+		}
+		
+		public Chord(Chord chord) {
+			fullname = chord.getFullname();
+			chordName = chord.getChordName();
+			inversion = chord.getInversion();
+			halfsteps = chord.getHalfsteps().clone();
+			noteList = new LinkedList<Note>();
+			for (Note note : chord.getNoteList()) {
+				noteList.add(new Note(note));
+			}
+			noteList = Collections.unmodifiableList(noteList);
+		}
+		
+		public Chord(String name, byte[] halfsteps) {
+			fullname = name;
+			this.halfsteps = halfsteps.clone();
+			createNotes();
+		}
+
+		private void parseChord(String name) {
+			Matcher m = CHORD_PAT.matcher(name);
+			if (!m.matches())
+				throw new IllegalArgumentException(name + " is not a valid chord");
+			this.chordName = m.group(1);
+			halfsteps = NoteFactory.CHORDS_MAP.get(getChordName().toUpperCase());
+			if (halfsteps == null)
+				throw new IllegalArgumentException(name + " is not a valid chord");
+			halfsteps = Arrays.copyOf(halfsteps, halfsteps.length);
+			parseInversion(m.group(2));
+			createNotes();
+		}
+
+		private void createNotes() {
+			noteList = new LinkedList<Note>();
+			Note root = new Note(getRoot());
+			root.setChord(null);
+			root.setType(PARALLEL);
+			for (byte hs : halfsteps) {
+				Note note = new Note(root);
+				note.setValue((byte) (note.getValue() + hs));
+				noteList.add(note);
+			}
+			noteList = Collections.unmodifiableList(noteList);
+		}
+
+		private void parseInversion(String inv) {
+			inversion = inv;
+			
+	        int inversionCount = 0;
+	        int inversionRootNote = -1;
+	        int inversionOctave = -1;
+	        
+	        inv = inv.toUpperCase();
+	        Matcher m = INV_PAT.matcher(inv);
+	        while (m.find()) {
+				String s = m.group(1);
+				switch (s.charAt(0)) {
+				case '^':
+					inversionCount++;
+					break;
+				case 'C':
+					inversionRootNote = 0;
+					break;
+				case 'D':
+					inversionRootNote = 2;
+					break;
+				case 'E':
+					inversionRootNote = 4;
+					break;
+				case 'F':
+					inversionRootNote = 5;
+					break;
+				case 'G':
+					inversionRootNote = 7;
+					break;
+				case 'A':
+					inversionRootNote = 9;
+					break;
+				case 'B':
+					inversionRootNote = 11;
+					break;
+				case '0':
+					inversionOctave = 0;
+					break;
+				case '1':
+					if (s.startsWith("10"))
+						inversionOctave = 10;
+					else
+						inversionOctave = 1;
+					break;
+				case '2':
+					inversionOctave = 2;
+					break;
+				case '3':
+					inversionOctave = 3;
+					break;
+				case '4':
+					inversionOctave = 4;
+					break;
+				case '5':
+					inversionOctave = 5;
+					break;
+				case '6':
+					inversionOctave = 6;
+					break;
+				case '7':
+					inversionOctave = 7;
+					break;
+				case '8':
+					inversionOctave = 8;
+					break;
+				case '9':
+					inversionOctave = 9;
+					break;
+				case '[':
+					inversionRootNote = Integer.parseInt(s.substring(1, s.indexOf(']') - 1));
+					break;
+				default:
+					break;
+				}
+				s = m.group(2);
+				if (s == null) {
+				} else if ("B".equals(s))
+					inversionRootNote--;
+				else if ("#".equals(s))
+					inversionRootNote++;
+			}
+	        
+	        if (inversionCount == 0)
+	        	return;
+	        
+	        if (inversionRootNote == -1) {
+	        	setValue((byte) (getValue() + 12));
+	        	/*
+	        	 * I don't understand why we're lowering halfsteps an octave -ska
+	        	 */
+	        	for (int i=inversionCount-1; i < halfsteps.length; i++) {
+                    halfsteps[i] -= 12;
+                }
+	        } else {
+                // The root is determined by an inversionRoot.  This is much trickier, but we can
+                // still figure it out.
+                if (inversionOctave != -1) {
+                    inversionRootNote += inversionOctave * 12;
+                }
+                else if (inversionRootNote < 12) {
+                    int currentOctave = getValue() / 12;
+                    inversionRootNote += currentOctave * 12;
+                }
+                // Otherwise, inversionRootNote is a numeric note value, like [60]
+
+                if ((inversionRootNote > getValue() + halfsteps[halfsteps.length-1]) || (inversionRootNote < getValue())) {
+                    throw new JFugueException(JFugueException.INVERSION_EXC);
+                }
+
+                value += 12;
+                for (int i=0; i < halfsteps.length; i++)
+                {
+                    if (value + halfsteps[i] >= inversionRootNote + 12) {
+                        halfsteps[i]-=12;
+                    }
+                }
+	        }
+		}
+		
+		public String getInversion() {
+			return inversion;
+		}
+
+		public byte[] getHalfsteps() {
+			return halfsteps;
+		}
+		
+		public List<Note> getNoteList() {
+			return noteList;
+		}
+    	
+    	public String getChordName() {
+			return chordName;
+		}
+    	
+		/**
+		 * @return the fullname
+		 */
+		public String getFullname() {
+			return fullname;
+		}
+
+		public String getMusicString() {
+			return getFullname();
+		}
+
+		public Note getRoot() {
+			return Note.this;
+		}
+
+		public String getVerifyString() {
+			return String.format(
+					"Chord[name=%s, chord=%s, inversion=%s, halfsteps=%s]",
+					getFullname(), getChordName(), getInversion(),
+					getHalfsteps());
+		}
+
+		/* (non-Javadoc)
+		 * @see java.lang.Object#hashCode()
+		 */
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + getOuterType().hashCode();
+			result = prime * result + Arrays.hashCode(halfsteps);
+			// TODO Modify to compare chords.  I'm not sure how to do this since it's recursive. -ska
+			return result;
+		}
+
+		/* (non-Javadoc)
+		 * @see java.lang.Object#equals(java.lang.Object)
+		 */
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (!(obj instanceof Chord))
+				return false;
+			Chord other = (Chord) obj;
+			if (!getOuterType().equals(other.getOuterType()))
+				return false;
+			if (!Arrays.equals(halfsteps, other.halfsteps))
+				return false;
+			// TODO Modify to compare chords.  I'm not sure how to do this since it's recursive. -ska
+			return true;
+		}
+
+		public void acceptVisitor(ElementVisitor visitor) {
+//			visitor.visitChord(this);
+			for (Note n : getNoteList()) {
+				n.acceptVisitor(visitor);
+			}
+		}
+
+		private Note getOuterType() {
+			return Note.this;
+		}
+		
+	}
 
 }
 

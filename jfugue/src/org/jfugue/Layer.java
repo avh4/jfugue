@@ -39,7 +39,7 @@ public final class Layer implements JFugueElement
 	private static final long serialVersionUID = 1L;
 	private byte layer;
 
-	/**
+    /**
      * Creates a new Layer object, with the specified layer number.
      * @param layer the number of the layer to use
      */
@@ -91,12 +91,12 @@ public final class Layer implements JFugueElement
         buffy.append(getLayer());
         return buffy.toString();
     }
-
+    
     public void acceptVisitor(ElementVisitor visitor) {
-		visitor.visitLayer(this);		
-	}
+    	visitor.visit(this);
+    }
 
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (obj == null) {
             return false;
         }

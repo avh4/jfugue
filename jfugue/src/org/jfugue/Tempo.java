@@ -47,8 +47,8 @@ public final class Tempo implements JFugueElement
 	 */
 	private static final long serialVersionUID = 1L;
 	private int tempo;
-	
-	/**
+
+    /**
      * Creates a new Tempo object, with the specified tempo value (in BPM).
      * @param tempo the tempo for this object, in Beats Per Minute
      */
@@ -110,12 +110,12 @@ public final class Tempo implements JFugueElement
         buffy.append(getTempo());
         return buffy.toString();
     }
-
+    
     public void acceptVisitor(ElementVisitor visitor) {
-		visitor.visitTempo(this);		
-	}
+    	visitor.visit(this);
+    }
 
-	public static final int GRAVE = 40;
+    public static final int GRAVE = 40;
     public static final int LARGO = 45;
     public static final int LARGHETTO = 50;
     public static final int LENTO = 55;
@@ -177,7 +177,7 @@ public final class Tempo implements JFugueElement
     	});
     }
     
-    public static class TempoFactory extends JFugueElementFactory<Tempo> {
+    protected static class TempoFactory extends JFugueElementFactory<Tempo> {
     	
     	private static Tempo.TempoFactory instance;
 		private TempoFactory() {}
@@ -186,17 +186,20 @@ public final class Tempo implements JFugueElement
 				instance = new Tempo.TempoFactory();
 			return instance;
 		}
-
-		public Tempo createElement(String token)
-				throws IllegalArgumentException {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
+//		public Tempo parseElement(PushbackReader reader, Environment environment)
+//				throws IllegalArgumentException {
+//			// TODO Auto-generated method stub
+//			return null;
+//		}
 		public Class<Tempo> type() {
 			// TODO Auto-generated method stub
 			return null;
 		}
+public Tempo createElement(String token) throws IllegalArgumentException {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+	}
     	
-    }
 }

@@ -32,6 +32,9 @@ package org.jfugue;
  */
 public final class Measure implements JFugueElement
 {
+	
+	public static final String FACTORY = null;
+	
     /**
 	 * 
 	 */
@@ -64,12 +67,12 @@ public final class Measure implements JFugueElement
     {
         return "Measure";
     }
-
+    
     public void acceptVisitor(ElementVisitor visitor) {
-		visitor.visitMeasure(this);		
-	}
+    	visitor.visit(this);
+    }
 
-	// TODO This equals/hashCode is horrible but what am I gonna do?
+    // TODO This equals/hashCode is horrible but what am I gonna do?
     public boolean equals(Object obj) {
         if (obj == null || getClass() != obj.getClass()) {
             return false;
@@ -83,4 +86,5 @@ public final class Measure implements JFugueElement
         hash = 67 * hash;
         return hash;
     }
+    
 }

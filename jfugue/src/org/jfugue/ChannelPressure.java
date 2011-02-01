@@ -89,10 +89,6 @@ public final class ChannelPressure implements JFugueElement
         buffy.append(getPressure());
         return buffy.toString();
     }
-    
-    public void acceptVisitor(ElementVisitor visitor) {
-    	visitor.visitChannelPressure(this);		
-	}
 
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -113,6 +109,10 @@ public final class ChannelPressure implements JFugueElement
         hash = 59 * hash + this.pressure;
         return hash;
     }
+
+	public void acceptVisitor(ElementVisitor visitor) {
+		visitor.visit(this);
+	}
 
     
 }

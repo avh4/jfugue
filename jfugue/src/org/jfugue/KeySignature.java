@@ -125,12 +125,12 @@ public final class KeySignature implements JFugueElement
         buffy.append(getScale());
         return buffy.toString();
     }
-
+    
     public void acceptVisitor(ElementVisitor visitor) {
-		visitor.visitKeySignature(this);		
-	}
+    	visitor.visit(this);
+    }
 
-	private static final String[] majorSigs = new String[] { "Cb", "Gb", "Db", "Ab", "Eb", "Bb", "F", "C", "G", "D", "A", "E", "B", "F#", "C#" };
+    private static final String[] majorSigs = new String[] { "Cb", "Gb", "Db", "Ab", "Eb", "Bb", "F", "C", "G", "D", "A", "E", "B", "F#", "C#" };
     private static final String[] minorSigs = new String[] { "Ab", "Eb", "Bb", "F", "C", "G", "D", "A", "E", "B", "F#", "C#", "G#", "D#", "A#" };
 
     public boolean equals(Object obj) {

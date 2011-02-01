@@ -35,8 +35,8 @@ public final class Voice implements JFugueElement
 	 */
 	private static final long serialVersionUID = 1L;
 	private byte voice;
-	
-	/**
+
+    /**
      * Creates a new Voice object, with the specified voice value.
      * @param voice the voice for this object
      */
@@ -108,8 +108,9 @@ public final class Voice implements JFugueElement
         buffy.append(getVoice());
         return buffy.toString();
     }
-	public void acceptVisitor(ElementVisitor visitor) {
-		visitor.visitVoice(this);		
-	}
+    
+    public void acceptVisitor(ElementVisitor visitor) {
+    	visitor.visit(this);
+    }
 
 }

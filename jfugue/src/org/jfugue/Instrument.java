@@ -104,11 +104,7 @@ public final class Instrument implements JFugueElement
         return buffy.toString();
     }
 
-    public void acceptVisitor(ElementVisitor visitor) {
-		visitor.visitInstrument(this);		
-	}
-
-	public static final String[] INSTRUMENT_NAME = new String[] {
+    public static final String[] INSTRUMENT_NAME = new String[] {
         "Piano",
         "Bright_Acoustic",
         "Electric_Grand",
@@ -672,5 +668,9 @@ public final class Instrument implements JFugueElement
     	        {"MUTE_TRIANGLE"          ,"80"},
     	        {"OPEN_TRIANGLE"          ,"81"},
     	});
+    }
+    
+    public void acceptVisitor(ElementVisitor visitor) {
+    	visitor.visit(this);
     }
 }

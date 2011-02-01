@@ -36,7 +36,7 @@ public final class SystemExclusiveEvent implements JFugueElement
 	private static final long serialVersionUID = 1L;
 	private byte[] data;
 
-	/**
+    /**
      * Creates a new SystemExclusiveEvent object, with the specified bytes.
      * @param data the bytes of data for this event
      */
@@ -100,8 +100,9 @@ public final class SystemExclusiveEvent implements JFugueElement
         }
         return buddy.toString();
     }
-	public void acceptVisitor(ElementVisitor visitor) {
-		visitor.visitSystemExclusiveEvent(this);		
-	}
+    
+    public void acceptVisitor(ElementVisitor visitor) {
+    	visitor.visit(this);
+    }
 
 }

@@ -953,7 +953,7 @@ public class Pattern implements JFugueElement
 
 	public void acceptVisitor(ElementVisitor visitor) {
 		// TODO	make this not use the parser
-		visitor.visitPattern(this);
+		visitor.visit(this);
 		MusicStringParser msp = new MusicStringParser();
 		msp.addParserListener(new ListenerToVisitorAdaptor(visitor));
 		msp.parse(this);

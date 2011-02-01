@@ -92,12 +92,12 @@ public final class PitchBend implements JFugueElement
         buffy.append(getBend());
         return buffy.toString();
     }
-
+    
     public void acceptVisitor(ElementVisitor visitor) {
-		visitor.visitPitchBend(this);		
-	}
+    	visitor.visit(this);
+    }
 
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (obj == null) {
             return false;
         }

@@ -2,6 +2,7 @@ package org.jfugue.extras;
 
 import org.jfugue.ChannelPressure;
 import org.jfugue.Controller;
+import org.jfugue.DefaultElementVistior;
 import org.jfugue.ElementVisitor;
 import org.jfugue.Instrument;
 import org.jfugue.KeySignature;
@@ -16,7 +17,7 @@ import org.jfugue.Tempo;
 import org.jfugue.Time;
 import org.jfugue.Voice;
 
-public class ListenerToVisitorAdaptor implements ParserListener {
+public class ListenerToVisitorAdaptor extends DefaultElementVistior implements ParserListener {
 
 	protected ElementVisitor visitor;
 	
@@ -39,63 +40,63 @@ public class ListenerToVisitorAdaptor implements ParserListener {
 	}
 	
 	public void voiceEvent(Voice voice) {
-		visitor.visitVoice(voice);
+		visitor.visit(voice);
 	}
 
 	public void tempoEvent(Tempo tempo) {
-		visitor.visitTempo(tempo);
+		visitor.visit(tempo);
 	}
 
 	public void instrumentEvent(Instrument instrument) {
-		visitor.visitInstrument(instrument);
+		visitor.visit(instrument);
 	}
 
 	public void layerEvent(Layer layer) {
-		visitor.visitLayer(layer);
+		visitor.visit(layer);
 	}
 
 	public void measureEvent(Measure measure) {
-		visitor.visitMeasure(measure);
+		visitor.visit(measure);
 	}
 
 	public void timeEvent(Time time) {
-		visitor.visitTime(time);
+		visitor.visit(time);
 	}
 
 	public void keySignatureEvent(KeySignature keySig) {
-		visitor.visitKeySignature(keySig);
+		visitor.visit(keySig);
 	}
 
 	public void systemExclusiveEvent(SystemExclusiveEvent sysex) {
-		visitor.visitSystemExclusiveEvent(sysex);
+		visitor.visit(sysex);
 	}
 
 	public void controllerEvent(Controller controller) {
-		visitor.visitController(controller);
+		visitor.visit(controller);
 	}
 
 	public void channelPressureEvent(ChannelPressure channelPressure) {
-		visitor.visitChannelPressure(channelPressure);
+		visitor.visit(channelPressure);
 	}
 
 	public void polyphonicPressureEvent(PolyphonicPressure polyphonicPressure) {
-		visitor.visitPolyphonicPressure(polyphonicPressure);
+		visitor.visit(polyphonicPressure);
 	}
 
 	public void pitchBendEvent(PitchBend pitchBend) {
-		visitor.visitPitchBend(pitchBend);
+		visitor.visit(pitchBend);
 	}
 
 	public void noteEvent(Note note) {
-		visitor.visitNote(note);
+		visitor.visit(note);
 	}
 
 	public void sequentialNoteEvent(Note note) {
-		visitor.visitSequentialNote(note);
+		visitor.visit(note);
 	}
 
 	public void parallelNoteEvent(Note note) {
-		visitor.visitParallelNote(note);
+		visitor.visit(note);
 	}
 
 }
