@@ -30,7 +30,7 @@ import java.io.Reader;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.HashMap;
-import java.util.Map;
+
 
 import nu.xom.Attribute;
 import nu.xom.Builder;
@@ -83,7 +83,7 @@ class voiceDef
  *
  */
 public final class MusicXmlParser extends Parser
-{	private Map<String, Object> dictionaryMap;
+{	private HashMap<String, String> dictionaryMap;
 	private Builder xomBuilder;
 	private Document xomDoc;
 	private String[] volumes = {"pppppp", "ppppp", "pppp", "ppp", "pp", "p", "mp",
@@ -103,7 +103,7 @@ public final class MusicXmlParser extends Parser
 	
 	public MusicXmlParser()
 	{	xomBuilder = new Builder();
-		dictionaryMap = new HashMap<String, Object>();
+		dictionaryMap = new HashMap<String, String>();
 		JFugueDefinitions.populateDictionary(dictionaryMap);
 		beats = 1;
 		divisions = 1;

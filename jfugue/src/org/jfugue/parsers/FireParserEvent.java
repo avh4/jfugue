@@ -1,4 +1,20 @@
-package org.jfugue;
+package org.jfugue.parsers;
+
+import org.jfugue.ChannelPressure;
+import org.jfugue.Controller;
+import org.jfugue.Instrument;
+import org.jfugue.KeySignature;
+import org.jfugue.Layer;
+import org.jfugue.Measure;
+import org.jfugue.Note;
+import org.jfugue.ParserListener;
+import org.jfugue.PitchBend;
+import org.jfugue.PolyphonicPressure;
+import org.jfugue.SystemExclusiveEvent;
+import org.jfugue.Tempo;
+import org.jfugue.Time;
+import org.jfugue.Voice;
+
 
 public interface FireParserEvent {
     /**

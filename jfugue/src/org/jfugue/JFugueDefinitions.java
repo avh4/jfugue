@@ -22,6 +22,7 @@
 
 package org.jfugue;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,7 +49,7 @@ public final class JFugueDefinitions
      * controller events, and some controller values.
      * @param dictionaryMap the dictionary instantiated by the parser
      */
-    protected static void populateDictionary(Map<String, Object> dictionaryMap)
+    protected static void populateDictionary(Map<String, String> dictionaryMap)
     {
     	dictionaryMap.putAll(DICT_MAP);
 //        //
@@ -858,6 +859,6 @@ public final class JFugueDefinitions
     	map.putAll(Instrument.DICT_MAP);
     	map.putAll(Controller.DICT_MAP);
        	map.putAll(Tempo.DICT_MAP);
-    	return map;
+    	return Collections.unmodifiableMap(map);
 	}
 }

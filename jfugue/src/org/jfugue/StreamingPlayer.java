@@ -27,6 +27,7 @@ import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequencer;
 import javax.sound.midi.Synthesizer;
 
+
 /**
  * Provides a player that can be given new MusicStrings at runtime.  The
  * original Player class requires that a MusicString be fully formed

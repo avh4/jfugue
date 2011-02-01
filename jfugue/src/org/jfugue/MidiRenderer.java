@@ -25,6 +25,7 @@ package org.jfugue;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.ShortMessage;
 
+
 /**
  * This class takes a Pattern, and turns it into wonderful music.
  *

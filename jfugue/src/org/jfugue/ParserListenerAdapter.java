@@ -22,6 +22,7 @@
 
 package org.jfugue;
 
+
 /**
  * This Adapter class implements all of the methods of
  * ParserListener, but the implementations are blank.

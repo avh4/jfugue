@@ -23,92 +23,84 @@
 package org.jfugue;
 
 import java.io.IOException;
-import java.io.PushbackReader;
 
 import org.jfugue.factories.JFugueElementFactory;
+import org.jfugue.parsers.ParserContext;
+
 
 /**
- * Represents a measure marker.  This has no bearing on the audio produced,
- * but is useful for making music strings more readable, and for listening
- * to progress as a song is played.
- *
- *@author David Koelle
- *@version 3.0
+ * Represents a measure marker. This has no bearing on the audio produced, but
+ * is useful for making music strings more readable, and for listening to
+ * progress as a song is played.
+ * 
+ * @author David Koelle
+ * @version 3.0
  */
-public final class Measure implements JFugueElement
-{
-	
+public final class Measure implements JFugueElement {
+
 	public static final String FACTORY = null;
-	
-    /**
+
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
-     * Creates a new Measure object, which is simply an indicator
-     * that a measure line has been parsed in a MusicString
-     */
-    public Measure()
-    {
-    }
+	 * Creates a new Measure object, which is simply an indicator that a measure
+	 * line has been parsed in a MusicString
+	 */
+	public Measure() {
+	}
 
-    /**
-     * Returns the Music String representing this element.
-     * For a Measure object, the Music String is <code>|</code>
-     * @return the Music String for this element
-     */
-    public String getMusicString()
-    {
-        return "|";
-    }
+	/**
+	 * Returns the Music String representing this element. For a Measure object,
+	 * the Music String is <code>|</code>
+	 * 
+	 * @return the Music String for this element
+	 */
+	public String getMusicString() {
+		return "|";
+	}
 
-    /**
-     * Returns verification string in this format:
-     * Measure
-     * @version 4.0
-     */
-    public String getVerifyString()
-    {
-        return "Measure";
-    }
-    
-    public void acceptVisitor(ElementVisitor visitor) {
-    	visitor.visit(this);
-    }
+	/**
+	 * Returns verification string in this format: Measure
+	 * 
+	 * @version 4.0
+	 */
+	public String getVerifyString() {
+		return "Measure";
+	}
 
-    // TODO This equals/hashCode is horrible but what am I gonna do?
-    public boolean equals(Object obj) {
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        } else {
-            return true;
-        }
-    }
+	public void acceptVisitor(ElementVisitor visitor) {
+		visitor.visit(this);
+	}
 
-    public int hashCode() {
-        int hash = 3;
-        hash = 67 * hash;
-        return hash;
-    }
-    
-    protected static class MeasureFactory extends JFugueElementFactory<Measure> {
-
-		public Measure parseElement(PushbackReader reader, Environment environment)
-				throws IllegalArgumentException {
-			try {
-				if (reader.ready()) {
-					int codePoint = reader.read();
-					if (((char) codePoint) == '|')
-						return new Measure();
-				}
-			} catch (IOException e) {}
-			throw new IllegalArgumentException("Cannot parse measure");
+	// TODO This equals/hashCode is horrible but what am I gonna do?
+	public boolean equals(Object obj) {
+		if (obj == null || getClass() != obj.getClass()) {
+			return false;
+		} else {
+			return true;
 		}
+	}
+
+	public int hashCode() {
+		int hash = 3;
+		hash = 67 * hash;
+		return hash;
+	}
+
+	protected static class MeasureFactory extends JFugueElementFactory<Measure> {
 
 		public Class<Measure> type() {
 			return Measure.class;
 		}
 
-    }
+		public Measure createElement(ParserContext context) throws IOException,
+				IllegalArgumentException, JFugueException {
+			context.readChar('|');
+			return new Measure();
+		}
+
+	}
 }

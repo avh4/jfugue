@@ -22,6 +22,11 @@
 
 package org.jfugue;
 
+import java.io.IOException;
+
+import org.jfugue.factories.JFugueElementFactory;
+import org.jfugue.parsers.ParserContext;
+
 /**
  * Represents channel pressure changes.
  *
@@ -114,5 +119,27 @@ public final class ChannelPressure implements JFugueElement
 		visitor.visit(this);
 	}
 
-    
+    public static class Factory extends JFugueElementFactory<ChannelPressure> {
+
+		public Class<ChannelPressure> type() {
+			return ChannelPressure.class;
+		}
+
+		public ChannelPressure createElement(ParserContext context) throws IOException,
+				IllegalArgumentException, JFugueException {
+			return new ChannelPressure(context.readCharThenByte('+').getThen());
+			
+//			if (reader.ready()) {
+//				int cp = reader.read();
+//				if ((char) cp == '+')
+//					return new ChannelPressure(ParserHelper.readByte(reader, environment));
+//				else {
+//					reader.unread(cp);
+//					throw new JFugueException(JFugueException.PARSE_CHAR_ERROR, (char) cp);
+//				}
+//			}
+//			throw new IOException();
+		}
+    	
+    }
 }

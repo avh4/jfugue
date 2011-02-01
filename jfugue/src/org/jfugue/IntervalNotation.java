@@ -22,6 +22,7 @@
 
 package org.jfugue;
 
+
 /**
  * A IntervalNotation is a MusicString that only contains interval information and durations, not actual notes.
  * A riff is converted into an actual MusicString by applying a root note.

@@ -38,6 +38,7 @@ import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
 import javax.sound.midi.Synthesizer;
 
+
 /**
  * Prepares a pattern to be turned into music by the Renderer.  This class
  * also handles saving the sequence derived from a pattern as a MIDI file.

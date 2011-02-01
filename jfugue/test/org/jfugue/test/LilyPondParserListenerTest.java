@@ -2,6 +2,7 @@ package org.jfugue.test;
 
 import org.jfugue.MusicStringParser;
 import org.jfugue.Pattern;
+import org.jfugue.PatternInterface;
 import org.jfugue.integration.lilypond.LilyPondParserListener;
 import org.junit.Assert;
 import org.junit.Before;
@@ -13,7 +14,7 @@ public class LilyPondParserListenerTest {
 
 	private LilyPondParserListener listener = null;
 
-	private Pattern pattern = null;
+	private PatternInterface pattern = null;
 
 	@Before
 	public void setUp() throws Exception {

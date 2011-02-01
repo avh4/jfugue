@@ -24,6 +24,9 @@ package org.jfugue;
 
 import javax.swing.event.EventListenerList;
 
+import org.jfugue.parsers.FireParserEvent;
+
+
 /**
  * You may notice that there is no parse() method in the Parser class!
  * That's because the parse() method may take any type of parameter, as

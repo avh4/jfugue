@@ -57,8 +57,6 @@ public class Pattern extends AbstractPattern implements JFugueElement, PatternIn
 	protected StringBuilder musicString;
 	protected List<JFugueElement> elements = new LinkedList<JFugueElement>();
 	protected List<JFugueElement> iElements = Collections.unmodifiableList(elements);
-	protected List<JFugueElement> elements = new LinkedList<JFugueElement>();
-	protected List<JFugueElement> iElements = Collections.unmodifiableList(elements);
 
     /**
      * Instantiates a new pattern

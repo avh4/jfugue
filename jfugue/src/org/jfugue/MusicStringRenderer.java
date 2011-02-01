@@ -23,6 +23,7 @@
 package org.jfugue;
 
 
+
 /**
  * This class is used to build a Pattern (i.e., a MusicString) given a MIDI Sequence. 
  *

@@ -23,6 +23,7 @@
 package org.jfugue;
 
 
+
 public abstract class EasyAnticipatorListener extends ParserListenerAdapter
 {
     private Voice activeVoice;

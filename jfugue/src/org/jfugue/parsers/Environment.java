@@ -1,9 +1,26 @@
-package org.jfugue;
+package org.jfugue.parsers;
 
+import java.util.HashMap;
 import java.util.Map;
+
+import org.jfugue.*;
+import org.jfugue.util.DummyParserEventProxy;
 
 public class Environment {
 	
+	private static Environment instance;
+	
+	/**
+	 * @return the instance
+	 */
+	public static Environment getInstance() {
+		if (instance == null) {
+			instance = new Environment(new HashMap<String, String>(JFugueDefinitions.DICT_MAP),
+					new DummyParserEventProxy());
+		}
+		return instance;
+	}
+
 	private Map<String,String> dictionaryMap;
 	private FireParserEvent proxy;
 	
@@ -149,7 +166,7 @@ public class Environment {
         }
         return newdouble.doubleValue();
     }
-    
+      
 	/**
 	 * @param listener
 	 * @see org.jfugue.FireParserEvent#addParserListener(org.jfugue.ParserListener)

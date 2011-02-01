@@ -25,6 +25,7 @@ package org.jfugue;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.Sequence;
 
+
 /**
  * This class can be used in conjunction with a call to Player.play() to
  * inform your application about musical events before they happen.  This

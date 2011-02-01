@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+
 /**
  * Parses music strings, and fires events for <code>ParserListener</code> interfaces
  * when tokens are interpreted. The <code>ParserListener</code> does intelligent things
@@ -43,7 +44,7 @@ import java.util.StringTokenizer;
  */
 public final class MusicStringParser extends Parser
 {
-    private Map<String, Object> dictionaryMap;
+    private Map<String, String> dictionaryMap;
     private byte keySig = 0;
     private boolean defaultTempoEnabled = true;
     
@@ -53,7 +54,7 @@ public final class MusicStringParser extends Parser
      */
     public MusicStringParser()
     {
-        dictionaryMap = new HashMap<String, Object>();
+        dictionaryMap = new HashMap<String, String>();
         JFugueDefinitions.populateDictionary(dictionaryMap);
     }
 

@@ -23,6 +23,7 @@
 package org.jfugue;
 
 
+
 /**
  * Calculates the length of the given pattern, in milliseconds
  * 

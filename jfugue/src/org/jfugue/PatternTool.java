@@ -1,5 +1,6 @@
 package org.jfugue;
 
+
 public abstract class PatternTool<R> extends ParserListenerAdapter {
 
     private R result;

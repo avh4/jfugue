@@ -9,10 +9,10 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+
+import org.jfugue.Parser;
 import org.jfugue.ParserListener;
 import org.jfugue.ParserProgressListener;
-import org.jfugue.Parser;
-
 import org.jfugue.Voice;
 import org.jfugue.Tempo;
 
@@ -21,6 +21,7 @@ import java.lang.reflect.InvocationTargetException;
 
 public class ParserTest {
     public class TestParser extends Parser {
+
 	}
 
 	private Parser parser;

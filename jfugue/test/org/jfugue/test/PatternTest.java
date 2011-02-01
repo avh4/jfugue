@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.io.File;
 
 import org.jfugue.Pattern;
+import org.jfugue.PatternInterface;
 import org.jfugue.Player;
 import org.junit.After;
 import org.junit.Before;
@@ -24,7 +25,7 @@ public class PatternTest {
 	public void tearDown() throws Exception {
 	}
 
-	public Pattern getFrereJacques() {
+	public PatternInterface getFrereJacques() {
 		// "Frere Jacques"
 		Pattern pattern1 = new Pattern("C5q D5q E5q C5q");
 
@@ -61,18 +62,18 @@ public class PatternTest {
 		round3.add(song);
 
 		// Put the voices together
-		Pattern roundSong = new Pattern();
+		PatternInterface roundSong = new Pattern();
 		roundSong.add(round1);
 		roundSong.add(round2);
 		roundSong.add(round3);
 
-		roundSong.setProperty(Pattern.TITLE, "Frere Jacques");
+		roundSong.setProperty(PatternInterface.TITLE, "Frere Jacques");
 		return roundSong;
 	}
 
 	@Test
 	public void testSave() throws Exception {
-		Pattern song = getFrereJacques();
+		PatternInterface song = getFrereJacques();
 		song.savePattern(new File(FRERE_JACQUAS_FILE));
 	}
 
@@ -91,7 +92,7 @@ public class PatternTest {
 
 	@Test
 	public void testFrereJacques() {
-		Pattern song = getFrereJacques();
+		PatternInterface song = getFrereJacques();
 		player.play(song);
 	}
 	

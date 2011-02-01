@@ -24,6 +24,7 @@ package org.jfugue;
 
 import javax.sound.midi.ShortMessage;
 
+
 /**
  * Assists the StreamingPlayer in converting Patterns to MIDI.
  *

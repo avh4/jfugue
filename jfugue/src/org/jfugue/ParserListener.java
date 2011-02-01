@@ -24,6 +24,7 @@ package org.jfugue;
 
 import java.util.EventListener;
 
+
 /**
  * Classes that implement ParserListener and add themselves as listeners
  * to a <code>Parser</code> object will receive events when

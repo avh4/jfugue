@@ -31,6 +31,7 @@ import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
 import javax.sound.midi.Transmitter;
 
+
 /**
  * Represents an attached MIDI device, such as a keyboard.  This class
  * uses javax.sound.MidiDevice, but is not derived from javax.sound.MidiDevice.

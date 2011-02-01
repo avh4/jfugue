@@ -48,11 +48,12 @@ public class JFugueException extends RuntimeException
     /**
      * Create a new JFugueException.
      *
-     * @param exc The string representing the exception.  
+     * @param format The string representing the exception.  
+     * @param ch 
      */
-    public JFugueException(String exc)
+    public JFugueException(String format, Object...objects)
     {
-        super(exc);
+        super(String.format(format, objects));
     }
 
     /**
@@ -143,6 +144,8 @@ public class JFugueException extends RuntimeException
     
     /** General error */
     public static final String GENERAL_ERROR = "General error: ";
+    
+    public static final String PARSE_CHAR_ERROR = "The charactor '%s' was not expected while parsing %s";
     
     /** Error for MusicXMLParser (TODO: Should this reside in MusicXMLParser?) */
     public static final String BEAT_UNIT_MUST_BE_QUARTER = "MusicXML tag \"beat-unit\" must be set to \"quarter\"";

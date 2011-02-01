@@ -455,4 +455,6 @@ public final class Controller implements JFugueElement
     public void acceptVisitor(ElementVisitor visitor) {
     	visitor.visit(this);
     }
+    
+    // TODO Implement JFugueElementFactory
 }

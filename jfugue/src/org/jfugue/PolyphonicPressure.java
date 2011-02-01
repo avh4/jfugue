@@ -120,9 +120,6 @@ public final class PolyphonicPressure implements JFugueElement
     	visitor.visit(this);
     }
 
-    public void acceptVisitor(ElementVisitor visitor) {
-		visitor.visit(this);		
-	}
 
 	public boolean equals(Object obj) {
         if (obj == null) {
