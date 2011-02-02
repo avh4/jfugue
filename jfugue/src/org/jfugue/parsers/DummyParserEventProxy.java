@@ -1,4 +1,4 @@
-package org.jfugue.util;
+package org.jfugue.parsers;
 
 import org.jfugue.ChannelPressure;
 import org.jfugue.Controller;
@@ -15,7 +15,7 @@ import org.jfugue.Tempo;
 import org.jfugue.Time;
 import org.jfugue.Voice;
 
-public class DummyParserEventProxy implements org.jfugue.parsers.FireParserEvent {
+public class DummyParserEventProxy implements org.jfugue.parsers.FireParserEventProxy {
 
 	public void addParserListener(ParserListener listener) {
 		// TODO Auto-generated method stub

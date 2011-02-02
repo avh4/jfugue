@@ -24,7 +24,7 @@ import org.jfugue.Tempo;
 import org.jfugue.Time;
 import org.jfugue.Voice;
 import org.jfugue.parsers.Environment;
-import org.jfugue.parsers.FireParserEvent;
+import org.jfugue.parsers.FireParserEventProxy;
 import org.jfugue.parsers.ParserContext;
 import org.junit.After;
 import org.junit.Before;
@@ -52,7 +52,7 @@ public class NoteFactoryTest {
 		
 	}
 
-	static private class DummyProxy implements FireParserEvent {
+	static private class DummyProxy implements FireParserEventProxy {
 
 		public void addParserListener(ParserListener listener) {
 			// TODO Auto-generated method stub
