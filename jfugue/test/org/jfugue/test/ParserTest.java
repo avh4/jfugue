@@ -16,6 +16,7 @@ import org.jfugue.ParserProgressListener;
 import org.jfugue.Voice;
 import org.jfugue.Tempo;
 import org.jfugue.Instrument;
+import org.jfugue.Layer;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
@@ -50,7 +51,7 @@ public class ParserTest {
         assertEquals("Tracing was not disabled", Parser.TRACING_OFF, parser.getTracing());
     }
 
-    @Ignore @Test 
+    @Ignore("Undefined behaviour, so test cannot be authored.")  @Test 
     public void testGetTracing_OUT_OF_BOUNDS(){
         //This behaviour is, as-yet, undefined.
         //  We should lock this down, but it is of
@@ -162,6 +163,12 @@ public class ParserTest {
     public void testfireInstrumentEvent() {
 	final Instrument instrument = new Instrument((byte)0);
         verify(getNotifiedListener("fireInstrumentEvent", instrument)).instrumentEvent(instrument);
+    }
+
+    @Test 
+    public void testfireLayerEvent() {
+	final Layer layer = new Layer((byte)0);
+        verify(getNotifiedListener("fireLayerEvent", layer)).layerEvent(layer);
     }
     
     
