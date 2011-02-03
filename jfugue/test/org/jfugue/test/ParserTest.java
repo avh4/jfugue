@@ -15,6 +15,7 @@ import org.jfugue.ParserListener;
 import org.jfugue.ParserProgressListener;
 import org.jfugue.Voice;
 import org.jfugue.Tempo;
+import org.jfugue.Instrument;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
@@ -155,6 +156,12 @@ public class ParserTest {
     public void testfireTempoEvent() {
 	final Tempo tempo = new Tempo(0);
         verify(getNotifiedListener("fireTempoEvent", tempo)).tempoEvent(tempo);
+    }
+
+    @Test 
+    public void testfireInstrumentEvent() {
+	final Instrument instrument = new Instrument((byte)0);
+        verify(getNotifiedListener("fireInstrumentEvent", instrument)).instrumentEvent(instrument);
     }
     
     
