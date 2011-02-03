@@ -29,6 +29,7 @@ import org.jfugue.parsers.ParserContext;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.Ignore;
 
 public class NoteFactoryTest {
 
@@ -40,7 +41,8 @@ public class NoteFactoryTest {
 	public void tearDown() throws Exception {
 	}
 
-	@Test
+    
+	@Ignore(" NoteFactory::createElement is not yet implemented.") @Test
 	public void testParseElementPushbackReader() throws Exception {
 		Map<String,String> dict = new HashMap<String, String>(JFugueDefinitions.DICT_MAP);
 		Environment environment = new Environment(dict, new DummyProxy());
