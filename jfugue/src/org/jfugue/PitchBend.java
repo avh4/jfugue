@@ -22,6 +22,12 @@
 
 package org.jfugue;
 
+import java.io.IOException;
+
+import org.jfugue.factories.JFugueElementFactory;
+import org.jfugue.parsers.ParserContext;
+import org.jfugue.parsers.ParserError;
+
 /**
  * Represents pitch bend changes.
  *
@@ -120,5 +126,60 @@ public final class PitchBend implements JFugueElement
         hash = 43 * hash + this.msb;
         return hash;
     }
+
+	public static class Factory extends JFugueElementFactory<PitchBend> {
+		private static PitchBend.Factory instance;
+		private Factory() {}
+		public static PitchBend.Factory getInstance() {
+			if (instance == null)
+				instance = new PitchBend.Factory();
+			return instance;
+		}
+	
+		public PitchBend createElement(ParserContext context)
+				throws IOException, IllegalArgumentException, JFugueException,
+				ParserError {
+//	        // A PitchBend token looks like one of the following:
+//	        //      &lsb,msb
+//	        //      &int
+//	        //
+//	        // where "byte1" and "byte2" or "int" can be bytes/ints or dictionary items
+//
+//	        byte lsb = 0;
+//	        byte msb = 0;
+//
+//	        if (s.indexOf(',') > -1) {
+//	            // We're dealing with two bytes
+//	            String b1String = s.substring(1,s.indexOf(','));
+//	            lsb = getByteFromDictionary(b1String);
+//
+//	            String b2String = s.substring(s.indexOf(',')+1, s.length());
+//	            msb = getByteFromDictionary(b2String);
+//	        } else {
+//	            // We're dealing with a single integer, which we will break into bytes
+//	            String valueString = s.substring(1,s.length());
+//	            int value = getIntFromDictionary(valueString);
+//	            lsb = (byte)(value % 128);
+//	            msb = (byte)(value / 128);
+//	        }
+			context.readOneOfTheChars('&');
+			int i = context.readInt();
+			byte lsb, msb;
+			if (i < 127) {
+				lsb = (byte) i;
+				context.readOneOfTheChars(',');
+				msb = context.readByte();
+			} else {
+				lsb = (byte)(i % 128);
+				msb = (byte)(i / 128);
+			}
+			return context.firePitchBendEvent(new PitchBend(lsb, msb));
+		}
+	
+		public Class<PitchBend> type() {
+			return PitchBend.class;
+		}
+	
+	}
 
 }

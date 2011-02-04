@@ -22,8 +22,12 @@
 
 package org.jfugue;
 
+import java.io.IOException;
 import java.util.Map;
 
+import org.jfugue.factories.JFugueElementFactory;
+import org.jfugue.parsers.ParserContext;
+import org.jfugue.parsers.ParserError;
 import org.jfugue.util.MapUtils;
 
 /**
@@ -40,8 +44,12 @@ public final class Controller implements JFugueElement
 	private static final long serialVersionUID = 1L;
 	byte index;
     byte value;
+    Controller coarse = null;
+    public Controller getCoarseController() {
+		return coarse;
+	}
 
-    /** Creates a new Controller object */
+	/** Creates a new Controller object */
     public Controller()
     {
         this.index = 0;
@@ -75,7 +83,26 @@ public final class Controller implements JFugueElement
 //    {
 //        throw new UnsupportedOperationException("Controller(int index, byte value) is not supported.  If you're using a byte for the controller index, cast your index appropriately to use Controller(byte index, byte value).");
 //    }
-
+    public Controller(int index, int value) {
+    	byte coarseIndex = (byte)(index / 128);
+    	byte fineIndex = (byte)(index % 128);
+    	
+        // Special case for BANK_SELECT, which has a high byte of 0
+        if (16383 == value) {
+            coarseIndex = 0;
+            fineIndex = 32;
+        }
+        
+        byte coarseValue = (byte)(value / 128);
+        byte fineValue = (byte)(value % 128);
+        
+        this.index = fineIndex;
+        this.value = fineValue;
+        
+        if (coarseIndex != 0)
+        	this.coarse = new Controller(coarseIndex, coarseValue);
+    }
+    
     /**
      * Sets the index of the controller event for this object.
      * @param index the index of the controller
@@ -456,5 +483,37 @@ public final class Controller implements JFugueElement
     	visitor.visit(this);
     }
     
-    // TODO Implement JFugueElementFactory
+	public static class Factory extends JFugueElementFactory<Controller> {
+
+		private static Factory instance;
+
+		private Factory() {
+		}
+
+		public static Factory getInstance() {
+			if (instance == null)
+				instance = new Factory();
+			return instance;
+		}
+
+		public Class<Controller> type() {
+			return Controller.class;
+		}
+
+		public Controller createElement(ParserContext context)
+				throws IOException, IllegalArgumentException, JFugueException, ParserError {
+			/* TODO How am I going to distinguish between bytes and ints and pass
+			 * back a single controller.
+			 */
+			context.readOneOfTheChars('X', 'x');
+			int index = context.readInt();
+			context.readOneOfTheChars('=');
+			int value = context.readInt();
+			Controller controller = new Controller(index, value);
+			context.fireControllerEvent(controller);
+			if (index > 127)
+				context.fireControllerEvent(controller.getCoarseController());
+			return controller;
+		}
+	}
 }

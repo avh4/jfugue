@@ -8,6 +8,7 @@ import org.jfugue.JFugueElement;
 import org.jfugue.JFugueException;
 import org.jfugue.parsers.Environment;
 import org.jfugue.parsers.ParserContext;
+import org.jfugue.parsers.ParserError;
 
 /**
  * Subclasses of this class will be responsible for making certain elements out
@@ -38,13 +39,33 @@ public abstract class JFugueElementFactory<T extends JFugueElement> {
 	 * @throws IOException
 	 * @throws IllegalArgumentException
 	 * @throws JFugueException
+	 * @throws ParserError
 	 */
 	public T createElement(String token) throws IOException,
-			IllegalArgumentException, JFugueException {
+			IllegalArgumentException, JFugueException, ParserError {
 		return createElement(new PushbackReader(new StringReader(token)),
 				Environment.getInstance());
 	}
-
+	
+	/**
+	 * Create a {@link JFugueElement} of type {@code T} if possible from the
+	 * {@code token}, else throw an exception.
+	 * 
+	 * @param token
+	 * @param environment
+	 * @return an instance of {@code T}
+	 * @throws IOException
+	 * @throws IllegalArgumentException
+	 * @throws JFugueException
+	 * @throws ParserError
+	 */
+	public T createElement(String token, Environment environment)
+			throws IOException, IllegalArgumentException, JFugueException,
+			ParserError {
+		return createElement(new PushbackReader(new StringReader(token)),
+				environment);
+	}
+	
 	/**
 	 * Create a {@link JFugueElement} of type {@code T} if possible, else
 	 * throws.
@@ -55,10 +76,11 @@ public abstract class JFugueElementFactory<T extends JFugueElement> {
 	 * @throws IOException
 	 * @throws IllegalArgumentException
 	 * @throws JFugueException
+	 * @throws ParserError
 	 */
 	public T createElement(PushbackReader reader,
 			Environment environment) throws IOException,
-			IllegalArgumentException, JFugueException {
+			IllegalArgumentException, JFugueException, ParserError {
 		return createElement(new ParserContext(reader, environment));
 	}
 
@@ -70,7 +92,7 @@ public abstract class JFugueElementFactory<T extends JFugueElement> {
 	 * @throws JFugueException
 	 */
 	public abstract T createElement(ParserContext context) throws IOException,
-			IllegalArgumentException, JFugueException;
+			IllegalArgumentException, JFugueException, ParserError;
 
 	/**
 	 * This should just return {@code T.class}. Unfortunately we have to get a

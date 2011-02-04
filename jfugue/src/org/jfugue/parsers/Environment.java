@@ -43,7 +43,17 @@ public class Environment {
 		this.dictionaryMap = dictionary;
 		this.proxy = proxy;
 	}
+	
+	public Environment() {
+		this(new HashMap<String, String>(JFugueDefinitions.DICT_MAP),
+				new DummyParserEventProxy());
+	}
 
+	public void add(String key, Object val) {
+		key = key.toUpperCase();
+		dictionaryMap.put(key, val.toString());
+	}
+	
 	/**
 	 * Looks up a string's value in the dictionary. The dictionary is used to
 	 * keep memorable names of obscure numbers - for example, the string FLUTE

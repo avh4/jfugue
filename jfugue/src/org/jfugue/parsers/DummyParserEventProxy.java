@@ -1,5 +1,7 @@
 package org.jfugue.parsers;
 
+import javax.swing.event.EventListenerList;
+
 import org.jfugue.ChannelPressure;
 import org.jfugue.Controller;
 import org.jfugue.Instrument;
@@ -16,100 +18,184 @@ import org.jfugue.Time;
 import org.jfugue.Voice;
 
 public class DummyParserEventProxy implements org.jfugue.parsers.FireParserEventProxy {
+    /** List of ParserListeners */
+    protected EventListenerList listenerList = new EventListenerList();
+    
+    /**
+     * Adds a <code>ParserListener</code>.  The listener will receive events when the parser
+     * interprets music string tokens.
+     *
+     * @param listener the listener that is to be notified of parser events
+     */
+    public void addParserListener(ParserListener listener) 
+    {
+        listenerList.add(ParserListener.class, listener);
+    }
 
-	public void addParserListener(ParserListener listener) {
-		// TODO Auto-generated method stub
+    /**
+     * Removes a <code>ParserListener</code>.
+     *
+     * @param listener the listener to remove
+     */
+    public void removeParserListener(ParserListener listener) 
+    {
+        listenerList.remove(ParserListener.class, listener);
+    }
 
-	}
+    /**
+     * Returns an array of all <code>ParserListener</code>s.
+     * 
+     * @return array of all <code>ParserListener</code>s
+     */
+    public ParserListener[] getParserListeners()
+    {
+        ParserListener[] listeners = listenerList.getListeners(ParserListener.class);
+        return listeners;
+    }
+    
+    /**
+     * Removes all of the <code>ParserListener</code>s.
+     */
+    public void clearParserListeners() 
+    {
+        ParserListener[] listeners = listenerList.getListeners(ParserListener.class);
+        for (ParserListener listener : listeners) { 
+            listenerList.remove(ParserListener.class, listener);
+        }
+    }
 
-	public void removeParserListener(ParserListener listener) {
-		// TODO Auto-generated method stub
+    /** Tells all ParserListeners that a voice event has been parsed. */
+    public void fireVoiceEvent(Voice event)
+    {
+        ParserListener[] listeners = getParserListeners();
+        for (ParserListener listener : listeners) {
+            listener.voiceEvent(event);
+        }
+    }
 
-	}
+    /** Tells all ParserListeners that a tempo event has been parsed. */
+    public void fireTempoEvent(Tempo event)
+    {
+        ParserListener[] listeners = getParserListeners();
+        for (ParserListener listener : listeners) {
+            listener.tempoEvent(event);
+        }
+    }
 
-	public ParserListener[] getParserListeners() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    /** Tells all ParserListeners that an instrument event has been parsed. */
+    public void fireInstrumentEvent(Instrument event)
+    {
+        ParserListener[] listeners = getParserListeners();
+        for (ParserListener listener : listeners) {
+            listener.instrumentEvent(event);
+        }
+    }
 
-	public void clearParserListeners() {
-		// TODO Auto-generated method stub
+    /** Tells all ParserListeners that a layer event has been parsed. */
+    public void fireLayerEvent(Layer event)
+    {
+        ParserListener[] listeners = getParserListeners();
+        for (ParserListener listener : listeners) {
+            listener.layerEvent(event);
+        }
+    }
+    
+    /** Tells all ParserListeners that a time event has been parsed. */
+    public void fireTimeEvent(Time event)
+    {
+        ParserListener[] listeners = getParserListeners();
+        for (ParserListener listener : listeners) {
+            listener.timeEvent(event);
+        }
+    }
+    
+    /** Tells all ParserListeners that a time event has been parsed. */
+    public void fireSystemExclusiveEvent(SystemExclusiveEvent event)
+    {
+        ParserListener[] listeners = getParserListeners();
+        for (ParserListener listener : listeners) {
+            listener.systemExclusiveEvent(event);
+        }
+    }
+    
+    /** Tells all ParserListeners that a key signature event has been parsed. */
+    public void fireKeySignatureEvent(KeySignature event)
+    {
+        ParserListener[] listeners = getParserListeners();
+        for (ParserListener listener : listeners) {
+            listener.keySignatureEvent(event);
+        }
+    }
+    
+    /** Tells all ParserListeners that a measure event has been parsed. */
+    public void fireMeasureEvent(Measure event)
+    {
+        ParserListener[] listeners = getParserListeners();
+        for (ParserListener listener : listeners) {
+            listener.measureEvent(event);
+        }
+    }
 
-	}
+    /** Tells all ParserListeners that a controller event has been parsed. */
+    public void fireControllerEvent(Controller event)
+    {
+        ParserListener[] listeners = getParserListeners();
+        for (ParserListener listener : listeners) {
+            listener.controllerEvent(event);
+        }
+    }
 
-	public void fireVoiceEvent(Voice event) {
-		// TODO Auto-generated method stub
+    /** Tells all ParserListeners that a controller event has been parsed. */
+    public void fireChannelPressureEvent(ChannelPressure event)
+    {
+        ParserListener[] listeners = getParserListeners();
+        for (ParserListener listener : listeners) {
+            listener.channelPressureEvent(event);
+        }
+    }
 
-	}
+    /** Tells all ParserListeners that a controller event has been parsed. */
+    public void firePolyphonicPressureEvent(PolyphonicPressure event)
+    {
+        ParserListener[] listeners = getParserListeners();
+        for (ParserListener listener : listeners) {
+            listener.polyphonicPressureEvent(event);
+        }
+    }
 
-	public void fireTempoEvent(Tempo event) {
-		// TODO Auto-generated method stub
+    /** Tells all ParserListeners that a controller event has been parsed. */
+    public void firePitchBendEvent(PitchBend event)
+    {
+        ParserListener[] listeners = getParserListeners();
+        for (ParserListener listener : listeners) {
+            listener.pitchBendEvent(event);
+        }
+    }
 
-	}
+    /** Tells all ParserListeners that a note event has been parsed. */
+    public void fireNoteEvent(Note event)
+    {
+        ParserListener[] listeners = getParserListeners();
+        for (ParserListener listener : listeners) {
+            listener.noteEvent(event);
+        }
+    }
 
-	public void fireInstrumentEvent(Instrument event) {
-		// TODO Auto-generated method stub
+    /** Tells all ParserListeners that a sequential note event has been parsed. */
+    public void fireSequentialNoteEvent(Note event)
+    {
+        ParserListener[] listeners = getParserListeners();
+        for (ParserListener listener : listeners) {
+            listener.sequentialNoteEvent(event);
+        }
+    }
 
-	}
-
-	public void fireLayerEvent(Layer event) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void fireTimeEvent(Time event) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void fireSystemExclusiveEvent(SystemExclusiveEvent event) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void fireKeySignatureEvent(KeySignature event) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void fireMeasureEvent(Measure event) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void fireControllerEvent(Controller event) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void fireChannelPressureEvent(ChannelPressure event) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void firePolyphonicPressureEvent(PolyphonicPressure event) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void firePitchBendEvent(PitchBend event) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void fireNoteEvent(Note event) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void fireSequentialNoteEvent(Note event) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void fireParallelNoteEvent(Note event) {
-		// TODO Auto-generated method stub
-
-	}
-
+    /** Tells all ParserListeners that a parallel note event has been parsed. */
+    public void fireParallelNoteEvent(Note event)
+    {
+        ParserListener[] listeners = getParserListeners();
+        for (ParserListener listener : listeners) {
+            listener.parallelNoteEvent(event);
+        }
+    }
 }

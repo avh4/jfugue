@@ -26,6 +26,7 @@ import java.io.IOException;
 
 import org.jfugue.factories.JFugueElementFactory;
 import org.jfugue.parsers.ParserContext;
+import org.jfugue.parsers.ParserError;
 
 
 /**
@@ -90,16 +91,23 @@ public final class Measure implements JFugueElement {
 		return hash;
 	}
 
-	protected static class MeasureFactory extends JFugueElementFactory<Measure> {
-
+	public static class Factory extends JFugueElementFactory<Measure> {
+		private static Measure.Factory instance;
+		private Factory() {}
+		public static Measure.Factory getInstance() {
+			if (instance == null)
+				instance = new Measure.Factory();
+			return instance;
+		}
+		
 		public Class<Measure> type() {
 			return Measure.class;
 		}
 
 		public Measure createElement(ParserContext context) throws IOException,
-				IllegalArgumentException, JFugueException {
-			context.readChar('|');
-			return new Measure();
+				IllegalArgumentException, JFugueException, ParserError {
+			context.readOneOfTheChars('|');
+			return context.fireMeasureEvent(new Measure());
 		}
 
 	}

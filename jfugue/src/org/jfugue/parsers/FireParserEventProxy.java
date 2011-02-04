@@ -17,6 +17,8 @@ import org.jfugue.Voice;
 
 
 public interface FireParserEventProxy {
+	
+	
     /**
      * Adds a <code>ParserListener</code>.  The listener will receive events when the parser
      * interprets music string tokens.

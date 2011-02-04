@@ -22,6 +22,12 @@
 
 package org.jfugue;
 
+import java.io.IOException;
+
+import org.jfugue.factories.JFugueElementFactory;
+import org.jfugue.parsers.ParserContext;
+import org.jfugue.parsers.ParserError;
+
 /**
  * Represents voice changes, also known as <i>track changes</i>.
  *
@@ -113,4 +119,27 @@ public final class Voice implements JFugueElement
     	visitor.visit(this);
     }
 
+    public static class Factory extends JFugueElementFactory<Voice> {
+
+		private static Factory instance;
+
+		private Factory() {
+		}
+
+		public static Factory getInstance() {
+			if (instance == null)
+				instance = new Factory();
+			return instance;
+		}
+
+		public Voice createElement(ParserContext context)
+				throws IOException, IllegalArgumentException, JFugueException,
+				ParserError {
+			return context.fireVoiceEvent(new Voice(context.readCharThenByte('V', 'v').getThen()));
+		}
+
+		public Class<Voice> type() {
+			return Voice.class;
+		}
+    }
 }

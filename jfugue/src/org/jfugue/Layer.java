@@ -22,6 +22,12 @@
 
 package org.jfugue;
 
+import java.io.IOException;
+
+import org.jfugue.factories.JFugueElementFactory;
+import org.jfugue.parsers.ParserContext;
+import org.jfugue.parsers.ParserError;
+
 /**
  * Represents layer changes.  A Layer allows multiple sounds to be played at the same
  * time on a single track (also known as a voice), without those notes being specified
@@ -115,6 +121,26 @@ public final class Layer implements JFugueElement
         hash = 13 * hash + this.layer;
         return hash;
     }
+
+	public static class Factory extends JFugueElementFactory<Layer> {
+		private static Layer.Factory instance;
+		private Factory() {}
+		public static Layer.Factory getInstance() {
+			if (instance == null)
+				instance = new Layer.Factory();
+			return instance;
+		}
+	
+		public Layer createElement(ParserContext context) throws IOException,
+				IllegalArgumentException, JFugueException, ParserError {
+			return context.fireLayerEvent(new Layer(context.readCharThenByte('L', 'l').getThen()));
+		}
+	
+		public Class<Layer> type() {
+			return Layer.class;
+		}
+	
+	}
 
 
 }

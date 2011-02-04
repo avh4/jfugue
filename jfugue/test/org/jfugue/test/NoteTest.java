@@ -1,11 +1,8 @@
 package org.jfugue.test;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
-import java.util.Map;
 
 import org.jfugue.MusicStringParser;
 import org.jfugue.Note;
@@ -61,14 +58,15 @@ public class NoteTest {
 		}
 	}
 	
-	@Test
-	public void testChords() {
-		Map<String, byte[]> chords = Note.NoteFactory.CHORDS_MAP;
-		assertFalse("The chord map is empty", chords.isEmpty());
-		assertTrue("MAJ is not in CHORDS_MAP", chords.containsKey("MAJ"));
-		byte[] bs = chords.get("MAJ");
-		assertArrayEquals("MAJ is not as it should be", new byte[] { 4, 7 }, bs);
-	}
+//	@Ignore
+//	@Test
+//	public void testChords() {
+//		Map<String, byte[]> chords = Note.NoteFactory.CHORDS_MAP;
+//		assertFalse("The chord map is empty", chords.isEmpty());
+//		assertTrue("MAJ is not in CHORDS_MAP", chords.containsKey("MAJ"));
+//		byte[] bs = chords.get("MAJ");
+//		assertArrayEquals("MAJ is not as it should be", new byte[] { 4, 7 }, bs);
+//	}
 
 	@Test
 	public void testEquality() throws Exception {

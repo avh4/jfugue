@@ -20,7 +20,13 @@
  *  
  */
 
-package org.jfugue;
+package org.jfugue.extras;
+
+import org.jfugue.MusicStringParser;
+import org.jfugue.Note;
+import org.jfugue.ParserListenerAdapter;
+import org.jfugue.PatternInterface;
+import org.jfugue.Voice;
 
 
 

@@ -120,41 +120,39 @@ public class LoggingVisitor extends DefaultElementVistior {
 		log.add(new Entry("visitPattern", pattern));
 	}
 
-	public void visitVoice(Voice voice) {
+	public void visit(Voice voice) {
 		log.add(new Entry("visitVoice", voice));
 	}
 
-	public void visitSystemExclusiveEvent(
-			SystemExclusiveEvent systemExclusiveEvent) {
+	public void visit(SystemExclusiveEvent systemExclusiveEvent) {
 		log.add(new Entry("visitSystemExclusiveEvent", systemExclusiveEvent));
 	}
 
-	public void visitTempo(Tempo tempo) {
+	public void visit(Tempo tempo) {
 		log.add(new Entry("visitTempo", tempo));
 	}
 
-	public void visitTime(Time time) {
+	public void visit(Time time) {
 		log.add(new Entry("visitTime", time));
 	}
 
-	public void visitPolyphonicPressure(
-			PolyphonicPressure polyphonicPressure) {
+	public void visit(PolyphonicPressure polyphonicPressure) {
 		log.add(new Entry("visitPolyphonicPressure", polyphonicPressure));
 	}
 
-	public void visitChord(Chord chord) {
-		log.add(new Entry("visitChord", chord));
-	}
+//	public void visitChord(Chord chord) {
+//		log.add(new Entry("visitChord", chord));
+//	}
+//
+//	public void visitParallelNote(Note note) {
+//		log.add(new Entry("visitParallelNote", note));
+//	}
+//
+//	public void visitSequentialNote(Note note) {
+//		log.add(new Entry("visitSequentialNote", note));
+//	}
 
-	public void visitParallelNote(Note note) {
-		log.add(new Entry("visitParallelNote", note));
-	}
-
-	public void visitSequentialNote(Note note) {
-		log.add(new Entry("visitSequentialNote", note));
-	}
-
-	public void visitPitchBend(PitchBend pitchBend) {
+	public void visit(PitchBend pitchBend) {
 		log.add(new Entry("visitPitchBend", pitchBend));
 	}
 

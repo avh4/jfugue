@@ -22,6 +22,12 @@
 
 package org.jfugue;
 
+import java.io.IOException;
+
+import org.jfugue.factories.JFugueElementFactory;
+import org.jfugue.parsers.ParserContext;
+import org.jfugue.parsers.ParserError;
+
 /**
  * Represents key signature changes.  Key signatures are kept for the
  * whole song, independent of tracks.  You may change the key signature
@@ -157,5 +163,69 @@ public final class KeySignature implements JFugueElement
         return hash;
     }
 
-    
+    public static class Factory extends JFugueElementFactory<KeySignature> {
+
+		private static Factory instance;
+
+		private Factory() {
+		}
+
+		public static Factory getInstance() {
+			if (instance == null)
+				instance = new Factory();
+			return instance;
+		}
+
+		public KeySignature createElement(ParserContext context)
+				throws IOException, IllegalArgumentException, JFugueException,
+				ParserError {
+			context.readOneOfTheChars('K', 'k');
+			String rootNote = context.readIdentifier();
+			try {
+				char c = context.readOneOfTheChars('#');
+				rootNote = c + context.readIdentifier();
+			} catch (Exception e) {}
+			
+			rootNote = rootNote.toUpperCase();
+			if (rootNote.length() <= 4)
+				throw new ParserError("The key '%s' is too short", rootNote);
+			
+			String majOrMinStr = rootNote.substring(rootNote.length()-4);
+			byte scale;
+			if ("MAJ".equals(majOrMinStr))
+				scale = 0;
+			else if ("MIN".equals(majOrMinStr))
+				scale = 1;
+			else
+				throw new ParserError("The scale must be MAJ or MIN but it is '%s'", majOrMinStr);
+			
+	        byte keySig = 0;
+
+	        // TODO Somehow make this less messy -ska
+	        if (rootNote.equalsIgnoreCase("CBMAJ") || rootNote.equalsIgnoreCase("ABMIN")) keySig = -7;
+	        else if (rootNote.equalsIgnoreCase("GBMAJ") || rootNote.equalsIgnoreCase("EBMIN")) keySig = -6;
+	        else if (rootNote.equalsIgnoreCase("DBMAJ") || rootNote.equalsIgnoreCase("BBMIN")) keySig = -5;
+	        else if (rootNote.equalsIgnoreCase("ABMAJ") || rootNote.equalsIgnoreCase("FMIN")) keySig = -4;
+	        else if (rootNote.equalsIgnoreCase("EBMAJ") || rootNote.equalsIgnoreCase("CMIN")) keySig = -3;
+	        else if (rootNote.equalsIgnoreCase("BBMAJ") || rootNote.equalsIgnoreCase("GMIN")) keySig = -2;
+	        else if (rootNote.equalsIgnoreCase("FMAJ") || rootNote.equalsIgnoreCase("DMIN")) keySig = -1;
+	        else if (rootNote.equalsIgnoreCase("CMAJ") || rootNote.equalsIgnoreCase("AMIN")) keySig = 0;
+	        else if (rootNote.equalsIgnoreCase("GMAJ") || rootNote.equalsIgnoreCase("EMIN")) keySig = +1;
+	        else if (rootNote.equalsIgnoreCase("DMAJ") || rootNote.equalsIgnoreCase("BMIN")) keySig = +2;
+	        else if (rootNote.equalsIgnoreCase("AMAJ") || rootNote.equalsIgnoreCase("F#MIN")) keySig = +3;
+	        else if (rootNote.equalsIgnoreCase("EMAJ") || rootNote.equalsIgnoreCase("C#MIN")) keySig = +4;
+	        else if (rootNote.equalsIgnoreCase("BMAJ") || rootNote.equalsIgnoreCase("G#MIN")) keySig = +5;
+	        else if (rootNote.equalsIgnoreCase("F#MAJ") || rootNote.equalsIgnoreCase("D#MIN")) keySig = +6;
+	        else if (rootNote.equalsIgnoreCase("C#MAJ") || rootNote.equalsIgnoreCase("A#MIN")) keySig = +7;
+	        else {
+	            throw new JFugueException(JFugueException.KEYSIG_EXC, "K" + rootNote);
+	        }
+	        
+	        return context.fireKeySignatureEvent(new KeySignature(keySig, scale));
+		}
+
+		public Class<KeySignature> type() {
+			return KeySignature.class;
+		}
+    }
 }

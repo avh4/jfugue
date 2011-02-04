@@ -27,6 +27,7 @@ import java.util.Map;
 
 import org.jfugue.factories.JFugueElementFactory;
 import org.jfugue.parsers.ParserContext;
+import org.jfugue.parsers.ParserError;
 import org.jfugue.util.MapUtils;
 
 /**
@@ -172,7 +173,7 @@ public final class Tempo implements JFugueElement {
 				{ "PRETISSIMO", "220" }, });
 	}
 
-	protected static class Factory extends JFugueElementFactory<Tempo> {
+	public static class Factory extends JFugueElementFactory<Tempo> {
 
 		private static Tempo.Factory instance;
 
@@ -193,9 +194,9 @@ public final class Tempo implements JFugueElement {
 
 		@Override
 		public Tempo createElement(ParserContext context) throws IOException,
-				IllegalArgumentException, JFugueException {
-			context.readChar('T', 't');
-			return new Tempo(context.readInt());
+				IllegalArgumentException, JFugueException, ParserError {
+			context.readOneOfTheChars('T', 't');
+			return context.fireTempoEvent(new Tempo(context.readInt()));
 //			if (reader.ready()) {
 //				int codePoint = reader.read();
 //				char ch = (char) codePoint;

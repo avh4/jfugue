@@ -22,8 +22,12 @@
 
 package org.jfugue;
 
+import java.io.IOException;
 import java.util.Map;
 
+import org.jfugue.factories.JFugueElementFactory;
+import org.jfugue.parsers.ParserContext;
+import org.jfugue.parsers.ParserError;
 import org.jfugue.util.MapUtils;
 
 /**
@@ -34,7 +38,29 @@ import org.jfugue.util.MapUtils;
  */
 public final class Instrument implements JFugueElement
 {
-    /**
+    public static class Factory extends JFugueElementFactory<Instrument> {
+    	private static Instrument.Factory instance;
+		private Factory() {}
+		public static Instrument.Factory getInstance() {
+			if (instance == null)
+				instance = new Instrument.Factory();
+			return instance;
+		}
+		
+		public Instrument createElement(ParserContext context)
+				throws IOException, IllegalArgumentException, JFugueException,
+				ParserError {
+			context.readOneOfTheChars('I', 'i');
+			return context.fireInstrumentEvent(new Instrument(context.readByte()));
+		}
+
+		public Class<Instrument> type() {
+			return Instrument.class;
+		}
+
+	}
+
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
@@ -673,4 +699,6 @@ public final class Instrument implements JFugueElement
     public void acceptVisitor(ElementVisitor visitor) {
     	visitor.visit(this);
     }
+    
+    
 }
