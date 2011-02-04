@@ -19,6 +19,7 @@ import org.jfugue.Instrument;
 import org.jfugue.Layer;
 import org.jfugue.SystemExclusiveEvent;
 import org.jfugue.Time;
+import org.jfugue.KeySignature;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
@@ -185,5 +186,10 @@ public class ParserTest {
         verify(getNotifiedListener("fireSystemExclusiveEvent", element)).systemExclusiveEvent(element);
     }    
 
+    @Test 
+    public void testfireKeySignatureEvent() {
+	final KeySignature element = new KeySignature((byte)0, (byte)0);
+        verify(getNotifiedListener("fireKeySignatureEvent", element)).keySignatureEvent(element);
+    }
     
 }
