@@ -23,6 +23,7 @@ import org.jfugue.KeySignature;
 import org.jfugue.Measure;
 import org.jfugue.Controller;
 import org.jfugue.ChannelPressure;
+import org.jfugue.PolyphonicPressure;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
@@ -211,6 +212,12 @@ public class ParserTest {
     public void testfireChannelPressureEvent() {
 	final ChannelPressure element = new ChannelPressure((byte)0);
         verify(getNotifiedListener("fireChannelPressureEvent", element)).channelPressureEvent(element);
+    }
+
+    @Test 
+    public void testfirePolyphonicPressureEvent() {
+	final PolyphonicPressure element = new PolyphonicPressure((byte)0, (byte)0);
+        verify(getNotifiedListener("firePolyphonicPressureEvent", element)).polyphonicPressureEvent(element);
     }
     
 }
