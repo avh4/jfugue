@@ -18,6 +18,7 @@ import org.jfugue.Tempo;
 import org.jfugue.Instrument;
 import org.jfugue.Layer;
 import org.jfugue.SystemExclusiveEvent;
+import org.jfugue.Time;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
@@ -173,10 +174,16 @@ public class ParserTest {
     }
 
     @Test 
+    public void testfireTimeEvent() {
+	final Time element = new Time(0);
+        verify(getNotifiedListener("fireTimeEvent", element)).timeEvent(element);
+    }
+
+    @Test 
     public void testfireSystemExclusiveEvent() {
 	final SystemExclusiveEvent element = new SystemExclusiveEvent(null);
         verify(getNotifiedListener("fireSystemExclusiveEvent", element)).systemExclusiveEvent(element);
-    }
-    
+    }    
+
     
 }
