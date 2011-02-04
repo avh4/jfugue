@@ -120,10 +120,24 @@ public class ParserTest {
     @Test 
     public void testRemoveParserListener_MoreThanAdd(){
         ParserListener listener = mock(ParserListener.class);
+        ParserListener listener0 = mock(ParserListener.class);
         parser.addParserListener(listener);
         parser.removeParserListener(listener);
         parser.removeParserListener(listener);
         assertEquals("Removing a ParserListener twice should have the same effect as removing it once", 0, parser.getParserListeners().length);
+    }
+
+    @Test 
+    public void testRemoveParserListener_Check_Correct_Removal(){
+        ParserListener listener0 = mock(ParserListener.class);
+        ParserListener listener1 = mock(ParserListener.class);
+        ParserListener listener2 = mock(ParserListener.class);
+        parser.addParserListener(listener0);
+        parser.addParserListener(listener1);
+        parser.addParserListener(listener2);
+        parser.removeParserListener(listener0);
+        parser.removeParserListener(listener2);
+        assertEquals("Removing a ParserListener twice should have the same effect as removing it once", listener1, parser.getParserListeners()[0]);
     }
 
     private ParserListener getNotifiedListener(final String methodName, final Object arg) {
