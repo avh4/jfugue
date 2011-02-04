@@ -21,6 +21,7 @@ import org.jfugue.SystemExclusiveEvent;
 import org.jfugue.Time;
 import org.jfugue.KeySignature;
 import org.jfugue.Measure;
+import org.jfugue.Controller;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
@@ -197,6 +198,12 @@ public class ParserTest {
     public void testfireMeasureEvent() {
 	final Measure element = new Measure();
         verify(getNotifiedListener("fireMeasureEvent", element)).measureEvent(element);
+    }
+
+    @Test 
+    public void testfireControllerEvent() {
+	final Controller element = new Controller();
+        verify(getNotifiedListener("fireControllerEvent", element)).controllerEvent(element);
     }
     
 }
