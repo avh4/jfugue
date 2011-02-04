@@ -20,6 +20,7 @@ import org.jfugue.Layer;
 import org.jfugue.SystemExclusiveEvent;
 import org.jfugue.Time;
 import org.jfugue.KeySignature;
+import org.jfugue.Measure;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
@@ -190,6 +191,12 @@ public class ParserTest {
     public void testfireKeySignatureEvent() {
 	final KeySignature element = new KeySignature((byte)0, (byte)0);
         verify(getNotifiedListener("fireKeySignatureEvent", element)).keySignatureEvent(element);
+    }
+
+    @Test 
+    public void testfireMeasureEvent() {
+	final Measure element = new Measure();
+        verify(getNotifiedListener("fireMeasureEvent", element)).measureEvent(element);
     }
     
 }
