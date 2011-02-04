@@ -25,6 +25,7 @@ import org.jfugue.Controller;
 import org.jfugue.ChannelPressure;
 import org.jfugue.PolyphonicPressure;
 import org.jfugue.PitchBend;
+import org.jfugue.Note;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
@@ -226,4 +227,23 @@ public class ParserTest {
 	final PitchBend element = new PitchBend((byte)0, (byte)0);
         verify(getNotifiedListener("firePitchBendEvent", element)).pitchBendEvent(element);
     }    
+
+    @Test 
+    public void testfireNoteEvent() {
+	final Note element = new Note((byte)0);
+        verify(getNotifiedListener("fireNoteEvent", element)).noteEvent(element);
+    }
+
+    @Test 
+    public void testfireSequentialNoteEvent() {
+	final Note element = new Note((byte)0);
+        verify(getNotifiedListener("fireSequentialNoteEvent", element)).sequentialNoteEvent(element);
+    }
+
+    @Test 
+    public void testfireParallelNoteEvent() {
+	final Note element = new Note((byte)0);
+        verify(getNotifiedListener("fireParallelNoteEvent", element)).parallelNoteEvent(element);
+    }
+
 }
