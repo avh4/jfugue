@@ -22,6 +22,7 @@ import org.jfugue.Time;
 import org.jfugue.KeySignature;
 import org.jfugue.Measure;
 import org.jfugue.Controller;
+import org.jfugue.ChannelPressure;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
@@ -204,6 +205,12 @@ public class ParserTest {
     public void testfireControllerEvent() {
 	final Controller element = new Controller();
         verify(getNotifiedListener("fireControllerEvent", element)).controllerEvent(element);
+    }
+
+    @Test 
+    public void testfireChannelPressureEvent() {
+	final ChannelPressure element = new ChannelPressure((byte)0);
+        verify(getNotifiedListener("fireChannelPressureEvent", element)).channelPressureEvent(element);
     }
     
 }
