@@ -17,6 +17,7 @@ import org.jfugue.Voice;
 import org.jfugue.Tempo;
 import org.jfugue.Instrument;
 import org.jfugue.Layer;
+import org.jfugue.SystemExclusiveEvent;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
@@ -148,27 +149,33 @@ public class ParserTest {
     }
     
     @Test 
-    public void testfireVoiceEvent() {
-	final Voice voice = new Voice((byte)0);
-        verify(getNotifiedListener("fireVoiceEvent", voice)).voiceEvent(voice);	
+    public void testfireVoiceElement() {
+	final Voice element = new Voice((byte)0);
+        verify(getNotifiedListener("fireVoiceEvent", element)).voiceEvent(element);	
     }
 
     @Test 
     public void testfireTempoEvent() {
-	final Tempo tempo = new Tempo(0);
-        verify(getNotifiedListener("fireTempoEvent", tempo)).tempoEvent(tempo);
+	final Tempo element = new Tempo(0);
+        verify(getNotifiedListener("fireTempoEvent", element)).tempoEvent(element);
     }
 
     @Test 
     public void testfireInstrumentEvent() {
-	final Instrument instrument = new Instrument((byte)0);
-        verify(getNotifiedListener("fireInstrumentEvent", instrument)).instrumentEvent(instrument);
+	final Instrument element = new Instrument((byte)0);
+        verify(getNotifiedListener("fireInstrumentEvent", element)).instrumentEvent(element);
     }
 
     @Test 
     public void testfireLayerEvent() {
-	final Layer layer = new Layer((byte)0);
-        verify(getNotifiedListener("fireLayerEvent", layer)).layerEvent(layer);
+	final Layer element = new Layer((byte)0);
+        verify(getNotifiedListener("fireLayerEvent", element)).layerEvent(element);
+    }
+
+    @Test 
+    public void testfireSystemExclusiveEvent() {
+	final SystemExclusiveEvent element = new SystemExclusiveEvent(null);
+        verify(getNotifiedListener("fireSystemExclusiveEvent", element)).systemExclusiveEvent(element);
     }
     
     
