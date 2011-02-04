@@ -24,6 +24,7 @@ import org.jfugue.Measure;
 import org.jfugue.Controller;
 import org.jfugue.ChannelPressure;
 import org.jfugue.PolyphonicPressure;
+import org.jfugue.PitchBend;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
@@ -220,4 +221,9 @@ public class ParserTest {
         verify(getNotifiedListener("firePolyphonicPressureEvent", element)).polyphonicPressureEvent(element);
     }
     
+    @Test 
+    public void testfirePitchBendEvent() {
+	final PitchBend element = new PitchBend((byte)0, (byte)0);
+        verify(getNotifiedListener("firePitchBendEvent", element)).pitchBendEvent(element);
+    }    
 }
