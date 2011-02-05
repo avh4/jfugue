@@ -1,11 +1,7 @@
 package org.jfugue.parsers;
 
-import static org.jfugue.JFugueException.PARSE_CHAR_ERROR;
-
 import java.io.IOException;
 import java.io.PushbackReader;
-
-import javax.xml.stream.events.Characters;
 
 import org.jfugue.ChannelPressure;
 import org.jfugue.Controller;
@@ -60,6 +56,32 @@ public class ParserContext {
 		this.environment = environment;
 	}
 	
+	// TODO Make this classes methods use read and unread from this class instead of reader
+	
+	/**
+	 * Reads a {@code char} from the {@code reader} if possible.
+	 * 
+	 * @return the {@code char} read
+	 * @throws IOException
+	 * @throws ParserError if the {@code reader} is not ready
+	 */
+	public char read() throws IOException, ParserError {
+		if (reader.ready())
+			return (char) reader.read();
+		else
+			throw new ParserError(ParserError.NOT_READY);
+	}
+	
+	/**
+	 * Tries to unread a {@code char}, otherwise throws.
+	 * 
+	 * @param ch
+	 * @throws IOException
+	 */
+	public void unread(char ch) throws IOException {
+		reader.unread((int) ch);
+	}
+	
 	/**
 	 * Tries to read a symbol for use in looking up dictionary elements.
 	 * 
@@ -89,18 +111,16 @@ public class ParserContext {
 	public String readIdentifier() throws IOException, ParserError {
 		StringBuilder sb = new StringBuilder(CAPACITY);
 		final String type = "identifier";
-		checkReady();
-		int cp = reader.read();
-		if (!Character.isLetter(cp)) {
-			reader.unread(cp);
-			throw new ParserError("'%s' is not the start of an %s", (char)cp, type);
+		char ch = read();
+		if (!Character.isLetter(ch)) {
+			unread(ch);
+			throw new ParserError(ParserError.CHAR_NOT_START, ch, type);
 		}
-		while (Character.isJavaIdentifierPart(cp)) {
-			sb.append((char) cp);
-			checkReady();
-			cp = reader.read();
+		while (Character.isJavaIdentifierPart(ch)) {
+			sb.append(ch);
+			ch = read();
 		}
-		reader.unread(cp);
+		unread(ch);
 		return sb.toString();
 	}
 
@@ -114,46 +134,23 @@ public class ParserContext {
 	 */
 	public byte readByte() throws JFugueException, IOException, ParserError {
 		StringBuilder sb = new StringBuilder(CAPACITY);
-		checkReady();
-		int cp = reader.read();
-		char ch = (char) cp;
+		char ch = read();
 		if (Character.isDigit(ch)) {
 			sb.append(ch);
 			while (checkReady()) {
-				cp = reader.read();
-				ch = (char) cp;
+				ch = read();
 				if (Character.isDigit(ch))
 					sb.append(ch);
 				else {
-					reader.unread(cp);
+					unread(ch);
 					break;
 				}
 			}
 			return Byte.parseByte(sb.toString());
 		} else {
-			reader.unread(cp);
+			unread(ch);
 			return environment.getByteFromDictionary(readSymbol());
 		}
-		// else if (ch == '[') {
-		// sb.append(ch);
-		// while (reader.ready()) {
-		// cp = reader.read();
-		// ch = (char) cp;
-		// if (Character.isJavaIdentifierPart(ch))
-		// sb.append(ch);
-		// else if (ch == ']') {
-		// sb.append(ch);
-		// break;
-		// } else {
-		// reader.unread(cp);
-		// throw new JFugueException(PARSE_CHAR_ERROR, ch, "byte");
-		// }
-		// }
-		// return environment.getByteFromDictionary(sb.toString());
-		// } else {
-		// reader.unread(cp);
-		// throw new JFugueException(PARSE_CHAR_ERROR, ch, "byte");
-		// }
 	}
 
 	/**
@@ -265,16 +262,50 @@ public class ParserContext {
 			return environment.getDoubleFromDictionary(readSymbol());
 		}
 	}
+	
+	public String readUnicodeAndChars(byte[] bs, char...cs) throws IOException, ParserError {
+		StringBuilder sb = new StringBuilder(CAPACITY);
+		char ch = read();
+		boolean match = false;
+		while (true) {
+			match = false;
+			for (byte b : bs) {
+				if (Character.getType(ch) == b) {
+					match = true;
+					break;
+				}
+			}
+			if (match == true) {
+				sb.append(ch);
+				match = false;
+				continue;
+			}
+			for (char c : cs) {
+				if (c == ch) {
+					match = true;
+					break;
+				}
+			}
+			if (match == true) {
+				sb.append(ch);
+				match = false;
+				continue;
+			}
+			unread(ch);
+			break;
+		}
+		return sb.toString();
+	}
 
 	public char readOneOfTheChars(char...cs) throws IOException, JFugueException, ParserError {
 			checkReady();
-			int cp = reader.read();
+			char ch = read();
 			for (char d : cs) {
-				if (cp == d)
+				if (ch == d)
 					return d;
 			}
-			reader.unread(cp);
-			throw new ParserError(ParserError.CHAR_UNEXPECTED, (char) cp, cs.toString());
+			unread(ch);
+			throw new ParserError(ParserError.CHAR_UNEXPECTED, ch, cs.toString());
 	}
 
 	public boolean checkReady() throws IOException, ParserError {
@@ -513,5 +544,17 @@ public class ParserContext {
 	public Note fireParallelNoteEvent(Note event) {
 		environment.fireParallelNoteEvent(event);
 		return event;
+	}
+
+	protected static final char[] HEX = new char[] {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+	public byte readByte(int radix) throws JFugueException, IOException, ParserError {
+//		final char[] HEX = new char[] {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+		if (radix == 10)
+			return readByte();
+		else if (radix == 16) {
+			String rb = new String(new char[] { readOneOfTheChars(HEX), readOneOfTheChars(HEX) });
+			return Byte.parseByte(rb, radix);
+		} else
+			throw new ParserError();
 	}
 }

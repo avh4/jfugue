@@ -22,6 +22,12 @@
 
 package org.jfugue;
 
+import java.io.IOException;
+
+import org.jfugue.factories.JFugueElementFactory;
+import org.jfugue.parsers.ParserContext;
+import org.jfugue.parsers.ParserError;
+
 /**
  * Represents a timing value, which can be used to indicate when certain events are played.
  *
@@ -112,5 +118,26 @@ public final class Time implements JFugueElement
         hash = 43 * hash + (int) (this.time ^ (this.time >>> 32));
         return hash;
     }
+
+	public static class Factory extends JFugueElementFactory<Time> {
+		private static Time.Factory instance;
+		private Factory() {}
+		public static Time.Factory getInstance() {
+			if (instance == null)
+				instance = new Time.Factory();
+			return instance;
+		}
+		
+		public Time createElement(ParserContext context) throws IOException,
+				IllegalArgumentException, JFugueException, ParserError {
+			context.readOneOfTheChars('@');
+			return context.fireTimeEvent(new Time(context.readLong()));
+		}
+	
+		public Class<Time> type() {
+			return Time.class;
+		}
+	
+	}
 
 }

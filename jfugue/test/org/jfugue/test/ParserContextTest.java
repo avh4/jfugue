@@ -80,9 +80,15 @@ public class ParserContextTest extends ParserContext {
 	public void testReadLong() {
 	}
 
-	@Ignore
+//	@Ignore
 	@Test
-	public void testReadDouble() {
+	public void testReadDouble() throws JFugueException, IOException, ParserError {
+		double expected = 0.25;
+		setString(Double.toString(expected));
+		assertEquals(expected, readDouble(), 0.0001);
+		environment.add("DOUBLE", Double.toString(expected));
+		setString("[Double]");
+		assertEquals(expected, readDouble(), 0.0001);
 	}
 
 	@Ignore

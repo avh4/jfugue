@@ -183,14 +183,14 @@ public final class KeySignature implements JFugueElement
 			String rootNote = context.readIdentifier();
 			try {
 				char c = context.readOneOfTheChars('#');
-				rootNote = c + context.readIdentifier();
+				rootNote = rootNote + String.valueOf(c) + context.readIdentifier();
 			} catch (Exception e) {}
 			
 			rootNote = rootNote.toUpperCase();
 			if (rootNote.length() <= 4)
 				throw new ParserError("The key '%s' is too short", rootNote);
 			
-			String majOrMinStr = rootNote.substring(rootNote.length()-4);
+			String majOrMinStr = rootNote.substring(rootNote.length()-3);
 			byte scale;
 			if ("MAJ".equals(majOrMinStr))
 				scale = 0;

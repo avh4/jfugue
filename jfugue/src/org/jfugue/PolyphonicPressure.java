@@ -22,6 +22,12 @@
 
 package org.jfugue;
 
+import java.io.IOException;
+
+import org.jfugue.factories.JFugueElementFactory;
+import org.jfugue.parsers.ParserContext;
+import org.jfugue.parsers.ParserError;
+
 /**
  * Represents tempo changes.  Tempo is kept for the whole
  * song, and is independent of tracks.  You may change the
@@ -144,5 +150,32 @@ public final class PolyphonicPressure implements JFugueElement
         hash = 29 * hash + this.pressure;
         return hash;
     }
+
+	public static class Factory extends
+			JFugueElementFactory<PolyphonicPressure> {
+	
+		private static PolyphonicPressure.Factory instance;
+		private Factory() {}
+		public static PolyphonicPressure.Factory getInstance() {
+			if (instance == null)
+				instance = new PolyphonicPressure.Factory();
+			return instance;
+		}
+		
+		public PolyphonicPressure createElement(ParserContext context)
+				throws IOException, IllegalArgumentException, JFugueException,
+				ParserError {
+			context.readOneOfTheChars('*');
+			byte key = context.readByte();
+			context.readOneOfTheChars(',');
+			byte pressure = context.readByte();
+			return context.firePolyphonicPressureEvent(new PolyphonicPressure(key, pressure));
+		}
+	
+		public Class<PolyphonicPressure> type() {
+			return PolyphonicPressure.class;
+		}
+	
+	}
 
 }

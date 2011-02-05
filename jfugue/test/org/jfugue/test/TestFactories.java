@@ -50,9 +50,15 @@ public class TestFactories {
 		assertEquals("I[Piano]", i.getMusicString());
 	}
 	
-	@Ignore("not implemented yet")
 	@Test
 	public void testKeySignatureFactory() throws Exception {
+		String expected = "KCbmaj";
+		KeySignature.Factory f = KeySignature.Factory.getInstance();
+		KeySignature actual = f.createElement(expected);
+		assertEquals(expected, actual.getMusicString());
+		expected = "KF#maj";
+		actual = f.createElement(expected);
+		assertEquals(expected, actual.getMusicString());
 	}
 
 	@Test
@@ -65,6 +71,32 @@ public class TestFactories {
 	public void testMeasureFactory() throws Exception {
 		Measure m = Measure.Factory.getInstance().createElement("|");
 		assertEquals("|", m.getMusicString());
+	}
+	
+	@Test
+	public void testPitchBendFactory() throws Exception {
+		visitor.clearLog();
+		PitchBend.Factory f = PitchBend.Factory.getInstance();
+		PitchBend p = f.createElement("&65,10", environment);
+		assertEquals("&1345", p.getMusicString());
+		p = f.createElement("&1345", environment);
+		assertEquals("&1345", p.getMusicString());
+		assertEquals("[visitPitchBend(&1345), visitPitchBend(&1345)]", visitor.toString());
+	}
+	
+	@Test
+	public void testPolyphonicPressureFactory() throws Exception {
+		PolyphonicPressure.Factory f = PolyphonicPressure.Factory.getInstance();
+		String exp = "*40,50";
+		assertJEquals(exp, f.createElement(exp));
+	}
+	
+	@Test
+	public void testSystemExclusiveEventFactory() throws Exception {
+		SystemExclusiveEvent.Factory f = SystemExclusiveEvent.Factory.getInstance();
+		String exp = "^DEC:10,40,20,60";
+		assertJEquals(exp, f.createElement(exp));
+		assertJEquals(exp, f.createElement("^HEX:0A,28,14,3C"));
 	}
 	
 	@Ignore("not implemented yet")
@@ -80,43 +112,24 @@ public class TestFactories {
 	}
 	
 	@Test
-	public void testPitchBendFactory() throws Exception {
-		visitor.clearLog();
-		PitchBend.Factory f = PitchBend.Factory.getInstance();
-		PitchBend p = f.createElement("&65,10", environment);
-		assertEquals("&1345", p.getMusicString());
-		p = f.createElement("&1345", environment);
-		assertEquals("&1345", p.getMusicString());
-		assertEquals("[visitPitchBend(&1345), visitPitchBend(&1345)]", visitor.toString());
-	}
-	
-	@Ignore("not implemented yet")
-	@Test
-	public void testPolyphonicPressureFactory() throws Exception {
-		
-	}
-	
-	@Ignore("not implemented yet")
-	@Test
-	public void testSystemExclusiveEventFactory() throws Exception {
-		
-	}
-	
-	@Test
 	public void testTempoFactory() throws Exception {
 		Tempo t = Tempo.Factory.getInstance().createElement("T160");
 		assertEquals("T160", t.getMusicString());
 	}
 	
-	@Ignore("not implemented yet")
 	@Test
 	public void testTimeFactory() throws Exception {
-		
+		String exp = "@123456";
+		assertJEquals(exp, Time.Factory.getInstance().createElement(exp));
 	}
 	
 	@Test
 	public void testVoiceFactory() throws Exception {
 		Voice v = Voice.Factory.getInstance().createElement("V5");
 		assertEquals("V5", v.getMusicString());
+	}
+	
+	public void assertJEquals(String expected, JFugueElement actual) {
+		assertEquals(expected, actual.getMusicString());
 	}
 }

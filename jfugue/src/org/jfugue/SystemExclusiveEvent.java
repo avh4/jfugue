@@ -22,6 +22,14 @@
 
 package org.jfugue;
 
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.jfugue.factories.JFugueElementFactory;
+import org.jfugue.parsers.ParserContext;
+import org.jfugue.parsers.ParserError;
+
 /**
  * Represents a MIDI System Exclusive (SysEx) message.
  *
@@ -31,6 +39,65 @@ package org.jfugue;
 public final class SystemExclusiveEvent implements JFugueElement
 {
     /**
+	 * @author joshua
+	 *
+	 */
+	public static class Factory extends
+			JFugueElementFactory<SystemExclusiveEvent> {
+		private static SystemExclusiveEvent.Factory instance;
+		private Factory() {}
+		public static SystemExclusiveEvent.Factory getInstance() {
+			if (instance == null)
+				instance = new SystemExclusiveEvent.Factory();
+			return instance;
+		}
+
+		/* (non-Javadoc)
+		 * @see org.jfugue.factories.JFugueElementFactory#createElement(org.jfugue.parsers.ParserContext)
+		 */
+		public SystemExclusiveEvent createElement(ParserContext context)
+				throws IOException, IllegalArgumentException, JFugueException,
+				ParserError {
+//			final char[] dec = new char[] { ',' };
+//			final char[] hex = new char[] { ',', 'A', 'B', 'C', 'D', 'E', 'F' };
+			context.readOneOfTheChars('^');
+			String decOrHex = context.readIdentifier().toUpperCase();
+			int radix;
+			if ("DEC".equals(decOrHex)) {
+				radix = 10;
+			} else if ("HEX".equals(decOrHex)) {
+				radix = 16;
+			} else
+				throw new ParserError();
+			context.readOneOfTheChars(':');
+			List<Byte> byteList = new LinkedList<Byte>();
+			while (true) {
+				byteList.add(context.readByte(radix));
+				try {
+					context.readOneOfTheChars(',');
+				} catch (Exception e) {
+					break;
+				}
+			}
+			byte[] bs = new byte[byteList.size()];
+			int i = 0;
+			for (Byte b : byteList) {
+				bs[i] = (byte) b;
+				i++;
+			}
+			return context.fireSystemExclusiveEvent(new SystemExclusiveEvent(bs));
+		}
+
+		/* (non-Javadoc)
+		 * @see org.jfugue.factories.JFugueElementFactory#type()
+		 */
+		public Class<SystemExclusiveEvent> type() {
+			return SystemExclusiveEvent.class;
+		}
+
+	}
+
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
@@ -71,7 +138,7 @@ public final class SystemExclusiveEvent implements JFugueElement
     public String getMusicString()
     {
         StringBuilder buddy = new StringBuilder();
-        buddy.append("^");
+        buddy.append("^DEC:");
         byte[] bytes = getBytes();
         for (int b=0; b < bytes.length; b++) {
         	buddy.append(bytes[b]);
