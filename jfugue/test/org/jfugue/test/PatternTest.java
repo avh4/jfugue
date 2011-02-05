@@ -1,7 +1,5 @@
 package org.jfugue.test;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 
 import org.jfugue.Pattern;

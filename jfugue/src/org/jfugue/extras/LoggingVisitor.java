@@ -14,7 +14,6 @@ import org.jfugue.KeySignature;
 import org.jfugue.Layer;
 import org.jfugue.Measure;
 import org.jfugue.Note;
-import org.jfugue.Note.Chord;
 import org.jfugue.Pattern;
 import org.jfugue.PitchBend;
 import org.jfugue.PolyphonicPressure;

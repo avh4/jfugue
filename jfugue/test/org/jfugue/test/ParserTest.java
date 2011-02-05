@@ -1,34 +1,32 @@
 package org.jfugue.test;
 
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
-import static org.junit.Assert.*;
-
-
+import org.jfugue.ChannelPressure;
+import org.jfugue.Controller;
+import org.jfugue.Instrument;
+import org.jfugue.KeySignature;
+import org.jfugue.Layer;
+import org.jfugue.Measure;
+import org.jfugue.Note;
 import org.jfugue.Parser;
 import org.jfugue.ParserListener;
 import org.jfugue.ParserProgressListener;
-import org.jfugue.Voice;
-import org.jfugue.Tempo;
-import org.jfugue.Instrument;
-import org.jfugue.Layer;
-import org.jfugue.SystemExclusiveEvent;
-import org.jfugue.Time;
-import org.jfugue.KeySignature;
-import org.jfugue.Measure;
-import org.jfugue.Controller;
-import org.jfugue.ChannelPressure;
-import org.jfugue.PolyphonicPressure;
 import org.jfugue.PitchBend;
-import org.jfugue.Note;
-
-import java.lang.reflect.Method;
-import java.lang.reflect.InvocationTargetException;
+import org.jfugue.PolyphonicPressure;
+import org.jfugue.SystemExclusiveEvent;
+import org.jfugue.Tempo;
+import org.jfugue.Time;
+import org.jfugue.Voice;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
 public class ParserTest {
     public class TestParser extends Parser {
@@ -120,7 +118,8 @@ public class ParserTest {
     @Test 
     public void testRemoveParserListener_MoreThanAdd(){
         ParserListener listener = mock(ParserListener.class);
-        ParserListener listener0 = mock(ParserListener.class);
+        @SuppressWarnings("unused")
+		ParserListener listener0 = mock(ParserListener.class);
         parser.addParserListener(listener);
         parser.removeParserListener(listener);
         parser.removeParserListener(listener);
@@ -148,12 +147,13 @@ public class ParserTest {
     }
 
     private void callEventMethod(final String methodName, final Object arg) {
+	@SuppressWarnings("rawtypes")
 	final Class [] argTypes = {arg.getClass()};
 	final Object [] args = {arg};
 	invokeParserMethod(methodName,argTypes,args);
     }
 
-    private Object invokeParserMethod(final String methodName, final Class [] methodArgTypes,  final Object [] methodArgs) {
+    private Object invokeParserMethod(final String methodName, @SuppressWarnings("rawtypes") final Class [] methodArgTypes,  final Object [] methodArgs) {
         try {
 	    Method method = Parser.class.getDeclaredMethod(methodName, methodArgTypes);
 	    method.setAccessible(true);
