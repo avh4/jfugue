@@ -57,6 +57,14 @@ public class ParserContextTest extends ParserContext {
 		setString(expected);
 		assertEquals(expected, readIdentifier());
 	}
+	
+	@Test
+	public void testReadToken() throws Exception {
+		String exp = "foo";
+		String expplus = "foo bar";
+		setString(expplus);
+		assertEquals(exp, readToken(' '));
+	}
 
 //	@Ignore
 	@Test

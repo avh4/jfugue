@@ -3,9 +3,12 @@ package org.jfugue.test;
 
 import static org.junit.Assert.*;
 
+import java.util.regex.Matcher;
+
 import org.jfugue.*;
 import org.jfugue.extras.LoggingVisitor;
 import org.jfugue.extras.ListenerToVisitorAdaptor;
+import org.jfugue.factories.NoteFactory;
 import org.jfugue.parsers.Environment;
 import org.junit.After;
 import org.junit.Before;
@@ -102,8 +105,29 @@ public class TestFactories {
 	@Ignore("not implemented yet")
 	@Test
 	public void testNoteFactory() throws Exception {
-		
+//		NoteFactory f = NoteFactory.getInstance();
+//		System.out.println(NoteFactory.NOTE_PAT);
+//		Matcher m = NoteFactory.NOTE_REGEX.matcher("C#");
+//		assertTrue(m.matches());
+//		System.out.println(m);
+//		m.reset("[61]");
+//		assertTrue(m.matches());
+//		System.out.println(m);
+//		
+//		tNote("C");
+//		tNote("C#");
+//		tNote("C#4");
+//		tNote("C#4maj");
+//		tNote("C#4W");
 	}
+	
+//	private void tNote(String s) {
+//		Matcher m = NoteFactory.NOTE_PAT.matcher(s);
+//		assertTrue(m.matches());
+//		for (int i = 0; i <= m.groupCount(); i++) {
+//			System.out.println(m.group(i));
+//		}
+//	}
 	
 	@Ignore("not implemented yet")
 	@Test

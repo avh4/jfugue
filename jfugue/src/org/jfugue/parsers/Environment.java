@@ -16,7 +16,7 @@ import org.jfugue.*;
  * @author joshua
  * 
  */
-public class Environment {
+public class Environment implements FireParserEventProxy {
 
 	private static Environment instance;
 

@@ -45,8 +45,8 @@ public interface ElementVisitor {
 	public void visit(Note note);
 //	public void visitNote(Note note);
 
-	// public void visitChord(Chord chord);
-//	public void visitParallelNote(Note n);
-//
-//	public void visitSequentialNote(Note note);
+	public void visit(Chord chord);
+	public void visit(NoteCollection collection);
+	public void visit(Note.Parallel parallel);
+	public void visit(Note.Sequential sequential);
 }

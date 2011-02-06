@@ -11,6 +11,7 @@ import org.jfugue.KeySignature;
 import org.jfugue.Layer;
 import org.jfugue.Measure;
 import org.jfugue.Note;
+import org.jfugue.ParserListener;
 import org.jfugue.PitchBend;
 import org.jfugue.PolyphonicPressure;
 import org.jfugue.SystemExclusiveEvent;
@@ -33,6 +34,23 @@ public class ParserContext {
 	protected PushbackReader reader;
 	protected Environment environment;
 	
+	protected byte keySig = 0;
+	public static final double SEQUENCE_RES = 128;
+	
+	/**
+	 * @return the keySig
+	 */
+	public byte getKeySig() {
+		return keySig;
+	}
+
+	/**
+	 * @param keySig the keySig to set
+	 */
+	public void setKeySig(byte keySig) {
+		this.keySig = keySig;
+	}
+
 	/**
 	 * @return the reader
 	 */
@@ -122,6 +140,34 @@ public class ParserContext {
 		}
 		unread(ch);
 		return sb.toString();
+	}
+	
+	public String readToken(boolean unreadLastChar, char...cs) throws IOException, ParserError {
+		@SuppressWarnings("unused")
+		final String type = "token";
+		if (cs.length == 1)
+			cs = new char[] { ' ' };
+		StringBuilder sb = new StringBuilder(CAPACITY);
+		char ch = read();
+		while (isNot(ch, cs)) {
+			sb.append(ch);
+			ch = read();
+		}
+		if (unreadLastChar)
+			unread(ch);
+		return sb.toString();
+	}
+	
+	public String readToken(char...cs) throws IOException, ParserError {
+		return readToken(true, cs);
+	}
+
+	private boolean isNot(char ch, char[] cs) {
+		for (char c : cs) {
+			if (c == ch)
+				return false;
+		}
+		return true;
 	}
 
 	/**
@@ -556,5 +602,25 @@ public class ParserContext {
 			return Byte.parseByte(rb, radix);
 		} else
 			throw new ParserError();
+	}
+
+	public void addParserListener(ParserListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void removeParserListener(ParserListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public ParserListener[] getParserListeners() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void clearParserListeners() {
+		// TODO Auto-generated method stub
+		
 	}
 }

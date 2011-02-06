@@ -1,5 +1,8 @@
 package org.jfugue;
 
+import org.jfugue.Note.Parallel;
+import org.jfugue.Note.Sequential;
+
 public class DefaultElementVistior implements ElementVisitor {
 
 	public void visit(ChannelPressure channelPressure) {
@@ -42,6 +45,32 @@ public class DefaultElementVistior implements ElementVisitor {
 	}
 
 	public void visit(Note note) {
+	}
+
+	public void visitParallelNote(Note n) {
+	}
+
+	public void visitSequentialNote(Note note) {
+	}
+
+	public void visit(Chord chord) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void visit(NoteCollection collection) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void visit(Parallel parallel) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void visit(Sequential sequential) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

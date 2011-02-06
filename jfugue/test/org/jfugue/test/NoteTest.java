@@ -1,12 +1,16 @@
 package org.jfugue.test;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Map;
+
 import org.jfugue.MusicStringParser;
 import org.jfugue.Note;
 import org.jfugue.extras.LoggingVisitor;
+import org.jfugue.factories.NoteFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -59,13 +63,26 @@ public class NoteTest {
 	}
 	
 //	@Ignore
-//	@Test
-//	public void testChords() {
-//		Map<String, byte[]> chords = Note.NoteFactory.CHORDS_MAP;
-//		assertFalse("The chord map is empty", chords.isEmpty());
-//		assertTrue("MAJ is not in CHORDS_MAP", chords.containsKey("MAJ"));
-//		byte[] bs = chords.get("MAJ");
-//		assertArrayEquals("MAJ is not as it should be", new byte[] { 4, 7 }, bs);
+	@Test
+	public void testChords() {
+		Map<String, byte[]> chords = Note.Factory.CHORDS_MAP;
+		assertFalse("The chord map is empty", chords.isEmpty());
+		assertTrue("MAJ is not in CHORDS_MAP", chords.containsKey("MAJ"));
+		byte[] bs = chords.get("MAJ");
+		assertArrayEquals("MAJ is not as it should be", new byte[] { 4, 7 }, bs);
+		System.out.println("CHORD_RE: " + NoteFactory.CHORD_RE);
+	}
+
+//	private void assertArrayEquals(String string, byte[] bs, byte[] bs2) {
+//		Byte[] bl = new Byte[bs.length];
+//		Byte[] bl2 = new Byte[bs2.length];
+//		for (int i = 0; i < bl.length; i++) {
+//			bl[i] = bs[i];
+//		}
+//		for (int i = 0; i < bl2.length; i++) {
+//			bl2[i] = bs2[i];
+//		}
+//
 //	}
 
 	@Test
