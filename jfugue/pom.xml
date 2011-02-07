@@ -7,6 +7,43 @@
   <version>4.1.0</version>
   <name>jfugue</name>
   <url>http://jfugue.org</url>
+  <description>With JFugue, playing music in your application is easy</description>
+  <licenses>
+  	<license>
+  		<name>GNU Lesser General Public License</name>
+  		<url>http://www.gnu.org/licenses/lgpl.html</url>
+  		<distribution>repo</distribution>
+  	</license>
+  </licenses>
+  <parent>
+  	<groupId>org.sonatype.oss</groupId>
+  	<artifactId>oss-parent</artifactId>
+  	<version>6</version>
+  </parent>
+  <scm>
+  	<connection>scm:svn:http://jfugue.googlecode.com/svn/trunk/</connection>
+  	<developerConnection>scm:svn:https://jfugue.googlecode.com/svn/trunk/</developerConnection>
+  	<tag>HEAD</tag>
+  	<url>http://code.google.com/p/jfugue/source/browse/</url>
+  </scm>
+  <developers>
+  	<developer>
+  		<id>dmkoelle</id>
+  		<name>David Koelle</name>
+  		<email>dmkoelle@gmail.com</email>
+  	</developer>
+  	<developer>
+  		<id>skavookie</id>
+  		<name>Joshua Gooding</name>
+  		<email>skavookie@gmail.com</email>
+  		<timezone>-8</timezone>
+  	</developer>
+  	<developer>
+  		<id>paul.butcher</id>
+  		<name>Paul Butcher</name>
+  		<email>paul.butcher@gmail.com</email>
+  	</developer>
+  </developers>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <testSourceDirectory>test</testSourceDirectory>
