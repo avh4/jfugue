@@ -175,7 +175,7 @@ public class PatternTransformer extends PatternTool<PatternInterface> {
 	}
 
 	@Override
-	protected PatternInterface initResult(Pattern pattern) {
+	protected PatternInterface initResult(PatternInterface pattern) {
 		PatternInterface nPattern = new Pattern();
 		for (Map.Entry<String, String> entries: pattern.getProperties().entrySet()) {
 			nPattern.setProperty(entries.getKey(), entries.getValue());
