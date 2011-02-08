@@ -22,6 +22,8 @@
 
 package org.jfugue;
 
+import java.util.StringTokenizer;
+
 import javax.sound.midi.MetaMessage;
 import javax.sound.midi.MidiEvent;
 import javax.sound.midi.MidiMessage;
@@ -241,8 +243,8 @@ public final class MidiParser extends Parser
      */
     private void parseSysexMessage(SysexMessage message, long timestamp)
     {
-        // Nothing to do - JFugue doesn't use sysex messages
-        trace("SysexMessage received but not parsed by JFugue (doesn't use them)");
+    	SystemExclusiveEvent sysex = new SystemExclusiveEvent(message.getData());
+    	fireSystemExclusiveEvent(sysex);
     }
 
     /**
