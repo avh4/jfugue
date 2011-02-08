@@ -1,4 +1,4 @@
-package org.jfugue;
+package org.jfugue.elements;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -21,6 +21,9 @@ import java.util.StringTokenizer;
 
 import javax.swing.event.EventListenerList;
 
+import org.jfugue.Pattern;
+import org.jfugue.PatternInterface;
+import org.jfugue.PatternListener;
 import org.jfugue.extras.ReversePatternTransformer;
 
 @SuppressWarnings("serial")

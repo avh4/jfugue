@@ -20,7 +20,7 @@
  *
  */
 
-package org.jfugue;
+package org.jfugue.elements;
 
 import java.io.Serializable;
 

@@ -38,6 +38,8 @@ import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
 import javax.sound.midi.Synthesizer;
 
+import org.jfugue.elements.Parser;
+
 
 /**
  * Prepares a pattern to be turned into music by the Renderer.  This class

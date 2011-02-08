@@ -23,9 +23,9 @@
 package org.jfugue.extras;
 
 import org.jfugue.MusicStringParser;
-import org.jfugue.Note;
 import org.jfugue.PatternInterface;
 import org.jfugue.PatternTransformer;
+import org.jfugue.elements.Note;
 
 
 

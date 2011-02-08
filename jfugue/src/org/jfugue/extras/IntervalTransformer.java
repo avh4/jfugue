@@ -22,8 +22,8 @@
 
 package org.jfugue.extras;
 
-import org.jfugue.Note;
 import org.jfugue.PatternTransformer;
+import org.jfugue.elements.Note;
 
 public class IntervalTransformer extends PatternTransformer
 {

@@ -20,80 +20,84 @@
  *
  */
 
-package org.jfugue;
+package org.jfugue.elements;
 
 import java.io.IOException;
 
+import org.jfugue.JFugueException;
 import org.jfugue.factories.JFugueElementFactory;
 import org.jfugue.parsers.ParserContext;
 import org.jfugue.parsers.ParserError;
 
 /**
- * Represents channel pressure changes.
+ * Represents a timing value, which can be used to indicate when certain events are played.
  *
  *@author David Koelle
  *@version 3.0
  */
-public final class ChannelPressure implements JFugueElement
+public final class Time implements JFugueElement
 {
     /**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private byte pressure;
+	private long time;
 
     /**
-     * Creates a new channel pressure object, with the specified key and pressure values.
-     * @param key the key to apply pressure to
-     * @param pressure the pressure to apply
+     * Creates a new Time object, with the specified time number.
+     * @param time the number of the time to use
      */
-    public ChannelPressure(byte pressure)
+    public Time(long time)
     {
-        setPressure(pressure);
+        setTime(time);
     }
 
     /**
-     * Sets the pressure value of this object.
-     * @param pressure the pressure for this object
+     * Sets the value of the time for this object.
+     * @param time the number of the time to use
      */
-    public void setPressure(byte pressure)
+    public void setTime(long time)
     {
-        this.pressure = pressure;
+        this.time = time;
     }
 
     /**
-     * Returns the pressure for this object.
-     * @return the pressure for this object
+     * Returns the time used in this object
+     * @return the time used in this object
      */
-    public byte getPressure()
+    public long getTime()
     {
-        return this.pressure;
+        return time;
     }
 
     /**
      * Returns the Music String representing this element and all of its settings.
-     * For a channel pressure object, the Music String is <code>+</code><i>key,pressure</i>
+     * For a Time object, the Music String is <code>@</code><i>time</i>
      * @return the Music String for this element
      */
     public String getMusicString()
     {
         StringBuffer buffy = new StringBuffer();
-        buffy.append("+");
-        buffy.append(getPressure());
+        buffy.append("@");
+        buffy.append(getTime());
         return buffy.toString();
     }
 
     /**
      * Returns verification string in this format:
-     * ChannelPressure: pressure={#}
+     * Time: time={#}
      * @version 4.0
      */
     public String getVerifyString()
     {
         StringBuffer buffy = new StringBuffer();
-        buffy.append("ChannelPressure: pressure=");
-        buffy.append(getPressure());
+        buffy.append("Time: time=");
+        buffy.append(getTime());
         return buffy.toString();
+    }
+    
+    public void acceptVisitor(ElementVisitor visitor) {
+    	visitor.visit(this);
     }
 
     public boolean equals(Object obj) {
@@ -103,52 +107,38 @@ public final class ChannelPressure implements JFugueElement
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final ChannelPressure other = (ChannelPressure) obj;
-        if (this.pressure != other.pressure) {
+        final Time other = (Time) obj;
+        if (this.time != other.time) {
             return false;
         }
         return true;
     }
 
     public int hashCode() {
-        int hash = 5;
-        hash = 59 * hash + this.pressure;
+        int hash = 7;
+        hash = 43 * hash + (int) (this.time ^ (this.time >>> 32));
         return hash;
     }
 
-	public void acceptVisitor(ElementVisitor visitor) {
-		visitor.visit(this);
-	}
-
-    public static class Factory extends JFugueElementFactory<ChannelPressure> {
-    	
-    	private static ChannelPressure.Factory instance;
+	public static class Factory extends JFugueElementFactory<Time> {
+		private static Time.Factory instance;
 		private Factory() {}
-		public static ChannelPressure.Factory getInstance() {
+		public static Time.Factory getInstance() {
 			if (instance == null)
-				instance = new ChannelPressure.Factory();
+				instance = new Time.Factory();
 			return instance;
 		}
 		
-		public Class<ChannelPressure> type() {
-			return ChannelPressure.class;
-		}
-
-		public ChannelPressure createElement(ParserContext context) throws IOException,
+		public Time createElement(ParserContext context) throws IOException,
 				IllegalArgumentException, JFugueException, ParserError {
-			return context.fireChannelPressureEvent(new ChannelPressure(context.readCharThenByte('+').getThen()));
-			
-//			if (reader.ready()) {
-//				int cp = reader.read();
-//				if ((char) cp == '+')
-//					return new ChannelPressure(ParserHelper.readByte(reader, environment));
-//				else {
-//					reader.unread(cp);
-//					throw new JFugueException(JFugueException.PARSE_CHAR_ERROR, (char) cp);
-//				}
-//			}
-//			throw new IOException();
+			context.readOneOfTheChars('@');
+			return context.fireTimeEvent(new Time(context.readLong()));
 		}
-    	
-    }
+	
+		public Class<Time> type() {
+			return Time.class;
+		}
+	
+	}
+
 }

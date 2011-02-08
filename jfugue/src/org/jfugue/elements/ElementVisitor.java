@@ -1,6 +1,10 @@
-package org.jfugue;
+package org.jfugue.elements;
 
-public interface ElementVisitor {
+import org.jfugue.NoteVisitor;
+import org.jfugue.Pattern;
+import org.jfugue.SystemExclusiveEvent;
+
+public interface ElementVisitor extends NoteVisitor {
 	
 	public void visit(ChannelPressure channelPressure);
 //	public void visitChannelPressure(ChannelPressure channelPressure);
@@ -42,11 +46,11 @@ public interface ElementVisitor {
 	public void visit(PolyphonicPressure polyphonicPressure);
 //	public void visitPolyphonicPressure(PolyphonicPressure polyphonicPressure);
 
-	public void visit(Note note);
-//	public void visitNote(Note note);
-
-	public void visit(Chord chord);
-	public void visit(NoteCollection collection);
-	public void visit(Note.Parallel parallel);
-	public void visit(Note.Sequential sequential);
+//	public void visit(Note note);
+////	public void visitNote(Note note);
+//
+//	public void visit(Chord chord);
+//	public void visit(NoteCollection collection);
+//	public void visit(Note.Parallel parallel);
+//	public void visit(Note.Sequential sequential);
 }

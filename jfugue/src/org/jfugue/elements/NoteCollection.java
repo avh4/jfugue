@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.jfugue;
+package org.jfugue.elements;
 
 import java.util.List;
 

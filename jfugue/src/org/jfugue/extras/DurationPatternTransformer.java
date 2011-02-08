@@ -22,8 +22,8 @@
 
 package org.jfugue.extras;
 
-import org.jfugue.Note;
 import org.jfugue.PatternTransformer;
+import org.jfugue.elements.Note;
 
 /**
  * The DurationPatternTransformer multiplies the duration of all notes in the given

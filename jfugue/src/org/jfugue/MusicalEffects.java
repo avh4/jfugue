@@ -22,6 +22,7 @@
 
 package org.jfugue;
 
+import org.jfugue.elements.Note;
 import org.jfugue.extras.DurationPatternTransformer;
 import org.jfugue.extras.PatternInvestigator;
 

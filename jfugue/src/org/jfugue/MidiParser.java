@@ -32,6 +32,17 @@ import javax.sound.midi.ShortMessage;
 import javax.sound.midi.SysexMessage;
 import javax.sound.midi.Track;
 
+import org.jfugue.elements.ChannelPressure;
+import org.jfugue.elements.Controller;
+import org.jfugue.elements.Instrument;
+import org.jfugue.elements.Note;
+import org.jfugue.elements.Parser;
+import org.jfugue.elements.PitchBend;
+import org.jfugue.elements.PolyphonicPressure;
+import org.jfugue.elements.Tempo;
+import org.jfugue.elements.Time;
+import org.jfugue.elements.Voice;
+
 
 /**
  * Parses MIDI data, whether from a file, a connected device, or some other stream.

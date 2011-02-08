@@ -5,10 +5,10 @@ import static org.junit.Assert.assertEquals;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jfugue.ImmutablePattern;
-import org.jfugue.Measure;
-import org.jfugue.Note;
 import org.jfugue.Pattern;
+import org.jfugue.elements.ImmutablePattern;
+import org.jfugue.elements.Measure;
+import org.jfugue.elements.Note;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

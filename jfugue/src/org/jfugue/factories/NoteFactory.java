@@ -10,11 +10,11 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.jfugue.Chord;
 import org.jfugue.JFugueException;
 import org.jfugue.Messages;
-import org.jfugue.Note;
-import org.jfugue.NoteCollection;
+import org.jfugue.elements.Chord;
+import org.jfugue.elements.Note;
+import org.jfugue.elements.NoteCollection;
 import org.jfugue.parsers.ParserContext;
 import org.jfugue.parsers.ParserError;
 

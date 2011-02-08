@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import org.jfugue.Pattern;
-import org.jfugue.Tempo;
+import org.jfugue.elements.Tempo;
 import org.jfugue.extras.CanonicalPatternTransformer;
 import org.junit.After;
 import org.junit.Before;

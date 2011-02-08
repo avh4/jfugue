@@ -8,7 +8,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Map;
 
 import org.jfugue.MusicStringParser;
-import org.jfugue.Note;
+import org.jfugue.elements.Note;
 import org.jfugue.extras.LoggingVisitor;
 import org.jfugue.factories.NoteFactory;
 import org.junit.After;

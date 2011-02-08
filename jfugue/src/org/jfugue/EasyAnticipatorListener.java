@@ -22,6 +22,11 @@
 
 package org.jfugue;
 
+import org.jfugue.elements.Instrument;
+import org.jfugue.elements.Note;
+import org.jfugue.elements.Tempo;
+import org.jfugue.elements.Voice;
+
 
 
 public abstract class EasyAnticipatorListener extends ParserListenerAdapter

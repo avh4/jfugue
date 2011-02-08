@@ -27,6 +27,21 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import org.jfugue.elements.ChannelPressure;
+import org.jfugue.elements.Controller;
+import org.jfugue.elements.Instrument;
+import org.jfugue.elements.JFugueElement;
+import org.jfugue.elements.KeySignature;
+import org.jfugue.elements.Layer;
+import org.jfugue.elements.Measure;
+import org.jfugue.elements.Note;
+import org.jfugue.elements.Parser;
+import org.jfugue.elements.PitchBend;
+import org.jfugue.elements.PolyphonicPressure;
+import org.jfugue.elements.Tempo;
+import org.jfugue.elements.Time;
+import org.jfugue.elements.Voice;
+
 
 /**
  * Parses music strings, and fires events for <code>ParserListener</code> interfaces

@@ -26,6 +26,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jfugue.elements.Note;
+
 /**
  * Provides the ability to build a rhythm using a simple strings in which
  * individual characters represent MusicString elements.

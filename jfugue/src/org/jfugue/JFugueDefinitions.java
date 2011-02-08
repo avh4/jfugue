@@ -26,6 +26,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jfugue.elements.Controller;
+import org.jfugue.elements.Instrument;
+import org.jfugue.elements.Tempo;
+
 /**
  * Loads default definitions into the JFugue dictionary.
  * This allows users to refer to instruments, percussion sounds,

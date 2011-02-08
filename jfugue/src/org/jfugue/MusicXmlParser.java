@@ -31,6 +31,14 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.HashMap;
 
+import org.jfugue.elements.Instrument;
+import org.jfugue.elements.KeySignature;
+import org.jfugue.elements.Measure;
+import org.jfugue.elements.Note;
+import org.jfugue.elements.Parser;
+import org.jfugue.elements.Tempo;
+import org.jfugue.elements.Voice;
+
 
 import nu.xom.Attribute;
 import nu.xom.Builder;

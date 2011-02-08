@@ -22,22 +22,22 @@
 
 package org.jfugue.extras;
 
-import org.jfugue.ChannelPressure;
-import org.jfugue.Controller;
-import org.jfugue.Instrument;
-import org.jfugue.JFugueElement;
-import org.jfugue.KeySignature;
-import org.jfugue.Layer;
-import org.jfugue.Measure;
-import org.jfugue.Note;
 import org.jfugue.ParserListenerAdapter;
 import org.jfugue.Pattern;
 import org.jfugue.PatternInterface;
-import org.jfugue.PitchBend;
-import org.jfugue.PolyphonicPressure;
-import org.jfugue.Tempo;
-import org.jfugue.Time;
-import org.jfugue.Voice;
+import org.jfugue.elements.ChannelPressure;
+import org.jfugue.elements.Controller;
+import org.jfugue.elements.Instrument;
+import org.jfugue.elements.JFugueElement;
+import org.jfugue.elements.KeySignature;
+import org.jfugue.elements.Layer;
+import org.jfugue.elements.Measure;
+import org.jfugue.elements.Note;
+import org.jfugue.elements.PitchBend;
+import org.jfugue.elements.PolyphonicPressure;
+import org.jfugue.elements.Tempo;
+import org.jfugue.elements.Time;
+import org.jfugue.elements.Voice;
 
 /**
  * Returns all of the MusicString events that are played in the requested Voice (i.e., Channel)

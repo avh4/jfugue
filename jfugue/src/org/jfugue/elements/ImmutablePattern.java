@@ -1,8 +1,10 @@
-package org.jfugue;
+package org.jfugue.elements;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.jfugue.Pattern;
 
 public class ImmutablePattern extends Pattern {
 

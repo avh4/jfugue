@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.jfugue.JFugueElement;
+import org.jfugue.elements.JFugueElement;
 
 public final class JFugueElementFactoryManager {
 

@@ -20,10 +20,11 @@
  *
  */
 
-package org.jfugue;
+package org.jfugue.elements;
 
 import java.io.IOException;
 
+import org.jfugue.JFugueException;
 import org.jfugue.factories.JFugueElementFactory;
 import org.jfugue.parsers.ParserContext;
 import org.jfugue.parsers.ParserError;
@@ -57,6 +58,10 @@ public final class KeySignature implements JFugueElement
     {
         setKeySig(keySig);
         setScale(scale);
+    }
+    
+    public KeySignature(int keySig, int scale) {
+    	this((byte) keySig, (byte) scale);
     }
 
     /**
@@ -131,6 +136,8 @@ public final class KeySignature implements JFugueElement
         buffy.append(getScale());
         return buffy.toString();
     }
+    
+
     
     public void acceptVisitor(ElementVisitor visitor) {
     	visitor.visit(this);

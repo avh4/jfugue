@@ -22,6 +22,20 @@
 
 package org.jfugue;
 
+import org.jfugue.elements.ChannelPressure;
+import org.jfugue.elements.Controller;
+import org.jfugue.elements.Instrument;
+import org.jfugue.elements.JFugueElement;
+import org.jfugue.elements.KeySignature;
+import org.jfugue.elements.Layer;
+import org.jfugue.elements.Measure;
+import org.jfugue.elements.Note;
+import org.jfugue.elements.PitchBend;
+import org.jfugue.elements.PolyphonicPressure;
+import org.jfugue.elements.Tempo;
+import org.jfugue.elements.Time;
+import org.jfugue.elements.Voice;
+
 
 /**
  * This implementation of a ParserListener listens for all events, and funnels

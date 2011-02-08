@@ -22,6 +22,8 @@
 
 package org.jfugue;
 
+import org.jfugue.elements.Note;
+
 
 /**
  * A IntervalNotation is a MusicString that only contains interval information and durations, not actual notes.

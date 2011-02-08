@@ -26,6 +26,8 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.jfugue.elements.ElementVisitor;
+import org.jfugue.elements.JFugueElement;
 import org.jfugue.factories.JFugueElementFactory;
 import org.jfugue.parsers.ParserContext;
 import org.jfugue.parsers.ParserError;

@@ -1,22 +1,34 @@
-package org.jfugue.parsers;
+package org.jfugue.elements;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jfugue.*;
+import org.jfugue.JFugueDefinitions;
+import org.jfugue.JFugueException;
+import org.jfugue.ParserListener;
+import org.jfugue.SystemExclusiveEvent;
+import org.jfugue.parsers.DummyParserEventProxy;
+import org.jfugue.parsers.FireEventProxy;
+import org.jfugue.parsers.ParserContext;
 
 /**
+ * 
  * This class contains a dictionary with which symbols such as {@code [blah]}
  * can be looked up in a variety of formats. This dictionary will eventually
- * replace the one in parsers. The other thing it contains is a proxy to the
- * parsers fire event methods. This class delegates to those two. It is mildly
+ * replace the one in parsers. The other thing it contains is a
+ * {@link FireEventProxy}. This class delegates to those two. It is mildly
  * important to keep this contained, as it exposes some of the inner workings of
- * the parser.  Mostly this will be wrapped in a {@link ParserContext}.
+ * the parser. Mostly this will be wrapped in a {@link ParserContext}.
+ * (Or later if we need a {@code RenderContext})
+ * 
+ * <p>
+ * This is <b>not</b> thread safe. Only one thread should be using a given
+ * instance, and probably the Patterns that are used with it.
  * 
  * @author joshua
  * 
  */
-public class Environment implements FireParserEventProxy {
+public class Environment implements FireEventProxy {
 
 	private static Environment instance;
 
@@ -32,18 +44,19 @@ public class Environment implements FireParserEventProxy {
 	}
 
 	private Map<String, String> dictionaryMap;
-	private FireParserEventProxy proxy;
+	private FireEventProxy proxy;
+	protected KeySignature keySig = new KeySignature(0, 0);
 
 	/**
 	 * @param dictionary
 	 * @param proxy
 	 */
-	public Environment(Map<String, String> dictionary, FireParserEventProxy proxy) {
+	public Environment(Map<String, String> dictionary, FireEventProxy proxy) {
 		super();
 		this.dictionaryMap = dictionary;
 		this.proxy = proxy;
 	}
-	
+
 	public Environment() {
 		this(new HashMap<String, String>(JFugueDefinitions.DICT_MAP),
 				new DummyParserEventProxy());
@@ -53,7 +66,7 @@ public class Environment implements FireParserEventProxy {
 		key = key.toUpperCase();
 		dictionaryMap.put(key, val.toString());
 	}
-	
+
 	/**
 	 * Looks up a string's value in the dictionary. The dictionary is used to
 	 * keep memorable names of obscure numbers - for example, the string FLUTE
@@ -214,7 +227,7 @@ public class Environment implements FireParserEventProxy {
 
 	/**
 	 * @param listener
-	 * @see org.jfugue.FireParserEventProxy#addParserListener(org.jfugue.ParserListener)
+	 * @see org.jfugue.FireEventProxy#addParserListener(org.jfugue.ParserListener)
 	 */
 	public void addParserListener(ParserListener listener) {
 		proxy.addParserListener(listener);
@@ -222,7 +235,7 @@ public class Environment implements FireParserEventProxy {
 
 	/**
 	 * @param listener
-	 * @see org.jfugue.FireParserEventProxy#removeParserListener(org.jfugue.ParserListener)
+	 * @see org.jfugue.FireEventProxy#removeParserListener(org.jfugue.ParserListener)
 	 */
 	public void removeParserListener(ParserListener listener) {
 		proxy.removeParserListener(listener);
@@ -230,7 +243,7 @@ public class Environment implements FireParserEventProxy {
 
 	/**
 	 * @return
-	 * @see org.jfugue.FireParserEventProxy#getParserListeners()
+	 * @see org.jfugue.FireEventProxy#getParserListeners()
 	 */
 	public ParserListener[] getParserListeners() {
 		return proxy.getParserListeners();
@@ -238,7 +251,7 @@ public class Environment implements FireParserEventProxy {
 
 	/**
 	 * 
-	 * @see org.jfugue.FireParserEventProxy#clearParserListeners()
+	 * @see org.jfugue.FireEventProxy#clearParserListeners()
 	 */
 	public void clearParserListeners() {
 		proxy.clearParserListeners();
@@ -246,7 +259,7 @@ public class Environment implements FireParserEventProxy {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.FireParserEventProxy#fireVoiceEvent(org.jfugue.Voice)
+	 * @see org.jfugue.FireEventProxy#fireVoiceEvent(org.jfugue.elements.Voice)
 	 */
 	public void fireVoiceEvent(Voice event) {
 		proxy.fireVoiceEvent(event);
@@ -254,7 +267,7 @@ public class Environment implements FireParserEventProxy {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.FireParserEventProxy#fireTempoEvent(org.jfugue.Tempo)
+	 * @see org.jfugue.FireEventProxy#fireTempoEvent(org.jfugue.elements.Tempo)
 	 */
 	public void fireTempoEvent(Tempo event) {
 		proxy.fireTempoEvent(event);
@@ -262,7 +275,7 @@ public class Environment implements FireParserEventProxy {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.FireParserEventProxy#fireInstrumentEvent(org.jfugue.Instrument)
+	 * @see org.jfugue.FireEventProxy#fireInstrumentEvent(org.jfugue.elements.Instrument)
 	 */
 	public void fireInstrumentEvent(Instrument event) {
 		proxy.fireInstrumentEvent(event);
@@ -270,7 +283,7 @@ public class Environment implements FireParserEventProxy {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.FireParserEventProxy#fireLayerEvent(org.jfugue.Layer)
+	 * @see org.jfugue.FireEventProxy#fireLayerEvent(org.jfugue.elements.Layer)
 	 */
 	public void fireLayerEvent(Layer event) {
 		proxy.fireLayerEvent(event);
@@ -278,7 +291,7 @@ public class Environment implements FireParserEventProxy {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.FireParserEventProxy#fireTimeEvent(org.jfugue.Time)
+	 * @see org.jfugue.FireEventProxy#fireTimeEvent(org.jfugue.elements.Time)
 	 */
 	public void fireTimeEvent(Time event) {
 		proxy.fireTimeEvent(event);
@@ -286,7 +299,7 @@ public class Environment implements FireParserEventProxy {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.FireParserEventProxy#fireSystemExclusiveEvent(org.jfugue.SystemExclusiveEvent)
+	 * @see org.jfugue.FireEventProxy#fireSystemExclusiveEvent(org.jfugue.SystemExclusiveEvent)
 	 */
 	public void fireSystemExclusiveEvent(SystemExclusiveEvent event) {
 		proxy.fireSystemExclusiveEvent(event);
@@ -294,15 +307,16 @@ public class Environment implements FireParserEventProxy {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.FireParserEventProxy#fireKeySignatureEvent(org.jfugue.KeySignature)
+	 * @see org.jfugue.FireEventProxy#fireKeySignatureEvent(org.jfugue.elements.KeySignature)
 	 */
 	public void fireKeySignatureEvent(KeySignature event) {
+		keySig = event;
 		proxy.fireKeySignatureEvent(event);
 	}
 
 	/**
 	 * @param event
-	 * @see org.jfugue.FireParserEventProxy#fireMeasureEvent(org.jfugue.Measure)
+	 * @see org.jfugue.FireEventProxy#fireMeasureEvent(org.jfugue.elements.Measure)
 	 */
 	public void fireMeasureEvent(Measure event) {
 		proxy.fireMeasureEvent(event);
@@ -310,7 +324,7 @@ public class Environment implements FireParserEventProxy {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.FireParserEventProxy#fireControllerEvent(org.jfugue.Controller)
+	 * @see org.jfugue.FireEventProxy#fireControllerEvent(org.jfugue.elements.Controller)
 	 */
 	public void fireControllerEvent(Controller event) {
 		proxy.fireControllerEvent(event);
@@ -318,7 +332,7 @@ public class Environment implements FireParserEventProxy {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.FireParserEventProxy#fireChannelPressureEvent(org.jfugue.ChannelPressure)
+	 * @see org.jfugue.FireEventProxy#fireChannelPressureEvent(org.jfugue.elements.ChannelPressure)
 	 */
 	public void fireChannelPressureEvent(ChannelPressure event) {
 		proxy.fireChannelPressureEvent(event);
@@ -326,7 +340,7 @@ public class Environment implements FireParserEventProxy {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.FireParserEventProxy#firePolyphonicPressureEvent(org.jfugue.PolyphonicPressure)
+	 * @see org.jfugue.FireEventProxy#firePolyphonicPressureEvent(org.jfugue.elements.PolyphonicPressure)
 	 */
 	public void firePolyphonicPressureEvent(PolyphonicPressure event) {
 		proxy.firePolyphonicPressureEvent(event);
@@ -334,7 +348,7 @@ public class Environment implements FireParserEventProxy {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.FireParserEventProxy#firePitchBendEvent(org.jfugue.PitchBend)
+	 * @see org.jfugue.FireEventProxy#firePitchBendEvent(org.jfugue.elements.PitchBend)
 	 */
 	public void firePitchBendEvent(PitchBend event) {
 		proxy.firePitchBendEvent(event);
@@ -342,7 +356,7 @@ public class Environment implements FireParserEventProxy {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.FireParserEventProxy#fireNoteEvent(org.jfugue.Note)
+	 * @see org.jfugue.FireEventProxy#fireNoteEvent(org.jfugue.elements.Note)
 	 */
 	public void fireNoteEvent(Note event) {
 		proxy.fireNoteEvent(event);
@@ -350,7 +364,7 @@ public class Environment implements FireParserEventProxy {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.FireParserEventProxy#fireSequentialNoteEvent(org.jfugue.Note)
+	 * @see org.jfugue.FireEventProxy#fireSequentialNoteEvent(org.jfugue.elements.Note)
 	 */
 	public void fireSequentialNoteEvent(Note event) {
 		proxy.fireSequentialNoteEvent(event);
@@ -358,10 +372,17 @@ public class Environment implements FireParserEventProxy {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.FireParserEventProxy#fireParallelNoteEvent(org.jfugue.Note)
+	 * @see org.jfugue.FireEventProxy#fireParallelNoteEvent(org.jfugue.elements.Note)
 	 */
 	public void fireParallelNoteEvent(Note event) {
 		proxy.fireParallelNoteEvent(event);
+	}
+
+	/**
+	 * @return the keySig
+	 */
+	public KeySignature getKeySig() {
+		return keySig;
 	}
 
 }

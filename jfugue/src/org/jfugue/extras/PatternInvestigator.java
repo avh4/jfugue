@@ -23,8 +23,8 @@
 
 package org.jfugue.extras;
 
-import org.jfugue.Note;
 import org.jfugue.ParserListenerAdapter;
+import org.jfugue.elements.Note;
 
 
 /**

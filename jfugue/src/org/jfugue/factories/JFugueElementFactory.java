@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.io.PushbackReader;
 import java.io.StringReader;
 
-import org.jfugue.JFugueElement;
 import org.jfugue.JFugueException;
-import org.jfugue.parsers.Environment;
+import org.jfugue.elements.Environment;
+import org.jfugue.elements.JFugueElement;
 import org.jfugue.parsers.ParserContext;
 import org.jfugue.parsers.ParserError;
 

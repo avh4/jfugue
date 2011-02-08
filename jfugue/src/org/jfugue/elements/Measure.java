@@ -20,10 +20,11 @@
  *
  */
 
-package org.jfugue;
+package org.jfugue.elements;
 
 import java.io.IOException;
 
+import org.jfugue.JFugueException;
 import org.jfugue.factories.JFugueElementFactory;
 import org.jfugue.parsers.ParserContext;
 import org.jfugue.parsers.ParserError;

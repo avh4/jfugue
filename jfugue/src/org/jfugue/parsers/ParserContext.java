@@ -3,21 +3,22 @@ package org.jfugue.parsers;
 import java.io.IOException;
 import java.io.PushbackReader;
 
-import org.jfugue.ChannelPressure;
-import org.jfugue.Controller;
-import org.jfugue.Instrument;
 import org.jfugue.JFugueException;
-import org.jfugue.KeySignature;
-import org.jfugue.Layer;
-import org.jfugue.Measure;
-import org.jfugue.Note;
 import org.jfugue.ParserListener;
-import org.jfugue.PitchBend;
-import org.jfugue.PolyphonicPressure;
 import org.jfugue.SystemExclusiveEvent;
-import org.jfugue.Tempo;
-import org.jfugue.Time;
-import org.jfugue.Voice;
+import org.jfugue.elements.ChannelPressure;
+import org.jfugue.elements.Controller;
+import org.jfugue.elements.Environment;
+import org.jfugue.elements.Instrument;
+import org.jfugue.elements.KeySignature;
+import org.jfugue.elements.Layer;
+import org.jfugue.elements.Measure;
+import org.jfugue.elements.Note;
+import org.jfugue.elements.PitchBend;
+import org.jfugue.elements.PolyphonicPressure;
+import org.jfugue.elements.Tempo;
+import org.jfugue.elements.Time;
+import org.jfugue.elements.Voice;
 
 /**
  * This class wraps a PushbackReader and Environment and provides helper methods to parsers and factories.  It also has readByte, readInt, readLong, and readDouble methods that take dictionary elements.
@@ -459,7 +460,7 @@ public class ParserContext {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.parsers.Environment#fireVoiceEvent(org.jfugue.Voice)
+	 * @see org.jfugue.elements.Environment#fireVoiceEvent(org.jfugue.elements.Voice)
 	 */
 	public Voice fireVoiceEvent(Voice event) {
 		environment.fireVoiceEvent(event);
@@ -468,7 +469,7 @@ public class ParserContext {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.parsers.Environment#fireTempoEvent(org.jfugue.Tempo)
+	 * @see org.jfugue.elements.Environment#fireTempoEvent(org.jfugue.elements.Tempo)
 	 */
 	public Tempo fireTempoEvent(Tempo event) {
 		environment.fireTempoEvent(event);
@@ -477,7 +478,7 @@ public class ParserContext {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.parsers.Environment#fireInstrumentEvent(org.jfugue.Instrument)
+	 * @see org.jfugue.elements.Environment#fireInstrumentEvent(org.jfugue.elements.Instrument)
 	 */
 	public Instrument fireInstrumentEvent(Instrument event) {
 		environment.fireInstrumentEvent(event);
@@ -486,7 +487,7 @@ public class ParserContext {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.parsers.Environment#fireLayerEvent(org.jfugue.Layer)
+	 * @see org.jfugue.elements.Environment#fireLayerEvent(org.jfugue.elements.Layer)
 	 */
 	public Layer fireLayerEvent(Layer event) {
 		environment.fireLayerEvent(event);
@@ -495,7 +496,7 @@ public class ParserContext {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.parsers.Environment#fireTimeEvent(org.jfugue.Time)
+	 * @see org.jfugue.elements.Environment#fireTimeEvent(org.jfugue.elements.Time)
 	 */
 	public Time fireTimeEvent(Time event) {
 		environment.fireTimeEvent(event);
@@ -504,7 +505,7 @@ public class ParserContext {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.parsers.Environment#fireSystemExclusiveEvent(org.jfugue.SystemExclusiveEvent)
+	 * @see org.jfugue.elements.Environment#fireSystemExclusiveEvent(org.jfugue.SystemExclusiveEvent)
 	 */
 	public SystemExclusiveEvent fireSystemExclusiveEvent(SystemExclusiveEvent event) {
 		environment.fireSystemExclusiveEvent(event);
@@ -513,7 +514,7 @@ public class ParserContext {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.parsers.Environment#fireKeySignatureEvent(org.jfugue.KeySignature)
+	 * @see org.jfugue.elements.Environment#fireKeySignatureEvent(org.jfugue.elements.KeySignature)
 	 */
 	public KeySignature fireKeySignatureEvent(KeySignature event) {
 		environment.fireKeySignatureEvent(event);
@@ -522,7 +523,7 @@ public class ParserContext {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.parsers.Environment#fireMeasureEvent(org.jfugue.Measure)
+	 * @see org.jfugue.elements.Environment#fireMeasureEvent(org.jfugue.elements.Measure)
 	 */
 	public Measure fireMeasureEvent(Measure event) {
 		environment.fireMeasureEvent(event);
@@ -531,7 +532,7 @@ public class ParserContext {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.parsers.Environment#fireControllerEvent(org.jfugue.Controller)
+	 * @see org.jfugue.elements.Environment#fireControllerEvent(org.jfugue.elements.Controller)
 	 */
 	public Controller fireControllerEvent(Controller event) {
 		environment.fireControllerEvent(event);
@@ -540,7 +541,7 @@ public class ParserContext {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.parsers.Environment#fireChannelPressureEvent(org.jfugue.ChannelPressure)
+	 * @see org.jfugue.elements.Environment#fireChannelPressureEvent(org.jfugue.elements.ChannelPressure)
 	 */
 	public ChannelPressure fireChannelPressureEvent(ChannelPressure event) {
 		environment.fireChannelPressureEvent(event);
@@ -549,7 +550,7 @@ public class ParserContext {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.parsers.Environment#firePolyphonicPressureEvent(org.jfugue.PolyphonicPressure)
+	 * @see org.jfugue.elements.Environment#firePolyphonicPressureEvent(org.jfugue.elements.PolyphonicPressure)
 	 */
 	public PolyphonicPressure firePolyphonicPressureEvent(PolyphonicPressure event) {
 		environment.firePolyphonicPressureEvent(event);
@@ -558,7 +559,7 @@ public class ParserContext {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.parsers.Environment#firePitchBendEvent(org.jfugue.PitchBend)
+	 * @see org.jfugue.elements.Environment#firePitchBendEvent(org.jfugue.elements.PitchBend)
 	 */
 	public PitchBend firePitchBendEvent(PitchBend event) {
 		environment.firePitchBendEvent(event);
@@ -567,7 +568,7 @@ public class ParserContext {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.parsers.Environment#fireNoteEvent(org.jfugue.Note)
+	 * @see org.jfugue.elements.Environment#fireNoteEvent(org.jfugue.elements.Note)
 	 */
 	public Note fireNoteEvent(Note event) {
 		environment.fireNoteEvent(event);
@@ -576,7 +577,7 @@ public class ParserContext {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.parsers.Environment#fireSequentialNoteEvent(org.jfugue.Note)
+	 * @see org.jfugue.elements.Environment#fireSequentialNoteEvent(org.jfugue.elements.Note)
 	 */
 	public Note fireSequentialNoteEvent(Note event) {
 		environment.fireSequentialNoteEvent(event);
@@ -585,7 +586,7 @@ public class ParserContext {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.parsers.Environment#fireParallelNoteEvent(org.jfugue.Note)
+	 * @see org.jfugue.elements.Environment#fireParallelNoteEvent(org.jfugue.elements.Note)
 	 */
 	public Note fireParallelNoteEvent(Note event) {
 		environment.fireParallelNoteEvent(event);

@@ -22,17 +22,17 @@
 
 package org.jfugue.extras;
 
-import org.jfugue.ChannelPressure;
-import org.jfugue.Controller;
-import org.jfugue.Instrument;
-import org.jfugue.KeySignature;
-import org.jfugue.Note;
 import org.jfugue.PatternTransformer;
-import org.jfugue.PitchBend;
-import org.jfugue.PolyphonicPressure;
-import org.jfugue.Tempo;
-import org.jfugue.Time;
-import org.jfugue.Voice;
+import org.jfugue.elements.ChannelPressure;
+import org.jfugue.elements.Controller;
+import org.jfugue.elements.Instrument;
+import org.jfugue.elements.KeySignature;
+import org.jfugue.elements.Note;
+import org.jfugue.elements.PitchBend;
+import org.jfugue.elements.PolyphonicPressure;
+import org.jfugue.elements.Tempo;
+import org.jfugue.elements.Time;
+import org.jfugue.elements.Voice;
 
 /**
  * Reverses a given pattern.

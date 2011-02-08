@@ -31,6 +31,8 @@ import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
 import javax.sound.midi.Transmitter;
 
+import org.jfugue.elements.Parser;
+
 
 /**
  * Represents an attached MIDI device, such as a keyboard.  This class

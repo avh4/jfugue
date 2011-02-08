@@ -23,10 +23,10 @@
 package org.jfugue.extras;
 
 import org.jfugue.MusicStringParser;
-import org.jfugue.Note;
 import org.jfugue.ParserListenerAdapter;
 import org.jfugue.PatternInterface;
-import org.jfugue.Voice;
+import org.jfugue.elements.Note;
+import org.jfugue.elements.Voice;
 
 
 

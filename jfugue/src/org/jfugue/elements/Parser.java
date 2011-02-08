@@ -20,11 +20,14 @@
  *  
  */
 
-package org.jfugue;
+package org.jfugue.elements;
 
 import javax.swing.event.EventListenerList;
 
-import org.jfugue.parsers.FireParserEventProxy;
+import org.jfugue.ParserListener;
+import org.jfugue.ParserProgressListener;
+import org.jfugue.SystemExclusiveEvent;
+import org.jfugue.parsers.FireEventProxy;
 
 
 /**
@@ -343,8 +346,8 @@ public abstract class Parser
     // End ParserListener methods
     /////////////////////////////////////////////////////////////////////////
 
-    protected final FireParserEventProxy eventProxy = this.new ParserEventProxy();
-    protected class ParserEventProxy implements FireParserEventProxy {
+    protected final FireEventProxy eventProxy = this.new ParserEventProxy();
+    protected class ParserEventProxy implements FireEventProxy {
 
 		public void addParserListener(ParserListener listener) {
 			Parser.this.addParserListener(listener);

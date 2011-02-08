@@ -29,6 +29,9 @@ import java.util.List;
 import java.util.Map;
 
 
+import org.jfugue.elements.AbstractPattern;
+import org.jfugue.elements.ElementVisitor;
+import org.jfugue.elements.JFugueElement;
 import org.jfugue.extras.GetInstrumentsUsedTool;
 import org.jfugue.extras.ListenerToVisitorAdaptor;
 
