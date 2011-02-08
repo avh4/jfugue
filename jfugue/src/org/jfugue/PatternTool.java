@@ -8,7 +8,8 @@ public abstract class PatternTool<R> extends ParserListenerAdapter {
 
     public R getResult() {
         if (result == null) {
-            result = initResult(null);
+        	pattern = new Pattern();
+            result = initResult(pattern);
         }
         return result;
     }
@@ -17,7 +18,7 @@ public abstract class PatternTool<R> extends ParserListenerAdapter {
         this.result = result;
     }
 
-    protected abstract R initResult(Pattern pattern);
+    protected abstract R initResult(PatternInterface pattern);
 
     public PatternInterface getPattern() {
         return pattern;
