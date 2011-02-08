@@ -47,6 +47,7 @@ public final class MidiParser extends Parser
     public MidiParser()
     {
         this.tempo = DEFAULT_TEMPO;
+        this.resolution = DEFAULT_TEMPO;
 
         // Create a two dimensional array of bytes [ track, note ] - when a NoteOn event is found,
         // populate the proper spot in the array with the note's start time.  When a NoteOff event 
