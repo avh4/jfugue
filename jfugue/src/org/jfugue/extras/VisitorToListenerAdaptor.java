@@ -15,6 +15,7 @@ import org.jfugue.elements.Note;
 import org.jfugue.elements.NoteCollection;
 import org.jfugue.elements.PitchBend;
 import org.jfugue.elements.PolyphonicPressure;
+import org.jfugue.elements.SystemExclusive;
 import org.jfugue.elements.Tempo;
 import org.jfugue.elements.Time;
 import org.jfugue.elements.Voice;
@@ -22,7 +23,6 @@ import org.jfugue.elements.Note.Parallel;
 import org.jfugue.elements.Note.Sequential;
 import org.jfugue.ParserListener;
 import org.jfugue.Pattern;
-import org.jfugue.SystemExclusiveEvent;
 
 /**
  * @author joshua
@@ -71,7 +71,7 @@ public class VisitorToListenerAdaptor implements ElementVisitor {
 		listener.voiceEvent(voice);
 	}
 
-	public void visit(SystemExclusiveEvent systemExclusiveEvent) {
+	public void visit(SystemExclusive systemExclusiveEvent) {
 		listener.systemExclusiveEvent(systemExclusiveEvent);
 	}
 

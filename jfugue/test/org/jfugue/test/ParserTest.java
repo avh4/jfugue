@@ -10,7 +10,6 @@ import java.lang.reflect.Method;
 
 import org.jfugue.ParserListener;
 import org.jfugue.ParserProgressListener;
-import org.jfugue.SystemExclusiveEvent;
 import org.jfugue.elements.ChannelPressure;
 import org.jfugue.elements.Controller;
 import org.jfugue.elements.Instrument;
@@ -21,6 +20,7 @@ import org.jfugue.elements.Note;
 import org.jfugue.elements.Parser;
 import org.jfugue.elements.PitchBend;
 import org.jfugue.elements.PolyphonicPressure;
+import org.jfugue.elements.SystemExclusive;
 import org.jfugue.elements.Tempo;
 import org.jfugue.elements.Time;
 import org.jfugue.elements.Voice;
@@ -284,19 +284,19 @@ public class ParserTest {
 
     @Test 
     public void testfireSystemExclusiveEvent_Zero() {
-	final SystemExclusiveEvent element = new SystemExclusiveEvent(null);
+	final SystemExclusive element = new SystemExclusive(null);
         getNotifiedListeners(0,"fireSystemExclusiveEvent", element);
     }    
 
     @Test 
     public void testfireSystemExclusiveEvent_One() {
-	final SystemExclusiveEvent element = new SystemExclusiveEvent(null);
+	final SystemExclusive element = new SystemExclusive(null);
         verify(getNotifiedListener("fireSystemExclusiveEvent", element)).systemExclusiveEvent(element);
     }    
 
     @Test 
     public void testfireSystemExclusiveEvent_Many() {
-	final SystemExclusiveEvent element = new SystemExclusiveEvent(null);
+	final SystemExclusive element = new SystemExclusive(null);
 	ParserListener [] listeners = getNotifiedListeners(3, "fireSystemExclusiveEvent", element);
 	for (int i = 0; i < 3; ++i) {
 	    verify(listeners[i]).systemExclusiveEvent(element);

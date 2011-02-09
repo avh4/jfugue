@@ -12,6 +12,7 @@ import org.jfugue.elements.Note;
 import org.jfugue.elements.NoteCollection;
 import org.jfugue.elements.PitchBend;
 import org.jfugue.elements.PolyphonicPressure;
+import org.jfugue.elements.SystemExclusive;
 import org.jfugue.elements.Tempo;
 import org.jfugue.elements.Time;
 import org.jfugue.elements.Voice;
@@ -47,7 +48,7 @@ public class DefaultElementVisitor implements ElementVisitor {
 	public void visit(Voice voice) {
 	}
 
-	public void visit(SystemExclusiveEvent systemExclusiveEvent) {
+	public void visit(SystemExclusive systemExclusiveEvent) {
 	}
 
 	public void visit(Tempo tempo) {

@@ -2,7 +2,6 @@ package org.jfugue.elements;
 
 import org.jfugue.NoteVisitor;
 import org.jfugue.Pattern;
-import org.jfugue.SystemExclusiveEvent;
 
 public interface ElementVisitor extends NoteVisitor {
 	
@@ -33,7 +32,7 @@ public interface ElementVisitor extends NoteVisitor {
 	public void visit(Voice voice);
 //	public void visitVoice(Voice voice);
 
-	public void visit(SystemExclusiveEvent systemExclusiveEvent);
+	public void visit(SystemExclusive systemExclusiveEvent);
 //	public void visitSystemExclusiveEvent(
 //			SystemExclusiveEvent systemExclusiveEvent);
 

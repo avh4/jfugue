@@ -26,7 +26,6 @@ import javax.swing.event.EventListenerList;
 
 import org.jfugue.ParserListener;
 import org.jfugue.ParserProgressListener;
-import org.jfugue.SystemExclusiveEvent;
 import org.jfugue.parsers.FireEventProxy;
 
 
@@ -253,7 +252,7 @@ public abstract class Parser
     }
     
     /** Tells all ParserListeners that a time event has been parsed. */
-    protected void fireSystemExclusiveEvent(SystemExclusiveEvent event)
+    protected void fireSystemExclusiveEvent(SystemExclusive event)
     {
         ParserListener[] listeners = getParserListeners();
         for (ParserListener listener : listeners) {
@@ -387,7 +386,7 @@ public abstract class Parser
 			Parser.this.fireTimeEvent(event);
 		}
 
-		public void fireSystemExclusiveEvent(SystemExclusiveEvent event) {
+		public void fireSystemExclusiveEvent(SystemExclusive event) {
 			Parser.this.fireSystemExclusiveEvent(event);
 		}
 

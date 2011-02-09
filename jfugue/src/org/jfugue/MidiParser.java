@@ -37,6 +37,7 @@ import org.jfugue.elements.Note;
 import org.jfugue.elements.Parser;
 import org.jfugue.elements.PitchBend;
 import org.jfugue.elements.PolyphonicPressure;
+import org.jfugue.elements.SystemExclusive;
 import org.jfugue.elements.Tempo;
 import org.jfugue.elements.Time;
 import org.jfugue.elements.Voice;
@@ -252,7 +253,7 @@ public final class MidiParser extends Parser
      */
     private void parseSysexMessage(SysexMessage message, long timestamp)
     {
-    	SystemExclusiveEvent sysex = new SystemExclusiveEvent(message.getData());
+    	SystemExclusive sysex = new SystemExclusive(message.getData());
     	fireSystemExclusiveEvent(sysex);
     }
 

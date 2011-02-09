@@ -32,6 +32,7 @@ import org.jfugue.elements.Measure;
 import org.jfugue.elements.Note;
 import org.jfugue.elements.PitchBend;
 import org.jfugue.elements.PolyphonicPressure;
+import org.jfugue.elements.SystemExclusive;
 import org.jfugue.elements.Tempo;
 import org.jfugue.elements.Time;
 import org.jfugue.elements.Voice;
@@ -72,7 +73,7 @@ public abstract class CollatedParserListener implements ParserListener
         jfugueEvent(keySig);
     }
 
-    public void systemExclusiveEvent(SystemExclusiveEvent sysex)
+    public void systemExclusiveEvent(SystemExclusive sysex)
     {	
     	jfugueEvent(sysex);
     }

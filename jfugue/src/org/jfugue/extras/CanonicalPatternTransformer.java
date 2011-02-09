@@ -9,7 +9,6 @@ import java.util.Map;
 import org.jfugue.Pattern;
 import org.jfugue.PatternInterface;
 import org.jfugue.PatternTransformer;
-import org.jfugue.SystemExclusiveEvent;
 import org.jfugue.elements.ChannelPressure;
 import org.jfugue.elements.Controller;
 import org.jfugue.elements.Instrument;
@@ -20,6 +19,7 @@ import org.jfugue.elements.Measure;
 import org.jfugue.elements.Note;
 import org.jfugue.elements.PitchBend;
 import org.jfugue.elements.PolyphonicPressure;
+import org.jfugue.elements.SystemExclusive;
 import org.jfugue.elements.Tempo;
 import org.jfugue.elements.Time;
 import org.jfugue.elements.Voice;
@@ -98,7 +98,7 @@ public class CanonicalPatternTransformer extends PatternTransformer {
 		addUniqueSinceLast(keySig);
 	}
 
-	public void systemExclusiveEvent(SystemExclusiveEvent sysex) {
+	public void systemExclusiveEvent(SystemExclusive sysex) {
 		addElement(sysex);
 	}
 

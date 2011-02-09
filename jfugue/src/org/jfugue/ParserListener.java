@@ -33,6 +33,7 @@ import org.jfugue.elements.Measure;
 import org.jfugue.elements.Note;
 import org.jfugue.elements.PitchBend;
 import org.jfugue.elements.PolyphonicPressure;
+import org.jfugue.elements.SystemExclusive;
 import org.jfugue.elements.Tempo;
 import org.jfugue.elements.Time;
 import org.jfugue.elements.Voice;
@@ -101,9 +102,9 @@ public interface ParserListener extends EventListener
     /**
      * Called when the parser encounters a system exclusive event.
      * @param sysex the event that has been parsed
-     * @see SystemExclusiveEvent
+     * @see SystemExclusive
      */
-    public void systemExclusiveEvent(SystemExclusiveEvent sysex);
+    public void systemExclusiveEvent(SystemExclusive sysex);
     
     /**
      * Called when the parser encounters a controller event.

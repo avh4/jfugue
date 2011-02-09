@@ -1,7 +1,6 @@
 package org.jfugue.parsers;
 
 import org.jfugue.ParserListener;
-import org.jfugue.SystemExclusiveEvent;
 import org.jfugue.elements.ChannelPressure;
 import org.jfugue.elements.Controller;
 import org.jfugue.elements.Instrument;
@@ -11,6 +10,7 @@ import org.jfugue.elements.Measure;
 import org.jfugue.elements.Note;
 import org.jfugue.elements.PitchBend;
 import org.jfugue.elements.PolyphonicPressure;
+import org.jfugue.elements.SystemExclusive;
 import org.jfugue.elements.Tempo;
 import org.jfugue.elements.Time;
 import org.jfugue.elements.Voice;
@@ -62,7 +62,7 @@ public interface FireEventProxy {
     public void fireTimeEvent(Time event);
     
     /** Tells all ParserListeners that a time event has been parsed. */
-    public void fireSystemExclusiveEvent(SystemExclusiveEvent event);
+    public void fireSystemExclusiveEvent(SystemExclusive event);
     
     /** Tells all ParserListeners that a key signature event has been parsed. */
     public void fireKeySignatureEvent(KeySignature event);

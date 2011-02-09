@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.jfugue.DefaultElementVisitor;
 import org.jfugue.Pattern;
-import org.jfugue.SystemExclusiveEvent;
 import org.jfugue.elements.ChannelPressure;
 import org.jfugue.elements.Controller;
 import org.jfugue.elements.Instrument;
@@ -18,6 +17,7 @@ import org.jfugue.elements.Measure;
 import org.jfugue.elements.Note;
 import org.jfugue.elements.PitchBend;
 import org.jfugue.elements.PolyphonicPressure;
+import org.jfugue.elements.SystemExclusive;
 import org.jfugue.elements.Tempo;
 import org.jfugue.elements.Time;
 import org.jfugue.elements.Voice;
@@ -123,7 +123,7 @@ public class LoggingVisitor extends DefaultElementVisitor {
 		log.add(new Entry("visitVoice", voice));
 	}
 
-	public void visit(SystemExclusiveEvent systemExclusiveEvent) {
+	public void visit(SystemExclusive systemExclusiveEvent) {
 		log.add(new Entry("visitSystemExclusiveEvent", systemExclusiveEvent));
 	}
 

@@ -5,7 +5,6 @@ import java.io.PushbackReader;
 
 import org.jfugue.JFugueException;
 import org.jfugue.ParserListener;
-import org.jfugue.SystemExclusiveEvent;
 import org.jfugue.elements.ChannelPressure;
 import org.jfugue.elements.Controller;
 import org.jfugue.elements.Environment;
@@ -16,6 +15,7 @@ import org.jfugue.elements.Measure;
 import org.jfugue.elements.Note;
 import org.jfugue.elements.PitchBend;
 import org.jfugue.elements.PolyphonicPressure;
+import org.jfugue.elements.SystemExclusive;
 import org.jfugue.elements.Tempo;
 import org.jfugue.elements.Time;
 import org.jfugue.elements.Voice;
@@ -505,9 +505,9 @@ public class ParserContext {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.elements.Environment#fireSystemExclusiveEvent(org.jfugue.SystemExclusiveEvent)
+	 * @see org.jfugue.elements.Environment#fireSystemExclusiveEvent(org.jfugue.elements.SystemExclusive)
 	 */
-	public SystemExclusiveEvent fireSystemExclusiveEvent(SystemExclusiveEvent event) {
+	public SystemExclusive fireSystemExclusiveEvent(SystemExclusive event) {
 		environment.fireSystemExclusiveEvent(event);
 		return event;
 	}

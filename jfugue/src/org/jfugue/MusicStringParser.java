@@ -38,6 +38,7 @@ import org.jfugue.elements.Note;
 import org.jfugue.elements.Parser;
 import org.jfugue.elements.PitchBend;
 import org.jfugue.elements.PolyphonicPressure;
+import org.jfugue.elements.SystemExclusive;
 import org.jfugue.elements.Tempo;
 import org.jfugue.elements.Time;
 import org.jfugue.elements.Voice;
@@ -299,7 +300,7 @@ public final class MusicStringParser extends Parser
         	c++;
         }
         trace("Sysex element: bytes = ",traceReport.toString());
-        fireSystemExclusiveEvent(new SystemExclusiveEvent(data));
+        fireSystemExclusiveEvent(new SystemExclusive(data));
     }
     
     /**

@@ -33,6 +33,7 @@ import org.jfugue.elements.Measure;
 import org.jfugue.elements.Note;
 import org.jfugue.elements.PitchBend;
 import org.jfugue.elements.PolyphonicPressure;
+import org.jfugue.elements.SystemExclusive;
 import org.jfugue.elements.Tempo;
 import org.jfugue.elements.Time;
 import org.jfugue.elements.Voice;
@@ -115,7 +116,7 @@ public class StreamingMidiRenderer implements ParserListener
         this.eventManager.addMetaMessage(0x59, new byte[] { keySig.getKeySig(), keySig.getScale() });
     }
 
-    public void systemExclusiveEvent(SystemExclusiveEvent sysex)
+    public void systemExclusiveEvent(SystemExclusive sysex)
     {
         this.eventManager.addSystemExclusiveEvent(sysex.getBytes());
     }

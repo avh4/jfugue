@@ -16,6 +16,7 @@ import org.jfugue.elements.Layer;
 import org.jfugue.elements.Measure;
 import org.jfugue.elements.PitchBend;
 import org.jfugue.elements.PolyphonicPressure;
+import org.jfugue.elements.SystemExclusive;
 import org.jfugue.elements.Tempo;
 import org.jfugue.elements.Time;
 import org.jfugue.elements.Voice;
@@ -108,7 +109,7 @@ public class TestFactories {
 	
 	@Test
 	public void testSystemExclusiveEventFactory() throws Exception {
-		SystemExclusiveEvent.Factory f = SystemExclusiveEvent.Factory.getInstance();
+		SystemExclusive.Factory f = SystemExclusive.Factory.getInstance();
 		String exp = "^DEC:10,40,20,60";
 		assertJEquals(exp, f.createElement(exp));
 		assertJEquals(exp, f.createElement("^HEX:0A,28,14,3C"));

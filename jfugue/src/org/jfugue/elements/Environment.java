@@ -6,7 +6,6 @@ import java.util.Map;
 import org.jfugue.JFugueDefinitions;
 import org.jfugue.JFugueException;
 import org.jfugue.ParserListener;
-import org.jfugue.SystemExclusiveEvent;
 import org.jfugue.parsers.DummyParserEventProxy;
 import org.jfugue.parsers.FireEventProxy;
 import org.jfugue.parsers.ParserContext;
@@ -299,9 +298,9 @@ public class Environment implements FireEventProxy {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.FireEventProxy#fireSystemExclusiveEvent(org.jfugue.SystemExclusiveEvent)
+	 * @see org.jfugue.FireEventProxy#fireSystemExclusiveEvent(org.jfugue.elements.SystemExclusive)
 	 */
-	public void fireSystemExclusiveEvent(SystemExclusiveEvent event) {
+	public void fireSystemExclusiveEvent(SystemExclusive event) {
 		proxy.fireSystemExclusiveEvent(event);
 	}
 
