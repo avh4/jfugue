@@ -1,6 +1,6 @@
 package org.jfugue.extras;
 
-import org.jfugue.DefaultElementVistior;
+import org.jfugue.DefaultElementVisitor;
 import org.jfugue.ParserListener;
 import org.jfugue.SystemExclusiveEvent;
 import org.jfugue.elements.ChannelPressure;
@@ -17,10 +17,21 @@ import org.jfugue.elements.Tempo;
 import org.jfugue.elements.Time;
 import org.jfugue.elements.Voice;
 
-public class ListenerToVisitorAdaptor extends DefaultElementVistior implements ParserListener {
+public class ListenerToVisitorAdaptor extends DefaultElementVisitor implements ParserListener {
 
 	protected ElementVisitor visitor;
 	
+    public ListenerToVisitorAdaptor(ElementVisitor visitor) {
+        setVisitor(visitor);
+    }
+    
+    /**
+     * @param visitor the visitor to set
+     */
+    public void setVisitor(ElementVisitor visitor) {
+        this.visitor = visitor;
+    }
+
 	/**
 	 * @return the visitor
 	 */
@@ -28,17 +39,6 @@ public class ListenerToVisitorAdaptor extends DefaultElementVistior implements P
 		return visitor;
 	}
 
-	/**
-	 * @param visitor the visitor to set
-	 */
-	public void setVisitor(ElementVisitor visitor) {
-		this.visitor = visitor;
-	}
-
-	public ListenerToVisitorAdaptor(ElementVisitor visitor) {
-		this.visitor = visitor;
-	}
-	
 	public void voiceEvent(Voice voice) {
 		visitor.visit(voice);
 	}

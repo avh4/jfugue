@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.jfugue.DefaultElementVistior;
+import org.jfugue.DefaultElementVisitor;
 import org.jfugue.Pattern;
 import org.jfugue.SystemExclusiveEvent;
 import org.jfugue.elements.ChannelPressure;
@@ -22,7 +22,7 @@ import org.jfugue.elements.Tempo;
 import org.jfugue.elements.Time;
 import org.jfugue.elements.Voice;
 
-public class LoggingVisitor extends DefaultElementVistior {
+public class LoggingVisitor extends DefaultElementVisitor {
 	
 	public static class Entry {
 		protected String name;
