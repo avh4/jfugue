@@ -77,7 +77,8 @@ public class CanonicalPatternTransformer extends PatternTransformer {
 	}
 
 	public void instrumentEvent(Instrument instrument) {
-		addUniqueSinceLast(instrument);
+		// TODO This is a slight problem
+		addElement(instrument);
 	}
 
 	public void layerEvent(Layer layer) {
@@ -156,7 +157,7 @@ public class CanonicalPatternTransformer extends PatternTransformer {
 		// The defaults
 		last.putAll(lastDef);
 
-		PatternInterface nPattern = new Pattern(pattern);
+		PatternInterface nPattern = new Pattern();
 		nPattern.setMusicString("");
 		return nPattern;
 	}

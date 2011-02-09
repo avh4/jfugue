@@ -8,7 +8,6 @@ import java.util.regex.Matcher;
 import org.jfugue.*;
 import org.jfugue.elements.ChannelPressure;
 import org.jfugue.elements.Controller;
-import org.jfugue.elements.Environment;
 import org.jfugue.elements.Instrument;
 import org.jfugue.elements.JFugueElement;
 import org.jfugue.elements.KeySignature;

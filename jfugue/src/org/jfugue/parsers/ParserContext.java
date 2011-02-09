@@ -1,13 +1,16 @@
 package org.jfugue.parsers;
 
+import java.io.FilterReader;
 import java.io.IOException;
-import java.io.PushbackReader;
+import java.io.Reader;
+import java.util.Scanner;
+import java.util.regex.Pattern;
 
+import org.jfugue.Environment;
 import org.jfugue.JFugueException;
 import org.jfugue.ParserListener;
 import org.jfugue.elements.ChannelPressure;
 import org.jfugue.elements.Controller;
-import org.jfugue.elements.Environment;
 import org.jfugue.elements.Instrument;
 import org.jfugue.elements.KeySignature;
 import org.jfugue.elements.Layer;
@@ -28,15 +31,28 @@ import org.jfugue.elements.Voice;
  * @author joshua
  *
  */
-public class ParserContext {
+public class ParserContext extends FilterReader {
 
 	public static final int CAPACITY = 10;
 
-	protected PushbackReader reader;
+	protected Reader reader;
 	protected Environment environment;
+	protected Scanner scanner;
+	protected StringBuilder sb = new StringBuilder(CAPACITY);
 	
 	protected byte keySig = 0;
 	public static final double SEQUENCE_RES = 128;
+	
+	public static final String HEX_BYTE_RE = "^[0-1A-F]{2}";
+	public static final String BYTE_RE = "^(?:-?(?:1[01]\\d|12[0-7]|\\d\\d?)|-128)";
+	public static final String INT_RE = "^\\d+";
+	public static final String LONG_RE = "^\\d+";
+	public static final String DOUBLE_RE = "^\\d+\\.\\d+";
+	public static final String SYMBOL_RE = "[A-Za-z][A-Za-z_]*";
+	public static final String BRACKETED_SYMBOL_RE = "^\\[[A-Za-z][A-Za-z_]*\\]";
+	
+	public static final Pattern HEX_BYTE_PAT = Pattern.compile(HEX_BYTE_RE, Pattern.CASE_INSENSITIVE);
+	public static final Pattern BYTE_PAT = Pattern.compile(BYTE_RE, Pattern.CASE_INSENSITIVE);
 	
 	/**
 	 * @return the keySig
@@ -53,13 +69,6 @@ public class ParserContext {
 	}
 
 	/**
-	 * @return the reader
-	 */
-	public PushbackReader getReader() {
-		return reader;
-	}
-
-	/**
 	 * @return the environment
 	 */
 	public Environment getEnvironment() {
@@ -70,25 +79,49 @@ public class ParserContext {
 	 * @param reader
 	 * @param environment
 	 */
-	public ParserContext(PushbackReader reader, Environment environment) {
-		this.reader = reader;
+	public ParserContext(Reader reader, Environment environment) {
+		super(reader);
+//		this.reader = reader;
+//		scanner = new Scanner(reader);
 		this.environment = environment;
 	}
 	
-	// TODO Make this classes methods use read and unread from this class instead of reader
+	/////////// Implementation of FilterReader ///////////
+	public boolean ready() throws IOException {
+		return super.ready() || sb.length() > 0;
+	}
+	
+	public int read() throws IOException {
+		if (sb.length() != 0) {
+			char ch = sb.charAt(0);
+			sb.deleteCharAt(0);
+			return (int) ch;
+		}
+		return super.read();
+	}
+
+	public int read(char[] cbuf, int off, int len) throws IOException {
+		int blen = sb.length();
+		int overflow = len - blen;
+		int cutoff = (overflow > 0) ? blen : len;
+		int count = cutoff;
+		if (cutoff > 0) {
+			sb.getChars(0, cutoff, cbuf, off);
+			sb.delete(0, cutoff);
+		}
+		if (overflow > 0)
+			count += super.read(cbuf, cutoff, len - cutoff);
+		return count;
+	}
 	
 	/**
-	 * Reads a {@code char} from the {@code reader} if possible.
+	 * Reads a {@code char} if possible.
 	 * 
 	 * @return the {@code char} read
 	 * @throws IOException
-	 * @throws ParserError if the {@code reader} is not ready
 	 */
-	public char read() throws IOException, ParserError {
-		if (reader.ready())
-			return (char) reader.read();
-		else
-			throw new ParserError(ParserError.NOT_READY);
+	public char readChar() throws IOException {
+		return (char) read();
 	}
 	
 	/**
@@ -98,13 +131,23 @@ public class ParserContext {
 	 * @throws IOException
 	 */
 	public void unread(char ch) throws IOException {
-		reader.unread((int) ch);
+		sb.insert(0, ch);
 	}
+	
+	public void unread(int cp) throws IOException {
+		unread((char) cp);
+	}
+	
+	public void unread(CharSequence cs) {
+		sb.insert(0, cs);	
+	}
+	
+	/////////// End implementation of FilterReader ///////////
 	
 	/**
 	 * Tries to read a symbol for use in looking up dictionary elements.
 	 * 
-	 * @return the symbol read from the reader
+	 * @return the symbol read
 	 * @throws JFugueException
 	 * @throws IOException
 	 * @throws ParserError 
@@ -112,32 +155,32 @@ public class ParserContext {
 	public String readSymbol() throws JFugueException, IOException, ParserError {
 		final String type = "symbol";
 		checkReady();
-		int cp = reader.read();
+		int cp = read();
 		if (cp == '[') {
 			String id = readIdentifier();
-			cp = reader.read();
+			cp = read();
 			if (cp == ']') {
 				return "[" + id + "]";
 			} else {
-				reader.unread(cp);
+				unread(cp);
 				throw new ParserError(ParserError.CHAR_UNEXPECTED, (char) cp, type);
 			}
 		} else
-			reader.unread(cp);
+			unread(cp);
 			return "[" + readIdentifier() + "]";
 	}
 
 	public String readIdentifier() throws IOException, ParserError {
 		StringBuilder sb = new StringBuilder(CAPACITY);
 		final String type = "identifier";
-		char ch = read();
+		char ch = readChar();
 		if (!Character.isLetter(ch)) {
 			unread(ch);
 			throw new ParserError(ParserError.CHAR_NOT_START, ch, type);
 		}
 		while (Character.isJavaIdentifierPart(ch)) {
 			sb.append(ch);
-			ch = read();
+			ch = readChar();
 		}
 		unread(ch);
 		return sb.toString();
@@ -149,10 +192,10 @@ public class ParserContext {
 		if (cs.length == 1)
 			cs = new char[] { ' ' };
 		StringBuilder sb = new StringBuilder(CAPACITY);
-		char ch = read();
+		char ch = readChar();
 		while (isNot(ch, cs)) {
 			sb.append(ch);
-			ch = read();
+			ch = readChar();
 		}
 		if (unreadLastChar)
 			unread(ch);
@@ -181,11 +224,11 @@ public class ParserContext {
 	 */
 	public byte readByte() throws JFugueException, IOException, ParserError {
 		StringBuilder sb = new StringBuilder(CAPACITY);
-		char ch = read();
+		char ch = readChar();
 		if (Character.isDigit(ch)) {
 			sb.append(ch);
 			while (checkReady()) {
-				ch = read();
+				ch = readChar();
 				if (Character.isDigit(ch))
 					sb.append(ch);
 				else {
@@ -200,6 +243,10 @@ public class ParserContext {
 		}
 	}
 
+	public byte readHexByte() {
+		return Byte.parseByte(scanner.findInLine(HEX_BYTE_PAT), 16);
+	}
+	
 	/**
 	 * Tries to read an int or a symbol that resolves to an int.
 	 * 
@@ -211,23 +258,23 @@ public class ParserContext {
 	public int readInt() throws JFugueException, IOException, ParserError {
 		StringBuilder sb = new StringBuilder(CAPACITY);
 		checkReady();
-		int cp = reader.read();
+		int cp = read();
 		char ch = (char) cp;
 		if (Character.isDigit(ch)) {
 			sb.append(ch);
 			while (checkReady()) {
-				cp = reader.read();
+				cp = read();
 				ch = (char) cp;
 				if (Character.isDigit(ch))
 					sb.append(ch);
 				else {
-					reader.unread(cp);
+					unread(cp);
 					break;
 				}
 			}
 			return Integer.parseInt(sb.toString());
 		} else {
-			reader.unread(cp);
+			unread(cp);
 			return environment.getIntFromDictionary(readSymbol());
 		}
 	}
@@ -243,23 +290,23 @@ public class ParserContext {
 	public long readLong() throws JFugueException, IOException, ParserError {
 		StringBuilder sb = new StringBuilder(CAPACITY);
 		checkReady();
-		int cp = reader.read();
+		int cp = read();
 		char ch = (char) cp;
 		if (Character.isDigit(ch)) {
 			sb.append(ch);
 			while (checkReady()) {
-				cp = reader.read();
+				cp = read();
 				ch = (char) cp;
 				if (Character.isDigit(ch))
 					sb.append(ch);
 				else {
-					reader.unread(cp);
+					unread(cp);
 					break;
 				}
 			}
 			return Long.parseLong(sb.toString());
 		} else {
-			reader.unread(cp);
+			unread(cp);
 			return environment.getLongFromDictionary(readSymbol());
 		}
 	}
@@ -276,12 +323,12 @@ public class ParserContext {
 		StringBuilder sb = new StringBuilder(CAPACITY);
 		final String type = "double";
 		checkReady();
-		int cp = reader.read();
+		int cp = read();
 		char ch = (char) cp;
 		if (Character.isDigit(ch)) {
 			sb.append(ch);
 			while (checkReady()) {
-				cp = reader.read();
+				cp = read();
 				ch = (char) cp;
 				if (Character.isDigit(ch))
 					sb.append(ch);
@@ -289,30 +336,30 @@ public class ParserContext {
 					sb.append(ch);
 					break;
 				} else {
-					reader.unread(cp);
+					unread(cp);
 					throw new ParserError(ParserError.CHAR_UNEXPECTED, ch, type);
 				}
 			}
 			while (checkReady()) {
-				cp = reader.read();
+				cp = read();
 				ch = (char) cp;
 				if (Character.isDigit(ch))
 					sb.append(ch);
 				else {
-					reader.unread(cp);
+					unread(cp);
 					break;
 				}
 			}
 			return Double.parseDouble(sb.toString());
 		} else {
-			reader.unread(cp);
+			unread(cp);
 			return environment.getDoubleFromDictionary(readSymbol());
 		}
 	}
 	
 	public String readUnicodeAndChars(byte[] bs, char...cs) throws IOException, ParserError {
 		StringBuilder sb = new StringBuilder(CAPACITY);
-		char ch = read();
+		char ch = readChar();
 		boolean match = false;
 		while (true) {
 			match = false;
@@ -346,7 +393,7 @@ public class ParserContext {
 
 	public char readOneOfTheChars(char...cs) throws IOException, JFugueException, ParserError {
 			checkReady();
-			char ch = read();
+			char ch = readChar();
 			for (char d : cs) {
 				if (ch == d)
 					return d;
@@ -356,7 +403,7 @@ public class ParserContext {
 	}
 
 	public boolean checkReady() throws IOException, ParserError {
-		if (!reader.ready())
+		if (!ready())
 			throw new ParserError(ParserError.NOT_READY);
 		else
 			return true;
@@ -460,7 +507,7 @@ public class ParserContext {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.elements.Environment#fireVoiceEvent(org.jfugue.elements.Voice)
+	 * @see org.jfugue.Environment#fireVoiceEvent(org.jfugue.elements.Voice)
 	 */
 	public Voice fireVoiceEvent(Voice event) {
 		environment.fireVoiceEvent(event);
@@ -469,7 +516,7 @@ public class ParserContext {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.elements.Environment#fireTempoEvent(org.jfugue.elements.Tempo)
+	 * @see org.jfugue.Environment#fireTempoEvent(org.jfugue.elements.Tempo)
 	 */
 	public Tempo fireTempoEvent(Tempo event) {
 		environment.fireTempoEvent(event);
@@ -478,7 +525,7 @@ public class ParserContext {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.elements.Environment#fireInstrumentEvent(org.jfugue.elements.Instrument)
+	 * @see org.jfugue.Environment#fireInstrumentEvent(org.jfugue.elements.Instrument)
 	 */
 	public Instrument fireInstrumentEvent(Instrument event) {
 		environment.fireInstrumentEvent(event);
@@ -487,7 +534,7 @@ public class ParserContext {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.elements.Environment#fireLayerEvent(org.jfugue.elements.Layer)
+	 * @see org.jfugue.Environment#fireLayerEvent(org.jfugue.elements.Layer)
 	 */
 	public Layer fireLayerEvent(Layer event) {
 		environment.fireLayerEvent(event);
@@ -496,7 +543,7 @@ public class ParserContext {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.elements.Environment#fireTimeEvent(org.jfugue.elements.Time)
+	 * @see org.jfugue.Environment#fireTimeEvent(org.jfugue.elements.Time)
 	 */
 	public Time fireTimeEvent(Time event) {
 		environment.fireTimeEvent(event);
@@ -505,7 +552,11 @@ public class ParserContext {
 
 	/**
 	 * @param event
+<<<<<<< .mine
+	 * @see org.jfugue.Environment#fireSystemExclusiveEvent(org.jfugue.SystemExclusiveEvent)
+=======
 	 * @see org.jfugue.elements.Environment#fireSystemExclusiveEvent(org.jfugue.elements.SystemExclusive)
+>>>>>>> .r102
 	 */
 	public SystemExclusive fireSystemExclusiveEvent(SystemExclusive event) {
 		environment.fireSystemExclusiveEvent(event);
@@ -514,7 +565,7 @@ public class ParserContext {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.elements.Environment#fireKeySignatureEvent(org.jfugue.elements.KeySignature)
+	 * @see org.jfugue.Environment#fireKeySignatureEvent(org.jfugue.elements.KeySignature)
 	 */
 	public KeySignature fireKeySignatureEvent(KeySignature event) {
 		environment.fireKeySignatureEvent(event);
@@ -523,7 +574,7 @@ public class ParserContext {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.elements.Environment#fireMeasureEvent(org.jfugue.elements.Measure)
+	 * @see org.jfugue.Environment#fireMeasureEvent(org.jfugue.elements.Measure)
 	 */
 	public Measure fireMeasureEvent(Measure event) {
 		environment.fireMeasureEvent(event);
@@ -532,7 +583,7 @@ public class ParserContext {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.elements.Environment#fireControllerEvent(org.jfugue.elements.Controller)
+	 * @see org.jfugue.Environment#fireControllerEvent(org.jfugue.elements.Controller)
 	 */
 	public Controller fireControllerEvent(Controller event) {
 		environment.fireControllerEvent(event);
@@ -541,7 +592,7 @@ public class ParserContext {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.elements.Environment#fireChannelPressureEvent(org.jfugue.elements.ChannelPressure)
+	 * @see org.jfugue.Environment#fireChannelPressureEvent(org.jfugue.elements.ChannelPressure)
 	 */
 	public ChannelPressure fireChannelPressureEvent(ChannelPressure event) {
 		environment.fireChannelPressureEvent(event);
@@ -550,7 +601,7 @@ public class ParserContext {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.elements.Environment#firePolyphonicPressureEvent(org.jfugue.elements.PolyphonicPressure)
+	 * @see org.jfugue.Environment#firePolyphonicPressureEvent(org.jfugue.elements.PolyphonicPressure)
 	 */
 	public PolyphonicPressure firePolyphonicPressureEvent(PolyphonicPressure event) {
 		environment.firePolyphonicPressureEvent(event);
@@ -559,7 +610,7 @@ public class ParserContext {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.elements.Environment#firePitchBendEvent(org.jfugue.elements.PitchBend)
+	 * @see org.jfugue.Environment#firePitchBendEvent(org.jfugue.elements.PitchBend)
 	 */
 	public PitchBend firePitchBendEvent(PitchBend event) {
 		environment.firePitchBendEvent(event);
@@ -568,7 +619,7 @@ public class ParserContext {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.elements.Environment#fireNoteEvent(org.jfugue.elements.Note)
+	 * @see org.jfugue.Environment#fireNoteEvent(org.jfugue.elements.Note)
 	 */
 	public Note fireNoteEvent(Note event) {
 		environment.fireNoteEvent(event);
@@ -577,7 +628,7 @@ public class ParserContext {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.elements.Environment#fireSequentialNoteEvent(org.jfugue.elements.Note)
+	 * @see org.jfugue.Environment#fireSequentialNoteEvent(org.jfugue.elements.Note)
 	 */
 	public Note fireSequentialNoteEvent(Note event) {
 		environment.fireSequentialNoteEvent(event);
@@ -586,7 +637,7 @@ public class ParserContext {
 
 	/**
 	 * @param event
-	 * @see org.jfugue.elements.Environment#fireParallelNoteEvent(org.jfugue.elements.Note)
+	 * @see org.jfugue.Environment#fireParallelNoteEvent(org.jfugue.elements.Note)
 	 */
 	public Note fireParallelNoteEvent(Note event) {
 		environment.fireParallelNoteEvent(event);

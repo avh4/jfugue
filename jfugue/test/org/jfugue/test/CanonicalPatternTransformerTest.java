@@ -12,7 +12,6 @@ import org.junit.Test;
 
 public class CanonicalPatternTransformerTest extends TestCaseHelpers {
 
-	protected static final CanonicalPatternTransformer cpt = new CanonicalPatternTransformer();
 	protected static final Pattern abcd = new Pattern("A B C D");
 
 	@Before
@@ -40,12 +39,14 @@ public class CanonicalPatternTransformerTest extends TestCaseHelpers {
 	}
 
 	private void assertCanonEq(Pattern one, Pattern two) {
-		assertEquals(cpt.execute(one), cpt.execute(two));
+		CanonicalPatternTransformer cpt1 = new CanonicalPatternTransformer(), cpt2 = new CanonicalPatternTransformer();
+		assertEquals(cpt1.execute(one), cpt2.execute(two));
 	}
 
 	private void assertCononNotEq(Pattern one, Pattern two) {
-		assertFalse(String.format("%s == %s", one, two), cpt.execute(one)
-				.equals(cpt.execute(two)));
+		CanonicalPatternTransformer cpt1 = new CanonicalPatternTransformer(), cpt2 = new CanonicalPatternTransformer();
+		assertFalse(String.format("%s == %s", one, two), cpt1.execute(one)
+				.equals(cpt2.execute(two)));
 	}
 
 }

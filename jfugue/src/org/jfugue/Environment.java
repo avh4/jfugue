@@ -1,11 +1,21 @@
-package org.jfugue.elements;
+package org.jfugue;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jfugue.JFugueDefinitions;
-import org.jfugue.JFugueException;
-import org.jfugue.ParserListener;
+import org.jfugue.elements.ChannelPressure;
+import org.jfugue.elements.Controller;
+import org.jfugue.elements.Instrument;
+import org.jfugue.elements.KeySignature;
+import org.jfugue.elements.Layer;
+import org.jfugue.elements.Measure;
+import org.jfugue.elements.Note;
+import org.jfugue.elements.PitchBend;
+import org.jfugue.elements.PolyphonicPressure;
+import org.jfugue.elements.SystemExclusive;
+import org.jfugue.elements.Tempo;
+import org.jfugue.elements.Time;
+import org.jfugue.elements.Voice;
 import org.jfugue.parsers.DummyParserEventProxy;
 import org.jfugue.parsers.FireEventProxy;
 import org.jfugue.parsers.ParserContext;
