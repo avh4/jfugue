@@ -22,8 +22,6 @@
 
 package org.jfugue;
 
-import java.util.StringTokenizer;
-
 import javax.sound.midi.MetaMessage;
 import javax.sound.midi.MidiEvent;
 import javax.sound.midi.MidiMessage;
