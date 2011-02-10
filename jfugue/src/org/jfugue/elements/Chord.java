@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.jfugue.factories.NoteFactory;
+import org.jfugue.visitors.ElementVisitor;
 
 @SuppressWarnings("serial")
 public class Chord extends Note {

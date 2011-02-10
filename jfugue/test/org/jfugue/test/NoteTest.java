@@ -9,8 +9,8 @@ import java.util.Map;
 
 import org.jfugue.MusicStringParser;
 import org.jfugue.elements.Note;
-import org.jfugue.extras.LoggingVisitor;
 import org.jfugue.factories.NoteFactory;
+import org.jfugue.visitors.LoggingVisitor;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

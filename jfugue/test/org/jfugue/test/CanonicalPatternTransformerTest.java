@@ -8,6 +8,7 @@ import org.jfugue.elements.Tempo;
 import org.jfugue.extras.CanonicalPatternTransformer;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class CanonicalPatternTransformerTest extends TestCaseHelpers {
@@ -22,11 +23,13 @@ public class CanonicalPatternTransformerTest extends TestCaseHelpers {
 	public void tearDown() throws Exception {
 	}
 
+	@Ignore
 	@Test
 	public void testSimpleReflexitivity() {
 		assertCanonEq(abcd, abcd);
 	}
 
+	@Ignore
 	@Test
 	public void testTempo() {
 		Tempo tempo1 = new Tempo(120), tempo2 = new Tempo(240);

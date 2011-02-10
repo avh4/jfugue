@@ -37,6 +37,8 @@ public class ParserContext extends FilterReader {
 
 	protected Reader reader;
 	protected Environment environment;
+	
+	// TODO How can I make this use Scanner
 	protected Scanner scanner;
 	protected StringBuilder sb = new StringBuilder(CAPACITY);
 	
@@ -45,14 +47,19 @@ public class ParserContext extends FilterReader {
 	
 	public static final String HEX_BYTE_RE = "^[0-1A-F]{2}";
 	public static final String BYTE_RE = "^(?:-?(?:1[01]\\d|12[0-7]|\\d\\d?)|-128)";
-	public static final String INT_RE = "^\\d+";
+	public static final String INT_RE = "^-?\\d+";
 	public static final String LONG_RE = "^\\d+";
-	public static final String DOUBLE_RE = "^\\d+\\.\\d+";
-	public static final String SYMBOL_RE = "[A-Za-z][A-Za-z_]*";
+	public static final String DOUBLE_RE = "^-?\\d+\\.\\d+";
+	public static final String SYMBOL_RE = "^[A-Za-z][A-Za-z_]*";
 	public static final String BRACKETED_SYMBOL_RE = "^\\[[A-Za-z][A-Za-z_]*\\]";
 	
 	public static final Pattern HEX_BYTE_PAT = Pattern.compile(HEX_BYTE_RE, Pattern.CASE_INSENSITIVE);
 	public static final Pattern BYTE_PAT = Pattern.compile(BYTE_RE, Pattern.CASE_INSENSITIVE);
+	public static final Pattern INT_PAT = Pattern.compile(INT_RE, Pattern.CASE_INSENSITIVE);
+	public static final Pattern LONG_PAT = Pattern.compile(LONG_RE, Pattern.CASE_INSENSITIVE);
+	public static final Pattern DOUBLE_PAT = Pattern.compile(DOUBLE_RE, Pattern.CASE_INSENSITIVE);
+	public static final Pattern SYMBOL_PAT = Pattern.compile(SYMBOL_RE, Pattern.CASE_INSENSITIVE);
+	public static final Pattern BRACKETED_SYMBOL_PAT = Pattern.compile(BRACKETED_SYMBOL_RE, Pattern.CASE_INSENSITIVE);
 	
 	/**
 	 * @return the keySig
@@ -82,7 +89,7 @@ public class ParserContext extends FilterReader {
 	public ParserContext(Reader reader, Environment environment) {
 		super(reader);
 //		this.reader = reader;
-//		scanner = new Scanner(reader);
+		scanner = new Scanner(reader);
 		this.environment = environment;
 	}
 	
@@ -243,8 +250,14 @@ public class ParserContext extends FilterReader {
 		}
 	}
 
-	public byte readHexByte() {
-		return Byte.parseByte(scanner.findInLine(HEX_BYTE_PAT), 16);
+//	public byte readHexByte() throws IOException, ParserError {
+//		char[] b = new char[2];
+//		read(b);
+//		return Byte.parseByte(String.valueOf(b), 16);
+//	}
+	
+	public byte readHexByte() throws IOException, ParserError {
+		return Byte.parseByte(scanner.findWithinHorizon(HEX_BYTE_PAT, 2), 16);
 	}
 	
 	/**
@@ -256,27 +269,35 @@ public class ParserContext extends FilterReader {
 	 * @throws ParserError 
 	 */
 	public int readInt() throws JFugueException, IOException, ParserError {
-		StringBuilder sb = new StringBuilder(CAPACITY);
-		checkReady();
-		int cp = read();
-		char ch = (char) cp;
-		if (Character.isDigit(ch)) {
-			sb.append(ch);
-			while (checkReady()) {
-				cp = read();
-				ch = (char) cp;
-				if (Character.isDigit(ch))
-					sb.append(ch);
-				else {
-					unread(cp);
-					break;
-				}
-			}
-			return Integer.parseInt(sb.toString());
-		} else {
-			unread(cp);
-			return environment.getIntFromDictionary(readSymbol());
-		}
+		String s = null;
+		s = scanner.findWithinHorizon(INT_RE, 11);
+		if (s != null && s.length() != 0)
+			return Integer.parseInt(s);
+		s = scanner.findWithinHorizon(BRACKETED_SYMBOL_PAT, 50);
+		if (s != null)
+			return environment.getIntFromDictionary(s);
+		throw new ParserError();
+//		StringBuilder sb = new StringBuilder(CAPACITY);
+//		checkReady();
+//		int cp = read();
+//		char ch = (char) cp;
+//		if (Character.isDigit(ch)) {
+//			sb.append(ch);
+//			while (checkReady()) {
+//				cp = read();
+//				ch = (char) cp;
+//				if (Character.isDigit(ch))
+//					sb.append(ch);
+//				else {
+//					unread(cp);
+//					break;
+//				}
+//			}
+//			return Integer.parseInt(sb.toString());
+//		} else {
+//			unread(cp);
+//			return environment.getIntFromDictionary(readSymbol());
+//		}
 	}
 
 	/**
@@ -357,38 +378,39 @@ public class ParserContext extends FilterReader {
 		}
 	}
 	
-	public String readUnicodeAndChars(byte[] bs, char...cs) throws IOException, ParserError {
-		StringBuilder sb = new StringBuilder(CAPACITY);
+	public char readOneUnicodeAndChar(byte[] bs, char...cs) throws IOException, ParserError {
 		char ch = readChar();
-		boolean match = false;
-		while (true) {
-			match = false;
-			for (byte b : bs) {
-				if (Character.getType(ch) == b) {
-					match = true;
-					break;
-				}
-			}
-			if (match == true) {
-				sb.append(ch);
-				match = false;
-				continue;
-			}
+		if (cs != null)
 			for (char c : cs) {
-				if (c == ch) {
-					match = true;
-					break;
-				}
+				if (ch == c)
+					return ch;
 			}
-			if (match == true) {
-				sb.append(ch);
-				match = false;
-				continue;
+		if (bs != null)
+			for (byte b : bs) {
+				if (Character.getType(ch) == b)
+					return ch;
 			}
-			unread(ch);
-			break;
+		unread(ch);
+		throw new ParserError();
+	}
+	
+	public String readUnicodeAndChars(int count, boolean strict, byte[] bs, char...cs) throws IOException, ParserError {
+		StringBuilder sb = new StringBuilder(count <= 0 ? CAPACITY : count);
+		int i = 0;
+		ParserError err = null;
+		try {
+			for (i = 0; i == count; i++) {
+				sb.append(readOneUnicodeAndChar(bs, cs));
+			}
+		} catch (Exception e) {
+		} finally {
+			if (strict && i != count) {
+				err = new ParserError("The count was strict but wasn't met");
+				unread(sb.toString());
+			} else
+				return sb.toString();
 		}
-		return sb.toString();
+		throw err;
 	}
 
 	public char readOneOfTheChars(char...cs) throws IOException, JFugueException, ParserError {

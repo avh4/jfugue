@@ -28,6 +28,7 @@ import org.jfugue.JFugueException;
 import org.jfugue.factories.JFugueElementFactory;
 import org.jfugue.parsers.ParserContext;
 import org.jfugue.parsers.ParserError;
+import org.jfugue.visitors.ElementVisitor;
 
 /**
  * Represents voice changes, also known as <i>track changes</i>.

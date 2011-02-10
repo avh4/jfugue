@@ -10,6 +10,8 @@ import org.jfugue.parsers.ParserContext;
 import org.jfugue.parsers.ParserError;
 
 /**
+ * The base interface for combinatorial parsers.
+ * 
  * @author joshua
  *
  */

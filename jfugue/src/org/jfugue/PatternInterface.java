@@ -7,9 +7,9 @@ import java.io.Writer;
 import java.util.List;
 import java.util.Map;
 
-import org.jfugue.elements.ElementVisitor;
 import org.jfugue.elements.JFugueElement;
 import org.jfugue.extras.ReversePatternTransformer;
+import org.jfugue.visitors.ElementVisitor;
 
 public interface PatternInterface extends JFugueElement {
 

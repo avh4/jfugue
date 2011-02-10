@@ -1,11 +1,10 @@
-package org.jfugue.extras;
+package org.jfugue.visitors;
 
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.jfugue.DefaultElementVisitor;
 import org.jfugue.Pattern;
 import org.jfugue.elements.ChannelPressure;
 import org.jfugue.elements.Controller;

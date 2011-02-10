@@ -1,10 +1,8 @@
-package org.jfugue.extras;
+package org.jfugue.visitors;
 
-import org.jfugue.DefaultElementVisitor;
 import org.jfugue.ParserListener;
 import org.jfugue.elements.ChannelPressure;
 import org.jfugue.elements.Controller;
-import org.jfugue.elements.ElementVisitor;
 import org.jfugue.elements.Instrument;
 import org.jfugue.elements.KeySignature;
 import org.jfugue.elements.Layer;

@@ -37,6 +37,7 @@ import org.jfugue.factories.NoteFactory;
 import org.jfugue.factories.NoteFactory.NoteContext;
 import org.jfugue.parsers.ParserContext;
 import org.jfugue.parsers.ParserError;
+import org.jfugue.visitors.ElementVisitor;
 
 /**
  * Contains all information necessary for a musical note, including

@@ -3,8 +3,8 @@ package org.jfugue.test;
 
 import org.jfugue.MusicStringParser;
 import org.jfugue.Pattern;
-import org.jfugue.extras.ListenerToVisitorAdaptor;
-import org.jfugue.extras.LoggingVisitor;
+import org.jfugue.visitors.ListenerToVisitorAdaptor;
+import org.jfugue.visitors.LoggingVisitor;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;

@@ -24,6 +24,8 @@ package org.jfugue.elements;
 
 import java.io.Serializable;
 
+import org.jfugue.visitors.ElementVisitor;
+
 /**
  * This is the base class for the JFugue elements, including
  * Voice, Instrument, Note, Controller, and Tempo.  It requires that

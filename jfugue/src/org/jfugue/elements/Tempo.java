@@ -30,6 +30,7 @@ import org.jfugue.factories.JFugueElementFactory;
 import org.jfugue.parsers.ParserContext;
 import org.jfugue.parsers.ParserError;
 import org.jfugue.util.MapUtils;
+import org.jfugue.visitors.ElementVisitor;
 
 /**
  * Represents tempo changes. Tempo is kept for the whole song, and is

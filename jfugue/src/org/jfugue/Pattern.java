@@ -30,10 +30,10 @@ import java.util.Map;
 
 
 import org.jfugue.elements.AbstractPattern;
-import org.jfugue.elements.ElementVisitor;
 import org.jfugue.elements.JFugueElement;
 import org.jfugue.extras.GetInstrumentsUsedTool;
-import org.jfugue.extras.ListenerToVisitorAdaptor;
+import org.jfugue.visitors.ElementVisitor;
+import org.jfugue.visitors.ListenerToVisitorAdaptor;
 
 /**
  * This class represents a segment of music.  By representing segments of music

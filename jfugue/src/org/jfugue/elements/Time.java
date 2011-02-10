@@ -28,6 +28,7 @@ import org.jfugue.JFugueException;
 import org.jfugue.factories.JFugueElementFactory;
 import org.jfugue.parsers.ParserContext;
 import org.jfugue.parsers.ParserError;
+import org.jfugue.visitors.ElementVisitor;
 
 /**
  * Represents a timing value, which can be used to indicate when certain events are played.

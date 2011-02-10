@@ -33,14 +33,19 @@ import org.jfugue.elements.Voice;
  */
 public class CanonicalPatternTransformer extends PatternTransformer {
 
-	private LinkedList<JFugueElement> elements = new LinkedList<JFugueElement>();
+	public CanonicalPatternTransformer() {
+		
+	}
 
+	protected List<List<JFugueElement>> voices;
+	protected int activeVoice = 0;
+	
 	protected List<JFugueElement> getElements() {
-		return elements;
+		return voices.get(activeVoice);
 	}
 
 	protected void addElement(JFugueElement element) {
-		elements.add(element);
+		voices.get(activeVoice).add(element);
 	}
 
 	/*
@@ -49,8 +54,11 @@ public class CanonicalPatternTransformer extends PatternTransformer {
 	 * @see org.jfugue.PatternTool#processResult(java.lang.Object)
 	 */
 	protected PatternInterface processResult(PatternInterface result) {
-		for (JFugueElement element : getElements()) {
-			result.add(element);
+		for (int i = 0; i < voices.size(); i++) {
+			List<JFugueElement> elements = voices.get(i);
+			if (elements.size() > 1)
+				for (JFugueElement element : elements)
+					result.add(element);
 		}
 		return result;
 	}
@@ -69,7 +77,7 @@ public class CanonicalPatternTransformer extends PatternTransformer {
 	}
 
 	public void voiceEvent(Voice voice) {
-		addUniqueSinceLast(voice);
+		activeVoice = voice.getVoice();
 	}
 
 	public void tempoEvent(Tempo tempo) {
@@ -77,7 +85,6 @@ public class CanonicalPatternTransformer extends PatternTransformer {
 	}
 
 	public void instrumentEvent(Instrument instrument) {
-		// TODO This is a slight problem
 		addElement(instrument);
 	}
 
@@ -140,9 +147,7 @@ public class CanonicalPatternTransformer extends PatternTransformer {
 	static {
 		Map<Class<? extends JFugueElement>, JFugueElement> last = new HashMap<Class<? extends JFugueElement>, JFugueElement>();
 		last.put(Tempo.class, new Tempo(120));
-		last.put(Voice.class, new Voice((byte) 0));
 		lastDef = Collections.unmodifiableMap(last);
-		;
 	}
 
 	/*
@@ -151,14 +156,17 @@ public class CanonicalPatternTransformer extends PatternTransformer {
 	 * @see org.jfugue.PatternTransformer#initResult(org.jfugue.Pattern)
 	 */
 	protected PatternInterface initResult(Pattern pattern) {
-		elements.clear();
+		voices = new LinkedList<List<JFugueElement>>();
+		for (int i = 0; i < 16; i++) {
+			List<JFugueElement> l = new LinkedList<JFugueElement>();
+			l.add(new Voice((byte) i));
+		}
 		last.clear();
 
 		// The defaults
 		last.putAll(lastDef);
 
 		PatternInterface nPattern = new Pattern();
-		nPattern.setMusicString("");
 		return nPattern;
 	}
 

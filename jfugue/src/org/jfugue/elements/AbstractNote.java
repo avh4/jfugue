@@ -1,5 +1,7 @@
 package org.jfugue.elements;
 
+import org.jfugue.visitors.ElementVisitor;
+
 @SuppressWarnings("serial")
 public class AbstractNote implements JFugueElement {
 

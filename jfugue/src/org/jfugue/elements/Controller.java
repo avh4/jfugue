@@ -30,6 +30,7 @@ import org.jfugue.factories.JFugueElementFactory;
 import org.jfugue.parsers.ParserContext;
 import org.jfugue.parsers.ParserError;
 import org.jfugue.util.MapUtils;
+import org.jfugue.visitors.ElementVisitor;
 
 /**
  * Contains information for MIDI Controller Events.
@@ -482,6 +483,8 @@ public final class Controller implements JFugueElement
     
     public void acceptVisitor(ElementVisitor visitor) {
     	visitor.visit(this);
+    	if (coarse != null)
+    		visitor.visit(coarse);
     }
     
 	public static class Factory extends JFugueElementFactory<Controller> {

@@ -6,8 +6,8 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import org.jfugue.elements.ElementVisitor;
 import org.jfugue.elements.Measure;
+import org.jfugue.visitors.ElementVisitor;
 import org.junit.Before;
 import org.junit.Test;
 

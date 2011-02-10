@@ -6,6 +6,7 @@ package org.jfugue.elements;
 import java.util.List;
 
 import org.jfugue.factories.NoteFactory.NoteContext;
+import org.jfugue.visitors.ElementVisitor;
 
 /**
  * @author joshua
