@@ -9,6 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import static org.junit.Assert.*;
 
 public class ElementVisitorTest {
 
@@ -23,13 +24,11 @@ public class ElementVisitorTest {
 	public void tearDown() throws Exception {
 	}
 
-	@Ignore("Maven doesn't like this for some reason")
 	@Test
 	public void testLoggingVisitor() throws Exception {
 		MusicStringParser parser = new MusicStringParser();
 		parser.addParserListener(new ListenerToVisitorAdaptor(loggingVisitor));
 		parser.parse(new Pattern("Cmaj C D | T160 V1 A B C"));
-		System.out.println(loggingVisitor.toString());
+		assertEquals("[visitTempo(T120), visitNote(C3q), visitNote(+E3q), visitNote(+G3q), visitNote(C5q), visitNote(D5q), visitMeasure(|), visitTempo(T160), visitVoice(V1), visitNote(A5q), visitNote(B5q), visitNote(C5q)]", loggingVisitor.toString());
 	}
-
 }
