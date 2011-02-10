@@ -91,7 +91,7 @@ public class Rhythm implements Serializable
     public void setLayer(int layer, String rhythmString)
     {
         if ((layer < 0) || (layer > MAX_LAYERS)) {
-            throw new JFugueException(JFugueException.LAYER_EXC, Integer.toString(layer), rhythmString);
+            throw new JFugueException(JFugueException.LAYER_EXC, Integer.toString(layer), rhythmString); // TODO Something else
         }
         layers[layer] = rhythmString;
     }
@@ -109,7 +109,7 @@ public class Rhythm implements Serializable
     public void setVoice(int voice, String rhythmString)
     {
         if ((voice < 0) || (voice > MAX_LAYERS) || (voice == PERCUSSION_TRACK)) {
-            throw new JFugueException(JFugueException.VOICE_EXC, Integer.toString(voice), rhythmString);
+            throw new JFugueException(JFugueException.VOICE_EXC, Integer.toString(voice), rhythmString); // TODO Something else
         }
         voices[voice] = rhythmString;
     }
@@ -136,7 +136,7 @@ public class Rhythm implements Serializable
     public void setVoiceDetails(int voice, String musicString)
     {
         if ((voice < 0) || (voice > MAX_LAYERS) || (voice == PERCUSSION_TRACK)) {
-            throw new JFugueException(JFugueException.VOICE_EXC, Integer.toString(voice), musicString);
+            throw new JFugueException(JFugueException.VOICE_EXC, Integer.toString(voice), musicString); // TODO Something else
         }
         voiceDetails[voice] = musicString;
     }

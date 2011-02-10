@@ -22,11 +22,11 @@
 
 package org.jfugue.extras;
 
-import org.jfugue.MusicStringParser;
 import org.jfugue.ParserListenerAdapter;
 import org.jfugue.PatternInterface;
 import org.jfugue.elements.Note;
 import org.jfugue.elements.Voice;
+import org.jfugue.parsers.MusicStringParser;
 
 
 

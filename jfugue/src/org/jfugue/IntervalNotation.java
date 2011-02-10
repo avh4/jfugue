@@ -23,6 +23,7 @@
 package org.jfugue;
 
 import org.jfugue.elements.Note;
+import org.jfugue.parsers.MusicStringParser;
 
 
 /**
@@ -86,7 +87,7 @@ public class IntervalNotation
                         intervalValue = Byte.valueOf(intervalString);
                     } catch (NumberFormatException e)
                     {
-                        throw new JFugueException(JFugueException.EXPECTED_BYTE, intervalString, tokens[i]);
+                        throw new JFugueException(JFugueException.EXPECTED_BYTE, intervalString, tokens[i]); // TODO Something else
                     }
 
                     buddy.append("[");

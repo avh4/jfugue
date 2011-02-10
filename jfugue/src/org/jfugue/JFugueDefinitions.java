@@ -53,7 +53,7 @@ public final class JFugueDefinitions
      * controller events, and some controller values.
      * @param dictionaryMap the dictionary instantiated by the parser
      */
-    protected static void populateDictionary(Map<String, String> dictionaryMap)
+    public static void populateDictionary(Map<String, String> dictionaryMap)
     {
     	dictionaryMap.putAll(DICT_MAP);
 //        //

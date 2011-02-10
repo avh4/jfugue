@@ -1,8 +1,8 @@
 package org.jfugue.test;
 
 
-import org.jfugue.MusicStringParser;
 import org.jfugue.Pattern;
+import org.jfugue.parsers.MusicStringParser;
 import org.jfugue.visitors.ListenerToVisitorAdaptor;
 import org.jfugue.visitors.LoggingVisitor;
 import org.junit.After;

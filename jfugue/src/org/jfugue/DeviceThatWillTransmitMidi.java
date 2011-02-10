@@ -31,7 +31,8 @@ import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
 import javax.sound.midi.Transmitter;
 
-import org.jfugue.elements.Parser;
+import org.jfugue.parsers.MidiParser;
+import org.jfugue.parsers.Parser;
 
 
 /**

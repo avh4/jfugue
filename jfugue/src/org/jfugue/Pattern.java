@@ -32,6 +32,7 @@ import java.util.Map;
 import org.jfugue.elements.AbstractPattern;
 import org.jfugue.elements.JFugueElement;
 import org.jfugue.extras.GetInstrumentsUsedTool;
+import org.jfugue.parsers.MusicStringParser;
 import org.jfugue.visitors.ElementVisitor;
 import org.jfugue.visitors.ListenerToVisitorAdaptor;
 

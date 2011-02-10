@@ -20,13 +20,18 @@
  *
  */
 
-package org.jfugue;
+package org.jfugue.parsers;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.StringTokenizer;
 
+import org.jfugue.CollatedParserListener;
+import org.jfugue.JFugueDefinitions;
+import org.jfugue.JFugueException;
+import org.jfugue.ParserListener;
+import org.jfugue.ParserListenerAdapter;
+import org.jfugue.Pattern;
+import org.jfugue.PatternInterface;
 import org.jfugue.elements.ChannelPressure;
 import org.jfugue.elements.Controller;
 import org.jfugue.elements.Instrument;
@@ -35,7 +40,6 @@ import org.jfugue.elements.KeySignature;
 import org.jfugue.elements.Layer;
 import org.jfugue.elements.Measure;
 import org.jfugue.elements.Note;
-import org.jfugue.elements.Parser;
 import org.jfugue.elements.PitchBend;
 import org.jfugue.elements.PolyphonicPressure;
 import org.jfugue.elements.SystemExclusive;
@@ -60,7 +64,7 @@ import org.jfugue.elements.Voice;
  */
 public final class MusicStringParser extends Parser
 {
-    private Map<String, String> dictionaryMap;
+//    private Map<String, String> dictionaryMap;
     private byte keySig = 0;
     private boolean defaultTempoEnabled = true;
     
@@ -70,8 +74,10 @@ public final class MusicStringParser extends Parser
      */
     public MusicStringParser()
     {
-        dictionaryMap = new HashMap<String, String>();
-        JFugueDefinitions.populateDictionary(dictionaryMap);
+    	super();
+//    	Map<String,String> dict = new HashMap<String, String>();
+//        JFugueDefinitions.populateDictionary(dict);
+//        dictionaryMap = dict;
     }
 
     /**
@@ -155,7 +161,7 @@ public final class MusicStringParser extends Parser
     {
         // If there are any spaces, get out
         if (s.indexOf(" ") != -1) {
-            throw new JFugueException(JFugueException.PARSER_SPACES_EXC,s,s);
+            throw new ParserError(ParserError.PARSER_SPACES_EXC,s,s);
         }
 
         s = s.toUpperCase();
@@ -511,7 +517,7 @@ public final class MusicStringParser extends Parser
         definition.replace('~', ' ');
         word = word.toUpperCase();
         trace("Dictionary Definition element: word = ",word,", value = ",definition);
-        dictionaryMap.put(word, definition);
+        addDict(word, definition);
     }
 
     class NoteContext
@@ -559,10 +565,10 @@ public final class MusicStringParser extends Parser
      * @param s the token that contains the collected note element
      * @throws JFugueException if there is a problem parsing the element
      */
-    private void parseCollectedNoteElement(String s) throws JFugueException
+    private void parseCollectedNoteElement(String s) throws ParserError
     {
         if (s.indexOf("_") > -1) {
-            throw new JFugueException("The character '_' is not a valid character in this collected note element: "+s);
+            throw new ParserError("The character '_' is not a valid character in this collected note element: "+s);
         }
 
         // Break apart the collected note element: (C+E+G)q --> C, E, G; q
@@ -676,7 +682,7 @@ public final class MusicStringParser extends Parser
              case 'G' : context.noteNumber = 7; break;
              case 'A' : context.noteNumber = 9; break;
              case 'B' : context.noteNumber = 11; break;
-             default : throw new JFugueException(JFugueException.NOTE_EXC, s);
+             default : throw new ParserError(ParserError.NOTE_EXC, s);
          }
          index++;
 
@@ -731,10 +737,10 @@ public final class MusicStringParser extends Parser
             try {
                 context.octaveNumber = Byte.parseByte(octaveNumberString);
             } catch (NumberFormatException e) {
-                throw new JFugueException(JFugueException.OCTAVE_EXC, octaveNumberString, s);
+                throw new ParserError(ParserError.OCTAVE_EXC, octaveNumberString, s);
             }
             if (context.octaveNumber > 10) {
-                throw new JFugueException(JFugueException.OCTAVE_EXC, octaveNumberString, s);
+                throw new ParserError(ParserError.OCTAVE_EXC, octaveNumberString, s);
             }
         }
 
@@ -1058,7 +1064,7 @@ public final class MusicStringParser extends Parser
                 trace("Inversion is base on note: "+inversionRootNote);
 
                 if ((inversionRootNote > context.noteNumber + context.halfsteps[context.numHalfsteps-1]) || (inversionRootNote < context.noteNumber)) {
-                    throw new JFugueException(JFugueException.INVERSION_EXC);
+                    throw new ParserError(ParserError.INVERSION_EXC);
                 }
 
                 trace("Inverting "+context.noteNumber+" to be "+(context.noteNumber+12));
@@ -1411,46 +1417,46 @@ public final class MusicStringParser extends Parser
      * @returns the definition of the string
      * @throws JFugueException if there is a problem looking up bracketedString
      */
-    private String dictionaryLookup(String bracketedString) throws JFugueException
-    {
-        int indexOfOpeningBracket = bracketedString.indexOf("[");
-        int indexOfClosingBracket = bracketedString.indexOf("]");
-
-        String word = null;
-        if ((indexOfOpeningBracket != -1) && (indexOfClosingBracket != -1)) {
-            word = bracketedString.substring(indexOfOpeningBracket+1,indexOfClosingBracket);
-        }
-        else {
-            // It appears that "bracketedString" wasn't bracketed.
-            word = bracketedString;
-        }
-        word = word.toUpperCase();
-
-        String definition = (String)dictionaryMap.get(word);
-        while ((definition != null) && (dictionaryMap.containsKey(definition.toUpperCase()))) {
-            definition = (String)dictionaryMap.get(definition.toUpperCase());
-        }
-
-        // If there is no definition for this word, see if the word is actually a number.
-        if (null == definition) {
-            char ch = 0;
-            boolean isNumber = true;
-            for (int i=0; i < word.length(); i++) {
-                ch = word.charAt(i);
-                if ((!Character.isDigit(ch) && (ch != '.'))) {
-                    isNumber = false;
-                }
-            }
-            if (isNumber) {
-                trace("Dictionary lookup returning the number ",word);
-                return word;
-            } else {
-                throw new JFugueException(JFugueException.WORD_NOT_DEFINED_EXC,word,bracketedString);
-            }
-        }
-        trace("Word ",word," is defined as ",definition);
-        return definition;
-    }
+//    private String dictionaryLookup(String bracketedString) throws JFugueException
+//    {
+//        int indexOfOpeningBracket = bracketedString.indexOf("[");
+//        int indexOfClosingBracket = bracketedString.indexOf("]");
+//
+//        String word = null;
+//        if ((indexOfOpeningBracket != -1) && (indexOfClosingBracket != -1)) {
+//            word = bracketedString.substring(indexOfOpeningBracket+1,indexOfClosingBracket);
+//        }
+//        else {
+//            // It appears that "bracketedString" wasn't bracketed.
+//            word = bracketedString;
+//        }
+//        word = word.toUpperCase();
+//
+//        String definition = (String)dictionaryMap.get(word);
+//        while ((definition != null) && (dictionaryMap.containsKey(definition.toUpperCase()))) {
+//            definition = (String)dictionaryMap.get(definition.toUpperCase());
+//        }
+//
+//        // If there is no definition for this word, see if the word is actually a number.
+//        if (null == definition) {
+//            char ch = 0;
+//            boolean isNumber = true;
+//            for (int i=0; i < word.length(); i++) {
+//                ch = word.charAt(i);
+//                if ((!Character.isDigit(ch) && (ch != '.'))) {
+//                    isNumber = false;
+//                }
+//            }
+//            if (isNumber) {
+//                trace("Dictionary lookup returning the number ",word);
+//                return word;
+//            } else {
+//                throw new JFugueException(JFugueException.WORD_NOT_DEFINED_EXC,word,bracketedString);
+//            }
+//        }
+//        trace("Word ",word," is defined as ",definition);
+//        return definition;
+//    }
 
     /**
      * Look up a byte from the dictionary
@@ -1458,17 +1464,17 @@ public final class MusicStringParser extends Parser
      * @returns the byte value of the definition
      * @throws JFugueException if there is a problem getting a byte from the dictionary look-up
      */
-    private byte getByteFromDictionary(String bracketedString) throws JFugueException
-    {
-        String definition = dictionaryLookup(bracketedString);
-        Byte newbyte = null;
-        try {
-            newbyte = new Byte(definition);
-        } catch (NumberFormatException e) {
-            throw new JFugueException(JFugueException.EXPECTED_BYTE, definition, bracketedString);
-        }
-        return newbyte.byteValue();
-    }
+//    private byte getByteFromDictionary(String bracketedString) throws JFugueException
+//    {
+//        String definition = dictionaryLookup(bracketedString);
+//        Byte newbyte = null;
+//        try {
+//            newbyte = new Byte(definition);
+//        } catch (NumberFormatException e) {
+//            throw new JFugueException(JFugueException.EXPECTED_BYTE, definition, bracketedString);
+//        }
+//        return newbyte.byteValue();
+//    }
 
     /**
      * Look up a long from the dictionary
@@ -1476,17 +1482,17 @@ public final class MusicStringParser extends Parser
      * @returns the long value of the definition
      * @throws JFugueException if there is a problem getting a long from the dictionary look-up
      */
-    private long getLongFromDictionary(String bracketedString) throws JFugueException
-    {
-        String definition = dictionaryLookup(bracketedString);
-        Long newlong = null;
-        try {
-            newlong = new Long(definition);
-        } catch (NumberFormatException e) {
-            throw new JFugueException(JFugueException.EXPECTED_LONG,definition,bracketedString);
-        }
-        return newlong.longValue();
-    }
+//    private long getLongFromDictionary(String bracketedString) throws JFugueException
+//    {
+//        String definition = dictionaryLookup(bracketedString);
+//        Long newlong = null;
+//        try {
+//            newlong = new Long(definition);
+//        } catch (NumberFormatException e) {
+//            throw new JFugueException(JFugueException.EXPECTED_LONG,definition,bracketedString);
+//        }
+//        return newlong.longValue();
+//    }
 
     /**
      * Look up an int from the dictionary
@@ -1494,17 +1500,17 @@ public final class MusicStringParser extends Parser
      * @returns the int value of the definition
      * @throws JFugueException if there is a problem getting a int from the dictionary look-up
      */
-    private int getIntFromDictionary(String bracketedString) throws JFugueException
-    {
-        String definition = dictionaryLookup(bracketedString);
-        Integer newint = null;
-        try {
-            newint = new Integer(definition);
-        } catch (NumberFormatException e) {
-            throw new JFugueException(JFugueException.EXPECTED_INT,definition,bracketedString);
-        }
-        return newint.intValue();
-    }
+//    private int getIntFromDictionary(String bracketedString) throws JFugueException
+//    {
+//        String definition = dictionaryLookup(bracketedString);
+//        Integer newint = null;
+//        try {
+//            newint = new Integer(definition);
+//        } catch (NumberFormatException e) {
+//            throw new JFugueException(JFugueException.EXPECTED_INT,definition,bracketedString);
+//        }
+//        return newint.intValue();
+//    }
 
     /**
      * Look up a double from the dictionary
@@ -1512,17 +1518,17 @@ public final class MusicStringParser extends Parser
      * @returns the double value of the definition
      * @throws JFugueException if there is a problem getting a double from the dictionary look-up
      */
-    private double getDoubleFromDictionary(String bracketedString) throws JFugueException
-    {
-        String definition = dictionaryLookup(bracketedString);
-        Double newdouble = null;
-        try {
-            newdouble = new Double(definition);
-        } catch (NumberFormatException e) {
-            throw new JFugueException(JFugueException.EXPECTED_DOUBLE,definition,bracketedString);
-        }
-        return newdouble.doubleValue();
-    }
+//    private double getDoubleFromDictionary(String bracketedString) throws JFugueException
+//    {
+//        String definition = dictionaryLookup(bracketedString);
+//        Double newdouble = null;
+//        try {
+//            newdouble = new Double(definition);
+//        } catch (NumberFormatException e) {
+//            throw new JFugueException(JFugueException.EXPECTED_DOUBLE,definition,bracketedString);
+//        }
+//        return newdouble.doubleValue();
+//    }
 
     /**
      * Checks whether a token is valid.  This method is provided for testing purposes,

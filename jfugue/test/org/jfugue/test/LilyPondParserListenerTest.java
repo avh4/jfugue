@@ -1,9 +1,9 @@
 package org.jfugue.test;
 
-import org.jfugue.MusicStringParser;
 import org.jfugue.Pattern;
 import org.jfugue.PatternInterface;
 import org.jfugue.integration.lilypond.LilyPondParserListener;
+import org.jfugue.parsers.MusicStringParser;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
