@@ -12,9 +12,9 @@ public class ParserError extends JFugueException {
 	public static final String NOT_READY = Messages.getString("ParserError.NOT_READY"); //$NON-NLS-1$
 	public static final String NOTE_OCTAVE_EXC = Messages.getString("ParserError.NOTE_OCTAVE_EXC"); //$NON-NLS-1$
 	public static final String NOTE_VELOCITY_EXC = Messages.getString("ParserError.NOTE_VELOCITY_EXC"); //$NON-NLS-1$
-	public static final String NOTE_EXC = "Note %s is not a valid drum sound name, or is not in the range 0 - 127.";
-	public static final String OCTAVE_EXC = "Octave %s is not a number, or is not in the range 0 - 10.";
-    public static final String PARSER_SPACES_EXC = "The token %s sent to Parser.parse() contains spaces.  A token is one unit of musical data, and should not contain a space.";
+	public static final String NOTE_EXC = Messages.getString("ParserError.NOTE_EXC"); //$NON-NLS-1$
+	public static final String OCTAVE_EXC = Messages.getString("ParserError.OCTAVE_EXC"); //$NON-NLS-1$
+    public static final String PARSER_SPACES_EXC = Messages.getString("ParserError.PARSER_SPACES_EXC"); //$NON-NLS-1$
 	
 	protected Object[] args = null;
 	
