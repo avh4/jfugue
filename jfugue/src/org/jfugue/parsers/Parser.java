@@ -20,14 +20,31 @@
  *  
  */
 
-package org.jfugue.elements;
+package org.jfugue.parsers;
+
+import java.util.HashMap;
 
 import javax.swing.event.EventListenerList;
 
+import org.jfugue.Environment;
+import org.jfugue.Environment.Error;
+import org.jfugue.JFugueDefinitions;
+import org.jfugue.JFugueException;
 import org.jfugue.ParserListener;
 import org.jfugue.ParserProgressListener;
-import org.jfugue.parsers.FireEventProxy;
-
+import org.jfugue.elements.ChannelPressure;
+import org.jfugue.elements.Controller;
+import org.jfugue.elements.Instrument;
+import org.jfugue.elements.KeySignature;
+import org.jfugue.elements.Layer;
+import org.jfugue.elements.Measure;
+import org.jfugue.elements.Note;
+import org.jfugue.elements.PitchBend;
+import org.jfugue.elements.PolyphonicPressure;
+import org.jfugue.elements.SystemExclusive;
+import org.jfugue.elements.Tempo;
+import org.jfugue.elements.Time;
+import org.jfugue.elements.Voice;
 
 /**
  * You may notice that there is no parse() method in the Parser class!
@@ -44,14 +61,81 @@ public abstract class Parser
     { 
         progressListenerList = new EventListenerList();
         listenerList = new EventListenerList ();
-        
+        environment = new org.jfugue.Environment(new HashMap<String, String>(JFugueDefinitions.DICT_MAP),
+        		eventProxy);
         // The Parser could add itself as a ParserProgressListener.
     }
+ 
+    private Environment environment;
+    
+    
     
     // Logging methods
     ///////////////////////////////////////////
 
-    /** Pass this value to setTracing( ) to turn tracing off.  Tracing is off by default. */
+    /******* Delegate to Environment *******/
+    
+    /**
+	 * @param key
+	 * @param val
+	 * @see org.jfugue.Environment#add(java.lang.String, java.lang.Object)
+	 */
+	public void addDict(String key, Object val) {
+		environment.add(key, val);
+	}
+
+	/**
+	 * @param bracketedString
+	 * @return
+	 * @throws Error
+	 * @see org.jfugue.Environment#getByteFromDictionary(java.lang.String)
+	 */
+	public byte getByteFromDictionary(String bracketedString) throws Error {
+		return environment.getByteFromDictionary(bracketedString);
+	}
+
+	/**
+	 * @param bracketedString
+	 * @return
+	 * @throws Error
+	 * @see org.jfugue.Environment#getDoubleFromDictionary(java.lang.String)
+	 */
+	public double getDoubleFromDictionary(String bracketedString) throws Error {
+		return environment.getDoubleFromDictionary(bracketedString);
+	}
+
+	/**
+	 * @param bracketedString
+	 * @return
+	 * @throws Error
+	 * @see org.jfugue.Environment#getIntFromDictionary(java.lang.String)
+	 */
+	public int getIntFromDictionary(String bracketedString) throws Error {
+		return environment.getIntFromDictionary(bracketedString);
+	}
+
+	/**
+	 * @param bracketedString
+	 * @return
+	 * @throws JFugueException
+	 * @see org.jfugue.Environment#getLongFromDictionary(java.lang.String)
+	 */
+	public long getLongFromDictionary(String bracketedString)
+			throws JFugueException {
+		return environment.getLongFromDictionary(bracketedString);
+	}
+
+	/**
+	 * @return
+	 * @see org.jfugue.Environment#getKeySig()
+	 */
+	public KeySignature getKeySig() {
+		return environment.getKeySig();
+	}
+
+	/******* End delegate to Environment *******/
+	
+	/** Pass this value to setTracing( ) to turn tracing off.  Tracing is off by default. */
     public static final int TRACING_OFF = 0;
 
     /** Pass this value to setTracing( ) to turn tracing on.  Tracing is off by default. */

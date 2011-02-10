@@ -25,10 +25,10 @@ package org.jfugue.extras;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jfugue.MusicStringParser;
 import org.jfugue.ParserListenerAdapter;
 import org.jfugue.PatternInterface;
 import org.jfugue.elements.Instrument;
+import org.jfugue.parsers.MusicStringParser;
 
 /**
  * Returns a List<Byte> containing all of the instruments used in the given pattern.

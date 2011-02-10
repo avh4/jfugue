@@ -43,6 +43,7 @@ import org.jfugue.elements.SystemExclusive;
 import org.jfugue.elements.Tempo;
 import org.jfugue.elements.Time;
 import org.jfugue.elements.Voice;
+import org.jfugue.parsers.MusicStringParser;
 
 
 import nu.xom.Attribute;

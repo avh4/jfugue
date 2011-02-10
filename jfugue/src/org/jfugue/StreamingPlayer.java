@@ -27,6 +27,8 @@ import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequencer;
 import javax.sound.midi.Synthesizer;
 
+import org.jfugue.parsers.MusicStringParser;
+
 
 /**
  * Provides a player that can be given new MusicStrings at runtime.  The

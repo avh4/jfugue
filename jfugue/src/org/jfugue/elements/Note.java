@@ -30,11 +30,11 @@ import java.util.regex.Pattern;
 
 import org.jfugue.JFugueException;
 import org.jfugue.Messages;
-import org.jfugue.MusicStringParser;
 import org.jfugue.factories.JFugueElementFactory;
 import org.jfugue.factories.JFugueElementFactoryManager;
 import org.jfugue.factories.NoteFactory;
 import org.jfugue.factories.NoteFactory.NoteContext;
+import org.jfugue.parsers.MusicStringParser;
 import org.jfugue.parsers.ParserContext;
 import org.jfugue.parsers.ParserError;
 import org.jfugue.visitors.ElementVisitor;
@@ -241,6 +241,7 @@ public class Note extends AbstractNote {
         {
             int intNoteNumber = (octaveNumber * 12) + noteNumber;
             if ( intNoteNumber > 127) {
+            	// TODO Something else - maybe we need a NoteError class
                 throw new JFugueException(JFugueException.NOTE_OCTAVE_EXC, Integer.toString(intNoteNumber), "");
             }
             noteNumber = (byte)intNoteNumber;

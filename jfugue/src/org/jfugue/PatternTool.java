@@ -1,5 +1,7 @@
 package org.jfugue;
 
+import org.jfugue.parsers.MusicStringParser;
+
 
 public abstract class PatternTool<R> extends ParserListenerAdapter {
 
