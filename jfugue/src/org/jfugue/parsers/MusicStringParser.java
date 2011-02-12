@@ -133,10 +133,8 @@ public final class MusicStringParser extends Parser
         String[] tokens = pattern.getTokens();
 
         // If the user hasn't specified a tempo as the first token, use the default of 120
-        if (isDefaultTempoEnabled() && tokens.length > 0) {
-            if (tokens[0].toUpperCase().charAt(0) != 'T') {
-                parseTempoElement("T120");
-            }
+        if (requiresDefaultTempo(tokens)) {
+            parseTempoElement("T120");
         }
         
         int counter = 0;
@@ -146,6 +144,10 @@ public final class MusicStringParser extends Parser
             counter++;
             fireProgressReported("Parsing music string...", counter, tokens.length);
         }
+    }
+
+    private boolean requiresDefaultTempo(String[] tokl) {
+	return isDefaultTempoEnabled() && tokl.length > 0 && tokl[0].toUpperCase().charAt(0) != 'T';
     }
 
     /**
