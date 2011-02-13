@@ -369,27 +369,7 @@ public class Note extends AbstractNote {
      */
     public String getVerifyString()
     {
-        StringBuilder buddy = new StringBuilder();
-        buddy.append("Note: value=");
-        buddy.append(getValue());
-        buddy.append(", duration=");
-        buddy.append(getDecimalDuration());
-        buddy.append(", startTie=");
-        buddy.append(isStartOfTie() ? "T" : "F");
-        buddy.append(", endTie=");
-        buddy.append(isEndOfTie() ? "T" : "F");
-        buddy.append(", attack=");
-        buddy.append(getAttackVelocity());
-        buddy.append(", decay=");
-        buddy.append(getDecayVelocity());
-        buddy.append(", isFirst=");
-        buddy.append(getType() == FIRST ? "T" : "F");
-        buddy.append(", isParallel=");
-        buddy.append(getType() == PARALLEL ? "T" : "F");
-        buddy.append(", isSequential=");
-        buddy.append(getType() == SEQUENTIAL ? "T" : "F");
-
-        return buddy.toString();
+        return createVerifyString(getValue(), getDecimalDuration(), isStartOfTie(), isEndOfTie(), getAttackVelocity(), getDecayVelocity(), getType()==FIRST, getType() == PARALLEL, getType() == SEQUENTIAL);
     }
 
     public int hashCode() {

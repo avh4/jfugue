@@ -29,6 +29,15 @@ public class NoteTest {
     }
 
     @Test
+    public void testFourArgConstructor() {
+        Note n = new Note((byte)10,20,(byte)30,(byte)40);
+        assertEquals(10,n.getValue());
+        assertEquals(20,n.getDuration());
+        assertEquals(30,n.getAttackVelocity());
+        assertEquals(40,n.getDecayVelocity());
+    }
+
+    @Test
     public void testIsNumericNote() {
         assertFalse("Note should not be numeric by default", note.isNumericNote());
     }
@@ -83,4 +92,43 @@ public class NoteTest {
     public void testEqualsDifferentValue() {
         assertFalse("Notes with different values should not be equal", Note.createNote("Cb4/0.5").equals(Note.createNote("D")));
     }
+
+    @Test
+    public void testGetVerifyString_Simple() {
+        assertEquals("Note: value=60, duration=0.25, startTie=F, endTie=F, attack=64, decay=64, isFirst=T, isParallel=F, isSequential=F", new Note((byte)60).getVerifyString());
+    }
+
+    @Test
+    public void testGetVerifyString_startTie() {
+        Note note =  new Note((byte)60);
+        note.setStartOfTie(true);
+        assertEquals("Note: value=60, duration=0.25, startTie=T, endTie=F, attack=64, decay=64, isFirst=T, isParallel=F, isSequential=F",note.getVerifyString());
+    }
+
+    @Test
+    public void testGetVerifyString_endTie() {
+        Note note =  new Note((byte)60);
+        note.setEndOfTie(true);
+        assertEquals("Note: value=60, duration=0.25, startTie=F, endTie=T, attack=64, decay=64, isFirst=T, isParallel=F, isSequential=F",note.getVerifyString());
+    }
+
+    @Test
+    public void testGetVerifyString_Parallel() {
+        Note note =  new Note((byte)60);
+        note.setType(Note.PARALLEL);
+        assertEquals("Note: value=60, duration=0.25, startTie=F, endTie=F, attack=64, decay=64, isFirst=F, isParallel=T, isSequential=F",note.getVerifyString());
+    }
+
+    @Test
+    public void testGetVerifyString_Sequential() {
+        Note note =  new Note((byte)60);
+        note.setType(Note.SEQUENTIAL);
+        assertEquals("Note: value=60, duration=0.25, startTie=F, endTie=F, attack=64, decay=64, isFirst=F, isParallel=F, isSequential=T",note.getVerifyString());
+    }
+
+    @Test
+    public void testGetVerifyStringFromFourArgConstructor() {
+        assertEquals("Note: value=51, duration=0.5, startTie=F, endTie=F, attack=53, decay=54, isFirst=T, isParallel=F, isSequential=F", new Note((byte)51, 0.5, (byte)53, (byte)54).getVerifyString());
+    }
+
 }
