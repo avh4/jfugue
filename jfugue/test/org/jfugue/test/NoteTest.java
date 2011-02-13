@@ -17,15 +17,25 @@ import org.junit.Test;
 
 public class NoteTest {
     private static final byte NOTE_DEFAULT_VELOCITY = Note.DEFAULT_VELOCITY + 10;
-
+    Note note;
     @Before
     public void setUp() {
-
+        note = new Note();
     }
 
     @After
     public void tearDown() {
 
+    }
+
+    @Test
+    public void testIsNumericNote() {
+        assertFalse("Note should not be numeric by default", note.isNumericNote());
+    }
+
+    @Test
+    public void testIsChord() {
+        assertFalse("Note should be not be a chord by default", note.isNumericNote());
     }
 
     @Test

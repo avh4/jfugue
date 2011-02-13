@@ -54,29 +54,31 @@ import org.jfugue.visitors.ElementVisitor;
  */
 public class Note extends AbstractNote {
  
-	protected byte attackVelocity = DEFAULT_VELOCITY;
+    protected byte attackVelocity = DEFAULT_VELOCITY;
     protected byte decayVelocity = DEFAULT_VELOCITY;
     protected double decimalDuration = 0.0;
     protected boolean isAdjustedForKey = false;
     protected boolean isNatural = false;
     protected boolean isChord = false;
     protected boolean isNumericNote = false;
+
     /**
-	 * @return the isNumericNote
-	 */
-	public boolean isNumericNote() {
-		return isNumericNote;
-	}
+     * @return the isNumericNote
+     */
+    public boolean isNumericNote() {
+        return isNumericNote;
+    }
+
+    /**
+     * @return the isChord
+     */
+    public boolean isChord() {
+        return isChord;
+    }
+
 	
 	public void setValue(int value) {
 		this.value = (byte) value;
-	}
-
-	/**
-	 * @return the isChord
-	 */
-	public boolean isChord() {
-		return isChord;
 	}
 
 	protected byte octave = 0;
