@@ -61,33 +61,11 @@ public class Note extends AbstractNote {
     protected boolean isNatural = false;
     protected boolean isChord = false;
     protected boolean isNumericNote = false;
-
-    /**
-     * @return the isNumericNote
-     */
-    public boolean isNumericNote() {
-        return isNumericNote;
-    }
-
-    /**
-     * @return the isChord
-     */
-    public boolean isChord() {
-        return isChord;
-    }
-
-	
-	public void setValue(int value) {
-		this.value = (byte) value;
-	}
-
-	protected byte octave = 0;
+    protected byte octave = 0;
     protected boolean rest = false;
- 
     protected byte value = 0;
-    
 
-	/**
+    /**
      * Instantiates a new Note object.
      */
     public Note()
@@ -182,6 +160,24 @@ public class Note extends AbstractNote {
 		type = c.getType();
 		isNatural = c.isNatural();
 	}
+
+    /**
+     * @return the isNumericNote
+     */
+    public boolean isNumericNote() {
+        return isNumericNote;
+    }
+
+    /**
+     * @return the isChord
+     */
+    public boolean isChord() {
+        return isChord;
+    }
+
+    public void setValue(int value) {
+        this.value = (byte) value;
+    }
     
     public void acceptVisitor(ElementVisitor visitor) {
 //    	switch (getType()) {
