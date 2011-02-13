@@ -46,7 +46,7 @@ public class NoteTest {
     @Test
     public void testIsChord() {
         Note note = new Note();
-        assertFalse("Note should be not be a chord by default", note.isNumericNote());
+        assertFalse("Note should be not be a chord by default", note.isChord());
     }
 
     @Test
