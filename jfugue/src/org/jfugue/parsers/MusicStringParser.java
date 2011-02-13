@@ -136,18 +136,20 @@ public final class MusicStringParser extends Parser
         if (requiresDefaultTempo(tokens)) {
             parseTempoElement("T120");
         }
-        
-        int counter = 0;
-        for (int t=0; t < tokens.length; t++)
-        {
-            parseToken(tokens[t]);
-            counter++;
-            fireProgressReported("Parsing music string...", counter, tokens.length);
-        }
+
+        parseTokens(tokens);
     }
 
     private boolean requiresDefaultTempo(String[] tokl) {
-	return isDefaultTempoEnabled() && tokl.length > 0 && tokl[0].toUpperCase().charAt(0) != 'T';
+        return isDefaultTempoEnabled() && tokl.length > 0 && tokl[0].toUpperCase().charAt(0) != 'T';
+    }
+
+    private void parseTokens(String [] tokl) {
+        for (int t=0; t < tokl.length; t++)
+        {
+            parseToken(tokl[t]);
+            fireProgressReported("Parsing music string...", t + 1, tokl.length);
+        }        
     }
 
     /**
