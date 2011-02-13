@@ -50,6 +50,19 @@ public class NoteTest {
     }
 
     @Test
+    public void testIsAdjustedForKey() {
+        Note note = new Note();
+        assertFalse("Note should be not be a adjusted for key by default", note.isAdjustedForKey());
+    }
+
+    @Test
+    public void testSetAdjustedForKey() {
+        Note note = new Note();
+        note.setAdjustedForKey(true);
+        assertTrue(note.isAdjustedForKey());
+    }
+
+    @Test
     public void testSetDecimalDuration() {
         Note n1 = new Note((byte) 60, 0.5);
         assertEquals("Decimal duration and long duration don't match when setting decimal duration",n1.getDecimalDuration(), (n1.getDuration() / MusicStringParser.SEQUENCE_RES), 0.01);
