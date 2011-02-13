@@ -180,18 +180,6 @@ public class Note extends AbstractNote {
     }
     
     public void acceptVisitor(ElementVisitor visitor) {
-//    	switch (getType()) {
-//		case FIRST:
-//			visitor.visitNote(this);
-//			break;
-//		case PARALLEL:
-//			visitor.visitParallelNote(this);
-//			break;
-//		case SEQUENTIAL:
-//			visitor.visitSequentialNote(this);
-//		default:
-//			break;
-//		}
     	visitor.visit(this);
     }
 
@@ -476,19 +464,6 @@ public class Note extends AbstractNote {
 		// TODO Auto-generated method stub
 		
 	}
-    
-//    public Chord getChord() {
-//		return chord;
-//	}
-//    
-//    public void setChord(String name, byte...bs) {
-//		chord = this.new Chord(name, bs);
-//	}
-//    
-//    public void setChord(Chord chord) {
-//		if (chord != null && chord.getRoot() == this)
-//			this.chord = chord;
-//	}
 
     /**
      * Sets the decay velocity for this note.
