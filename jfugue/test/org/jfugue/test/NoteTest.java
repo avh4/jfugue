@@ -139,9 +139,16 @@ public class NoteTest {
     }
 
     @Test
-    public void testSetValue() {
+    public void testSetValue_int() {
 	Note note = new Note((byte)55);
 	note.setValue(65);
 	assertEquals(65,note.getValue());
+    }
+
+    @Test
+    public void testSetValue_byte() {
+	Note note = new Note((byte)55);
+	note.setValue((byte)75);
+	assertEquals(75,note.getValue());
     }
 }
