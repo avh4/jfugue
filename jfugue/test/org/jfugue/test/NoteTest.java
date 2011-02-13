@@ -17,7 +17,7 @@ import org.junit.Test;
 
 public class NoteTest {
 
-	private static final byte NOT_DEFAULT_VELOCITY = Note.DEFAULT_VELOCITY + 10;
+	private static final byte NOTE_DEFAULT_VELOCITY = Note.DEFAULT_VELOCITY + 10;
 
 	@Before
 	public void setUp() throws Exception {
@@ -28,70 +28,48 @@ public class NoteTest {
 	}
 
 	@Test
-	public void testNoteDuration() throws Exception {
-		Note n1 = new Note((byte) 60, 0.5);
-		assertTrue(
-				"Decimal duration and long duration don't match when setting decimal duration",
-				n1.getDecimalDuration() == n1.getDuration()
-						/ MusicStringParser.SEQUENCE_RES);
-		n1 = new Note((byte) 60, (long) (MusicStringParser.SEQUENCE_RES * 0.5));
-		assertTrue(
-				"Decimal duration and long duration don't match when setting long duration",
-				((long) (MusicStringParser.SEQUENCE_RES * n1
-						.getDecimalDuration())) == n1.getDuration());
+	public void testSetDecimalDuration() {
+	    Note n1 = new Note((byte) 60, 0.5);
+	    assertEquals("Decimal duration and long duration don't match when setting decimal duration",n1.getDecimalDuration(), (n1.getDuration() / MusicStringParser.SEQUENCE_RES), 0.01);
+	}
+
+        @Test
+        public void testSetLongDuration() {
+	    Note n1 = new Note((byte) 60, (long) (MusicStringParser.SEQUENCE_RES * 0.5));
+	    assertEquals("Decimal duration and long duration don't match when setting long duration", n1.getDuration(), ((long) (MusicStringParser.SEQUENCE_RES * n1.getDecimalDuration())));
 	}
 	
 	@Test
-	public void testNoteNote() throws Exception {
-		Note n1 = new Note((byte)50, 0.5, NOT_DEFAULT_VELOCITY, NOT_DEFAULT_VELOCITY);
-		Note n2 = new Note(n1);
-		assertEquals("n1 does not egual n2", n1, n2);
+	public void testNoteCTorWithNoteArg() {
+            Note n1 = new Note((byte)50, 0.5, NOTE_DEFAULT_VELOCITY, NOTE_DEFAULT_VELOCITY);
+            Note n2 = new Note(n1);
+            assertEquals("Note constructed with Note argument should match argument", n1, n2);
 	}
 
 	@Test
 	public void testAcceptVisitor() throws Exception {
 		LoggingVisitor visitor = new LoggingVisitor();
-		String[] strNotes = new String[] {"C", "Cmaj"};
-		for (String string : strNotes) {
-			Note note = Note.createNote(string);
-			note.acceptVisitor(visitor);
-			System.out.println(note.getMusicString());
-			System.out.println(visitor.getLog().size());
-			System.out.println(visitor.toString());
-			visitor.clearLog();	
-		}
+		Note.createNote("C").acceptVisitor(visitor);
+		Note.createNote("Cmaj").acceptVisitor(visitor);
+		assertEquals("[visitNote(C5q), visitNote(C3q)]", visitor.toString());
 	}
 	
-//	@Ignore
 	@Test
 	public void testChords() {
 		Map<String, byte[]> chords = Note.Factory.CHORDS_MAP;
 		assertFalse("The chord map is empty", chords.isEmpty());
 		assertTrue("MAJ is not in CHORDS_MAP", chords.containsKey("MAJ"));
-		byte[] bs = chords.get("MAJ");
-		assertArrayEquals("MAJ is not as it should be", new byte[] { 4, 7 }, bs);
-		System.out.println("CHORD_RE: " + NoteFactory.CHORD_RE);
+		assertArrayEquals("MAJ intervals should be 4 & 7 semitones", new byte[] { 4, 7 }, chords.get("MAJ"));
 	}
-
-//	private void assertArrayEquals(String string, byte[] bs, byte[] bs2) {
-//		Byte[] bl = new Byte[bs.length];
-//		Byte[] bl2 = new Byte[bs2.length];
-//		for (int i = 0; i < bl.length; i++) {
-//			bl[i] = bs[i];
-//		}
-//		for (int i = 0; i < bl2.length; i++) {
-//			bl2[i] = bs2[i];
-//		}
-//
-//	}
 
 	@Test
-	public void testEquality() throws Exception {
-		String n1 = "Cb4/0.5", n2 = "D";
-		assertEquals("The two " + n1 + " are not equal", Note.createNote(n1),
-				Note.createNote(n1));
-		assertFalse(n1 + " and " + n2 + " report being equal",
-				Note.createNote(n1).equals(Note.createNote(n2)));
+        public void testEqualsSameNote() {
+	    String n1 = "Cb4/0.5";
+	    assertEquals("Notes with the same data should be equal", Note.createNote(n1),Note.createNote(n1));
 	}
 
+        @Test
+        public void testEqualsDifferentValue() {
+	    assertFalse("Notes with different values should not be equal", Note.createNote("Cb4/0.5").equals(Note.createNote("D")));
+	}
 }

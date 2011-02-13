@@ -66,7 +66,6 @@
             <exclude>**/StreamingPlayerTest.java</exclude>
             <exclude>**/TestCaseHelpers.java</exclude>
             <exclude>**/PatternTest.java</exclude>
-            <exclude>**/NoteTest.java</exclude>
             <exclude>**/NoteFactoryTest.java</exclude>
           </excludes>
         </configuration>
