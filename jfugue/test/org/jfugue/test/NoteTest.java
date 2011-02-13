@@ -17,10 +17,10 @@ import org.junit.Test;
 
 public class NoteTest {
     private static final byte NOTE_DEFAULT_VELOCITY = Note.DEFAULT_VELOCITY + 10;
-    Note note;
+
     @Before
     public void setUp() {
-        note = new Note();
+
     }
 
     @After
@@ -39,11 +39,13 @@ public class NoteTest {
 
     @Test
     public void testIsNumericNote() {
+        Note note = new Note();
         assertFalse("Note should not be numeric by default", note.isNumericNote());
     }
 
     @Test
     public void testIsChord() {
+        Note note = new Note();
         assertFalse("Note should be not be a chord by default", note.isNumericNote());
     }
 
@@ -131,4 +133,15 @@ public class NoteTest {
         assertEquals("Note: value=51, duration=0.5, startTie=F, endTie=F, attack=53, decay=54, isFirst=T, isParallel=F, isSequential=F", new Note((byte)51, 0.5, (byte)53, (byte)54).getVerifyString());
     }
 
+    @Test
+    public void testGetValue() {
+	assertEquals(55,new Note((byte)55).getValue());
+    }
+
+    @Test
+    public void testSetValue() {
+	Note note = new Note((byte)55);
+	note.setValue(65);
+	assertEquals(65,note.getValue());
+    }
 }
