@@ -63,6 +63,19 @@ public class NoteTest {
     }
 
     @Test
+    public void testIsRest() {
+        Note note = new Note();
+        assertFalse("Note should not be a rest by default", note.isRest());
+    }
+
+    @Test
+    public void testSetRest() {
+        Note note = new Note();
+        note.setRest(true);
+        assertTrue(note.isRest());
+    }
+
+    @Test
     public void testSetDecimalDuration() {
         Note n1 = new Note((byte) 60, 0.5);
         assertEquals("Decimal duration and long duration don't match when setting decimal duration",n1.getDecimalDuration(), (n1.getDuration() / MusicStringParser.SEQUENCE_RES), 0.01);
@@ -164,4 +177,5 @@ public class NoteTest {
 	note.setValue((byte)75);
 	assertEquals(75,note.getValue());
     }
+    
 }
