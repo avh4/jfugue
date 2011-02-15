@@ -1554,27 +1554,6 @@ public final class MusicStringParser extends Parser
         return valid;
     }
 
-    public void verifyToken(String token, final String verifyString)
-    {
-        ParserListener listener = new CollatedParserListener() {
-            private StringBuilder results = new StringBuilder();
-
-            public void jfugueEvent(JFugueElement e)
-            {
-                results.append(e.getVerifyString());
-
-                if (!verifyString.startsWith(results.toString())) {
-                    throw new JFugueException(JFugueException.VERIFICATION_EXCEPTION, results.toString(), verifyString);
-                }
-
-                results.append("; ");
-            }
-        };
-
-        addParserListener(listener);
-        parseToken(token);
-        removeParserListener(listener);
-    }
 
     /**
      * Parses a string which presumably contains one token, which is a note.
@@ -1645,16 +1624,7 @@ public final class MusicStringParser extends Parser
             parser.parseToken("Cw+Dq_Rq_Dq_Rq");
             System.out.println("(**********************************************)");
             
-            // Don't forget -- individual tokens ONLY!  No strings with spaces!
-            parser.verifyToken("C", Note.createVerifyString(60, 0.25));
-            parser.verifyToken("C3", Note.createVerifyString(36, 0.25));
-            parser.verifyToken("Cb3", Note.createVerifyString(35, 0.25));
-            parser.verifyToken("B#3", Note.createVerifyString(48, 0.25));
-            parser.verifyToken("C#3q", Note.createVerifyString(37, 0.25));
-            parser.verifyToken("C3i", Note.createVerifyString(36, 0.125));
-            parser.verifyToken("C3qh", Note.createVerifyString(36, 0.75));
-            parser.verifyToken("C5minw", Note.createCompoundVerifyString(Note.createVerifyString(60, 1.0), Note.createVerifyString(63, 1.0, false, true, false), Note.createVerifyString(67, 1.0, false, true, false)));
-            parser.verifyToken("Cmaj", Note.createCompoundVerifyString(Note.createVerifyString(36, 0.25), Note.createVerifyString(40, 0.25, false, true, false), Note.createVerifyString(43, 0.25, false, true, false)));
+
             parser.parseToken("Cdom9");
             parser.parseToken("Cmin11");
             parser.parseToken("Cdom7<5");

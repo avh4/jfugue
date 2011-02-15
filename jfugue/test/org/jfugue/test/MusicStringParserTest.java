@@ -14,12 +14,19 @@ import org.jfugue.parsers.MusicStringParser;
 import org.jfugue.PatternInterface;
 import org.jfugue.ParserProgressListener;
 import org.jfugue.ParserListener;
+import org.jfugue.CollatedParserListener;
+
 import org.jfugue.elements.Tempo;
+import org.jfugue.elements.Note;
 import org.jfugue.elements.Voice;
+import org.jfugue.elements.JFugueElement;
 
 
 import org.junit.Before;
 import org.junit.Test;
+
+
+import org.jfugue.test.TestCaseHelpers;
 
 public class MusicStringParserTest {
     private MusicStringParser parser;
@@ -125,5 +132,83 @@ public class MusicStringParserTest {
         verify(listener).progressReported("Parsing music string...", 1, 3);
         verify(listener).progressReported("Parsing music string...", 2, 3);
         verify(listener).progressReported("Parsing music string...", 3, 3);
+    }
+
+    @Test
+    //method exists for testing only, may be redundant
+    public void testIsValidToken_Success() {
+	assertTrue(parser.isValidToken("C3qh"));
+    }
+
+    @Test
+    //method exists for testing only, may be redundant
+    public void testIsValidToken_Fail() {
+	assertFalse(parser.isValidToken("This isn't a token"));
+    }
+
+    // Don't forget -- individual tokens ONLY!  No strings with spaces!
+    private void verifyToken(String musicStringToken, final String expected) {
+        ParserListener listener = new CollatedParserListener() {
+            private StringBuilder results = new StringBuilder();
+            private boolean first = true;
+
+            public void jfugueEvent(JFugueElement e) {
+		if (!first) {
+		    results.append("; ");
+		}
+                results.append(e.getVerifyString());
+                first = false;
+            }
+            public String toString() {
+		return results.toString();
+            }
+	};
+
+        parser.addParserListener(listener);
+	Class [] argTypes = {String.class};
+	Object [] args = {musicStringToken};
+        TestCaseHelpers.invokeRestrictedMethod(parser,MusicStringParser.class,"parseToken",argTypes,args);
+        parser.removeParserListener(listener);
+	assertEquals(expected,listener.toString());
+    }
+
+    @Test 
+    public void testParseC() {
+        verifyToken("C", Note.createVerifyString(60, 0.25));
+    }
+
+    @Test 
+    public void testParseC3() {
+        verifyToken("C3", Note.createVerifyString(36, 0.25));
+    }
+
+    @Test 
+    public void testParseC3Flat() {
+        verifyToken("Cb3", Note.createVerifyString(35, 0.25));
+    }
+
+    @Test 
+    public void testParseB3Sharp() {
+        verifyToken("B#3", Note.createVerifyString(48, 0.25));
+    }
+
+    @Test 
+    public void testParseC3Eighth() {
+        verifyToken("C3i", Note.createVerifyString(36, 0.125));
+    }
+
+    @Test 
+    public void testParseC3QuarterHalf() {
+        verifyToken("C3qh", Note.createVerifyString(36, 0.75));
+    }
+
+    @Test 
+    public void testParseC5majorWhole() {
+        verifyToken("C5minw", Note.createCompoundVerifyString(Note.createVerifyString(60, 1.0), Note.createVerifyString(63, 1.0, false, true, false), Note.createVerifyString(67, 1.0, false, true, false)));
+    }
+
+    @Test 
+    public void testParseCmajor() {
+        verifyToken("Cmaj", Note.createCompoundVerifyString(Note.createVerifyString(36, 0.25), Note.createVerifyString(40, 0.25, false, true, false), Note.createVerifyString(43, 0.25, false, true, false)));
     }
 }

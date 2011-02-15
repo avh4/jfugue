@@ -24,6 +24,9 @@ import org.jfugue.elements.Tempo;
 import org.jfugue.elements.Time;
 import org.jfugue.elements.Voice;
 import org.jfugue.parsers.Parser;
+
+import org.jfugue.test.TestCaseHelpers;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -161,20 +164,7 @@ public class ParserTest {
     }
 
     private Object invokeParserMethod(final String methodName, @SuppressWarnings("rawtypes") final Class [] methodArgTypes,  final Object [] methodArgs) {
-        try {
-	    Method method = Parser.class.getDeclaredMethod(methodName, methodArgTypes);
-	    method.setAccessible(true);
-            return method.invoke(parser, methodArgs);
-        } catch(NoSuchMethodException _e) {
-	    fail("Could not find method " + methodName);
-        } catch(IllegalAccessException _e){
-	    fail("Could not access method " + methodName);
-        } catch(InvocationTargetException _e){
-	    fail("Could not invoke method " + methodName + " on testParser");
-        } catch(IllegalArgumentException _e){
-	    fail("Wrong arguments provided for " + methodName);
-        }
-        return null;
+	return TestCaseHelpers.invokeRestrictedMethod(parser, Parser.class, methodName, methodArgTypes, methodArgs);
     }
     
     @Test 
