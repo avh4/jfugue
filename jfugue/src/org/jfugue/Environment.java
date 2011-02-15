@@ -60,6 +60,7 @@ public class Environment implements FireEventProxy {
 	}
 	public void add(String key, Object val) {
 		key = key.toUpperCase();
+		// TODO Should we allow arbitrary Objects?
 		dictionaryMap.put(key, val.toString());
 	}
 

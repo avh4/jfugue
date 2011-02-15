@@ -66,7 +66,7 @@ public abstract class Parser
         // The Parser could add itself as a ParserProgressListener.
     }
  
-    private Environment environment;
+    protected Environment environment;
     
     
     
