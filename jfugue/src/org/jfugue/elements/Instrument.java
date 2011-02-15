@@ -122,7 +122,6 @@ public final class Instrument implements JFugueElement
     /**
      * Returns verification string in this format:
      * Instrument: instrument={#}
-     * @version 4.0
      */
     public String getVerifyString()
     {

@@ -86,7 +86,7 @@ public abstract class JFugueElementFactory<T extends JFugueElement> {
 
 	/**
 	 * @param context
-	 * @return
+	 * @return an instance of {@code T}
 	 * @throws IOException
 	 * @throws IllegalArgumentException
 	 * @throws JFugueException

@@ -55,7 +55,7 @@ public final class Voice implements JFugueElement
 
     /**
      * Sets the value of the voice for this object.
-     * @param tempo the voice for this object
+     * @param voice the voice for this object
      */
     public void setVoice(byte voice)
     {
@@ -107,7 +107,6 @@ public final class Voice implements JFugueElement
     /**
      * Returns verification string in this format:
      * Voice: voice={#}
-     * @version 4.0
      */
     public String getVerifyString()
     {

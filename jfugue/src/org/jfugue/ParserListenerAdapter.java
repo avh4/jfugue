@@ -93,7 +93,7 @@ public class ParserListenerAdapter implements ParserListener
     
     /**
      * Called when the parser encounters a key signature event.
-     * @param time the event that has been parsed
+     * @param keySig the event that has been parsed
      * @see KeySignature
      */
     public void keySignatureEvent(KeySignature keySig) { }

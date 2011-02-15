@@ -96,7 +96,7 @@ public class Note extends AbstractNote {
      * Instantiates a new Note object with the given note value and duration.
      * 
      * @param value the numeric value of the note.  C5 is 60.
-     * @param duration the duration of the note, as a decimal fraction of a whole note.
+     * @param decimalDuration the duration of the note, as a decimal fraction of a whole note.
      */
     public Note(byte value, double decimalDuration)
     {
@@ -107,7 +107,9 @@ public class Note extends AbstractNote {
     /**
      * Instantiates a new Note object with the given note value, duration, and attack and decay velocities.
      * @param value the numeric value of the note.  C5 is 60.
-     * @param duration the duration of the note.
+     * @param decimalDuration the duration of the note.
+     * @param attackVelocity
+     * @param decayVelocity
      */
     public Note(byte value, double decimalDuration, byte attackVelocity, byte decayVelocity)
     {
@@ -132,6 +134,8 @@ public class Note extends AbstractNote {
      * Instantiates a new Note object with the given note value, duration, and attack and decay velocities.
      * @param value the numeric value of the note.  C5 is 60.
      * @param duration the duration of the note.
+     * @param attackVelocity
+     * @param decayVelocity
      */
     public Note(byte value, long duration, byte attackVelocity, byte decayVelocity)
     {
@@ -365,7 +369,6 @@ public class Note extends AbstractNote {
     /**
      * Returns verification string in this format:
      * Note: value={#}, duration={#}, startTie={T|F}, endTie={T|F}, attack={#}, decay={#}, isFirst={T|F}, isParallel={T|F}, isSequential={T|F}
-     * @version 4.0
      */
     public String getVerifyString()
     {
@@ -457,7 +460,7 @@ public class Note extends AbstractNote {
 
 	/**
      * Sets the decimal fraction value for the duration.
-     * @param number the decimal fraction for the duration
+     * @param duration the decimal fraction for the duration
      */
     public void setDecimalDuration(double duration)
     {
@@ -478,7 +481,7 @@ public class Note extends AbstractNote {
     }
     /**
      * Indicates whether this note is tied to some past note.
-     * @param tied true if the note is tied, false if not
+     * @param endOfTie true if the note is tied, false if not
      */
     public void setEndOfTie(boolean endOfTie)
     {
@@ -503,7 +506,7 @@ public class Note extends AbstractNote {
 
     /**
      * Indicates whether this note has a tie to some future note.
-     * @param tied true if the note is tied, false if not
+     * @param startOfTie true if the note is tied, false if not
      */
     public void setStartOfTie(boolean startOfTie)
     {
@@ -547,7 +550,7 @@ public class Note extends AbstractNote {
     /**
      * Parses a string which should contain only one token, which is a note.
      *
-     * @param string The String that contains one token with a note, like "C5"
+     * @param noteToken The String that contains one token with a note, like "C5"
      * @return a Note object representing the note parsed from the string
      */
     public static Note createNote(String noteToken)
@@ -639,7 +642,7 @@ public class Note extends AbstractNote {
      * Returns the frequency, in Hertz, for the given note value.
      * For example, the frequency for A5 (MIDI note 69) is 440.0
      * @param noteValue
-     * @return
+     * @return frequency in Hertz
      */
     public static double getFrequencyForNote(int noteValue)
     {

@@ -54,9 +54,9 @@ public class Anticipator
      *
      * @param listener the listener to remove
      */
-    public void addParserListener(ParserListener l) 
+    public void addParserListener(ParserListener listener) 
     {
-        this.parser.addParserListener(l);
+        this.parser.addParserListener(listener);
     }
 
     /**
@@ -64,9 +64,9 @@ public class Anticipator
      *
      * @param listener the listener to remove
      */
-    public void removeParserListener(ParserListener l) 
+    public void removeParserListener(ParserListener listener) 
     {
-        this.parser.removeParserListener(l);
+        this.parser.removeParserListener(listener);
     }
     
     protected void play(final Sequence sequence)

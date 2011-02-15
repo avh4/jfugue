@@ -87,7 +87,7 @@ public final class Time implements JFugueElement
     /**
      * Returns verification string in this format:
      * Time: time={#}
-     * @version 4.0
+     * version 4.0
      */
     public String getVerifyString()
     {

@@ -200,7 +200,6 @@ public class PatternTransformer extends PatternTool<PatternInterface> {
 	/**
 	 * Returns the pattern that the transformer is modifying
 	 * 
-	 * @version 4.0
 	 * @deprecated
 	 * @see PatternTool#getResult()
 	 */
@@ -212,7 +211,6 @@ public class PatternTransformer extends PatternTool<PatternInterface> {
 	/**
 	 * Sets the pattern that the transformer is modifying
 	 * 
-	 * @version 4.0
 	 * @deprecated
 	 * @see PatternTool#setResult(Object)
 	 */

@@ -80,7 +80,7 @@ public final class MidiEventManager
 
     /**
      * Sets the current layer within the track to which new events will be added.
-     * @param track the track to select
+     * @param layer the layer to select
      */
     public void setCurrentLayer(byte layer)
     {

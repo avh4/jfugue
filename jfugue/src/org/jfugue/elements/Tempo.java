@@ -54,7 +54,7 @@ public final class Tempo implements JFugueElement {
 	/**
 	 * Creates a new Tempo object, with the specified tempo value (in BPM).
 	 * 
-	 * @param tempo
+	 * @param tempoInBPM
 	 *            the tempo for this object, in Beats Per Minute
 	 */
 	public Tempo(int tempoInBPM) {
@@ -74,7 +74,7 @@ public final class Tempo implements JFugueElement {
 	/**
 	 * Sets the value of the tempo for this object.
 	 * 
-	 * @param tempo
+	 * @param tempoInBPM
 	 *            the tempo for this object
 	 */
 	public void setTempo(int tempoInBPM) {
@@ -107,7 +107,6 @@ public final class Tempo implements JFugueElement {
 	/**
 	 * Returns verification string in this format: Tempo: tempo={#}
 	 * 
-	 * @version 4.0
 	 */
 	public String getVerifyString() {
 		StringBuffer buffy = new StringBuffer();

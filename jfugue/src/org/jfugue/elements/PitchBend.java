@@ -58,7 +58,8 @@ public final class PitchBend implements JFugueElement
 
     /**
      * Sets the value of the pitch bend for this object.
-     * @param tempo the pitch bend for this object
+     * @param lsb the least significant byte for the pitch bend for this object
+     * @param msb the most significant byte for the pitch bend for this object
      */
     public void setPitchBend(byte lsb, byte msb)
     {
@@ -91,7 +92,6 @@ public final class PitchBend implements JFugueElement
     /**
      * Returns verification string in this format:
      * PitchBend: bend={#}
-     * @version 4.0
      */
     public String getVerifyString()
     {

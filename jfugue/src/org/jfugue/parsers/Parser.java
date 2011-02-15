@@ -86,7 +86,7 @@ public abstract class Parser
 
 	/**
 	 * @param bracketedString
-	 * @return
+	 * @return byte
 	 * @throws Error
 	 * @see org.jfugue.Environment#getByteFromDictionary(java.lang.String)
 	 */
@@ -96,7 +96,7 @@ public abstract class Parser
 
 	/**
 	 * @param bracketedString
-	 * @return
+	 * @return double
 	 * @throws Error
 	 * @see org.jfugue.Environment#getDoubleFromDictionary(java.lang.String)
 	 */
@@ -106,7 +106,7 @@ public abstract class Parser
 
 	/**
 	 * @param bracketedString
-	 * @return
+	 * @return int
 	 * @throws Error
 	 * @see org.jfugue.Environment#getIntFromDictionary(java.lang.String)
 	 */
@@ -116,7 +116,7 @@ public abstract class Parser
 
 	/**
 	 * @param bracketedString
-	 * @return
+	 * @return long
 	 * @throws JFugueException
 	 * @see org.jfugue.Environment#getLongFromDictionary(java.lang.String)
 	 */
@@ -126,7 +126,7 @@ public abstract class Parser
 	}
 
 	/**
-	 * @return
+	 * @return the current KeySig
 	 * @see org.jfugue.Environment#getKeySig()
 	 */
 	public KeySignature getKeySig() {
@@ -165,7 +165,7 @@ public abstract class Parser
 
     /**
      * Displays the passed String.
-     * @param s the String to display
+     * @param sentenceFragments the parts of the String to display
      */
     protected void trace(Object... sentenceFragments)
     {
@@ -194,9 +194,9 @@ public abstract class Parser
      *
      * @param listener the listener that is to be notified of parser events
      */
-    public void addParserProgressListener(ParserProgressListener l) 
+    public void addParserProgressListener(ParserProgressListener listener) 
     {
-        progressListenerList.add(ParserProgressListener.class, l);
+        progressListenerList.add(ParserProgressListener.class, listener);
     }
 
     /**
@@ -204,9 +204,9 @@ public abstract class Parser
      *
      * @param listener the listener to remove
      */
-    public void removeParserProgressListener(ParserProgressListener l) 
+    public void removeParserProgressListener(ParserProgressListener listener) 
     {
-        progressListenerList.remove(ParserProgressListener.class, l);
+        progressListenerList.remove(ParserProgressListener.class, listener);
     }
 
     /**

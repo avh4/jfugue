@@ -45,8 +45,7 @@ public final class ChannelPressure implements JFugueElement
 	private byte pressure;
 
     /**
-     * Creates a new channel pressure object, with the specified key and pressure values.
-     * @param key the key to apply pressure to
+     * Creates a new channel pressure object, with the specified (key?) and pressure values.
      * @param pressure the pressure to apply
      */
     public ChannelPressure(byte pressure)
@@ -88,7 +87,6 @@ public final class ChannelPressure implements JFugueElement
     /**
      * Returns verification string in this format:
      * ChannelPressure: pressure={#}
-     * @version 4.0
      */
     public String getVerifyString()
     {

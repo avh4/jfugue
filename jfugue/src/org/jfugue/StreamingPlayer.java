@@ -158,7 +158,6 @@ public final class StreamingPlayer
     /**
      * Returns the StreamingMidiRenderer that this Player will use to play MIDI events.  
      * @return the StreamingMidiRenderer that this Player will use to play MIDI events
-     * @version 4.1
      */
     public ParserListener getRenderer()
     {

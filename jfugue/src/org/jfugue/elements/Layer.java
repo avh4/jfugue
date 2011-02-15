@@ -90,7 +90,6 @@ public final class Layer implements JFugueElement
     /**
      * Returns verification string in this format:
      * Layer: layer={#}
-     * @version 4.0
      */
     public String getVerifyString()
     {

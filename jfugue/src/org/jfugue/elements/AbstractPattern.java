@@ -142,7 +142,7 @@ public abstract class AbstractPattern implements PatternInterface {
 	 * Load a {@code Pattern} from an {@code InputStream} in {@code .jfugue} format.
 	 * 
 	 * @param in
-	 * @return
+	 * @return the {@code Pattern} loaded
 	 * @throws IOException
 	 */
 	public static Pattern loadPattern(InputStream in) throws IOException {
@@ -153,7 +153,7 @@ public abstract class AbstractPattern implements PatternInterface {
 	 * Load a {@code Pattern} from an {@code File} in {@code .jfugue} format.
 	 * 
 	 * @param file
-	 * @return
+	 * @return the {@code Pattern} loaded
 	 * @throws IOException
 	 */
 	public static PatternInterface loadPattern(File file) throws IOException {
@@ -256,7 +256,6 @@ public abstract class AbstractPattern implements PatternInterface {
 	    }
 	}
 
-	/** @version 4.0.4 */
 	protected EventListenerList getEventListenerList() {
 	    if (listenerList == null) {
 	        listenerList = new EventListenerList();

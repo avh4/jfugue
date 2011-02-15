@@ -114,7 +114,7 @@ public class MusicalEffects
 
     /**
      * Right now, this is a pass-through to hammerOn()
-     * @see hammerOn
+     * @see #hammerOn
      */
     public static PatternInterface trill(Note note1, Note note2, double duration, int numSteps)
     {

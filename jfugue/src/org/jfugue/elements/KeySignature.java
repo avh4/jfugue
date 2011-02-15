@@ -126,7 +126,6 @@ public final class KeySignature implements JFugueElement
     /**
      * Returns verification string in this format:
      * KeySig: keySig={#}, scale={#}
-     * @version 4.0
      */
     public String getVerifyString()
     {

@@ -159,7 +159,6 @@ public final class Controller implements JFugueElement
     /**
      * Returns verification string in this format:
      * Controller: index={#}, value={#}
-     * @version 4.0
      */
     public String getVerifyString()
     {

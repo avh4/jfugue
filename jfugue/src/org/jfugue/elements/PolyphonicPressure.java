@@ -112,7 +112,6 @@ public final class PolyphonicPressure implements JFugueElement
     /**
      * Returns verification string in this format:
      * PolyphonicPressure: key={#}, pressure={#}
-     * @version 4.0
      */
     public String getVerifyString()
     {

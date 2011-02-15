@@ -114,9 +114,6 @@ public class Rhythm implements Serializable
         voices[voice] = rhythmString;
     }
 
-    /**
-     * @version 4.1
-     */
     public void setVoice(int voice, String rhythmString, String detailsString)
     {
         setVoice(voice, rhythmString);
@@ -151,18 +148,12 @@ public class Rhythm implements Serializable
         this.voiceDetails[voice] = null;
     }
 
-    /**
-     * @version 4.1
-     */
     public void setVoiceOffset(String rhythmToPlayWhileWaiting, int voiceOffset)
     {
         this.voiceOffset = voiceOffset;
         this.offsetString = rhythmToPlayWhileWaiting;
     }
 
-    /**
-     * @version 4.1 - works with voice offset
-     */
     public String generateMusicString()
     {
         StringBuffer buffy = new StringBuffer();

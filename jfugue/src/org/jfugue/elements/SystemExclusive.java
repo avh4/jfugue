@@ -154,7 +154,6 @@ public final class SystemExclusive implements JFugueElement
     /**
      * Returns verification string in this format:
      * Voice: voice={#}
-     * @version 4.0
      */
     public String getVerifyString()
     {

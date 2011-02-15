@@ -54,7 +54,7 @@ public class JFugueException extends RuntimeException
      * Create a new JFugueException.
      *
      * @param format The string representing the exception.  
-     * @param ch 
+     * @param objects the Objects to be formatted within the format
      */
     public JFugueException(String format, Object...objects)
     {

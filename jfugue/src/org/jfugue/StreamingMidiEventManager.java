@@ -178,7 +178,7 @@ public class StreamingMidiEventManager
 
     /**
      * Sets the current layer within the track to which new events will be added.
-     * @param track the track to select
+     * @param layer the layer to select
      */
     public void setCurrentLayer(byte layer)
     {
@@ -218,10 +218,9 @@ public class StreamingMidiEventManager
      * Adds a MetaMessage to the current track.  
      *
      * @param command the MIDI command represented by this message
-     * @param data1 the first data byte
-     * @param data2 the second data byte
+     * @param bytes
      */
-    public void addMetaMessage(int type, byte[] bytes)
+    public void addMetaMessage(int command, byte[] bytes)
     {
         // NOP
     }
@@ -296,9 +295,9 @@ public class StreamingMidiEventManager
      * Both the NOTE_ON and NOTE_OFF events can be suppressed.  This is useful
      * when notes are tied to other notes.
      *
-     * @param data1 the first data byte, which contains the note value
-     * @param data2 the second data byte for the NOTE_ON event, which contains the attack velocity
-     * @param data3 the second data byte for the NOTE_OFF event, which contains the decay velocity
+     * @param noteValue the first data byte, which contains the note value
+     * @param attackVelocity the second data byte for the NOTE_ON event, which contains the attack velocity
+     * @param decayVelocity the second data byte for the NOTE_OFF event, which contains the decay velocity
      * @param duration the duration of the note
      * @param addNoteOn whether a ShortMessage.NOTE_ON event should be created for for this event.  For the end of a tied note, this should be false; otherwise it should be true.
      * @param addNoteOff whether a ShortMessage.NOTE_OFF event should be created for for this event.  For the start of a tied note, this should be false; otherwise it should be true.

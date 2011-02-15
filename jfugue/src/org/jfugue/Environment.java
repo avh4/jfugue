@@ -65,148 +65,11 @@ public class Environment implements FireEventProxy {
 	}
 
 	/**
-	 * @param listener
-	 * @see org.jfugue.FireEventProxy#addParserListener(org.jfugue.ParserListener)
-	 */
-	public void addParserListener(ParserListener listener) {
-		proxy.addParserListener(listener);
-	}
-
-	/**
-	 * 
-	 * @see org.jfugue.FireEventProxy#clearParserListeners()
-	 */
-	public void clearParserListeners() {
-		proxy.clearParserListeners();
-	}
-
-	/**
-	 * @param event
-	 * @see org.jfugue.FireEventProxy#fireChannelPressureEvent(org.jfugue.elements.ChannelPressure)
-	 */
-	public void fireChannelPressureEvent(ChannelPressure event) {
-		proxy.fireChannelPressureEvent(event);
-	}
-
-	/**
-	 * @param event
-	 * @see org.jfugue.FireEventProxy#fireControllerEvent(org.jfugue.elements.Controller)
-	 */
-	public void fireControllerEvent(Controller event) {
-		proxy.fireControllerEvent(event);
-	}
-
-	/**
-	 * @param event
-	 * @see org.jfugue.FireEventProxy#fireInstrumentEvent(org.jfugue.elements.Instrument)
-	 */
-	public void fireInstrumentEvent(Instrument event) {
-		proxy.fireInstrumentEvent(event);
-	}
-
-	/**
-	 * @param event
-	 * @see org.jfugue.FireEventProxy#fireKeySignatureEvent(org.jfugue.elements.KeySignature)
-	 */
-	public void fireKeySignatureEvent(KeySignature event) {
-		keySig = event;
-		proxy.fireKeySignatureEvent(event);
-	}
-
-	/**
-	 * @param event
-	 * @see org.jfugue.FireEventProxy#fireLayerEvent(org.jfugue.elements.Layer)
-	 */
-	public void fireLayerEvent(Layer event) {
-		proxy.fireLayerEvent(event);
-	}
-
-	/**
-	 * @param event
-	 * @see org.jfugue.FireEventProxy#fireMeasureEvent(org.jfugue.elements.Measure)
-	 */
-	public void fireMeasureEvent(Measure event) {
-		proxy.fireMeasureEvent(event);
-	}
-
-	/**
-	 * @param event
-	 * @see org.jfugue.FireEventProxy#fireNoteEvent(org.jfugue.elements.Note)
-	 */
-	public void fireNoteEvent(Note event) {
-		proxy.fireNoteEvent(event);
-	}
-
-	/**
-	 * @param event
-	 * @see org.jfugue.FireEventProxy#fireParallelNoteEvent(org.jfugue.elements.Note)
-	 */
-	public void fireParallelNoteEvent(Note event) {
-		proxy.fireParallelNoteEvent(event);
-	}
-
-	/**
-	 * @param event
-	 * @see org.jfugue.FireEventProxy#firePitchBendEvent(org.jfugue.elements.PitchBend)
-	 */
-	public void firePitchBendEvent(PitchBend event) {
-		proxy.firePitchBendEvent(event);
-	}
-
-	/**
-	 * @param event
-	 * @see org.jfugue.FireEventProxy#firePolyphonicPressureEvent(org.jfugue.elements.PolyphonicPressure)
-	 */
-	public void firePolyphonicPressureEvent(PolyphonicPressure event) {
-		proxy.firePolyphonicPressureEvent(event);
-	}
-
-	/**
-	 * @param event
-	 * @see org.jfugue.FireEventProxy#fireSequentialNoteEvent(org.jfugue.elements.Note)
-	 */
-	public void fireSequentialNoteEvent(Note event) {
-		proxy.fireSequentialNoteEvent(event);
-	}
-
-	/**
-	 * @param event
-	 * @see org.jfugue.FireEventProxy#fireSystemExclusiveEvent(org.jfugue.elements.SystemExclusive)
-	 */
-	public void fireSystemExclusiveEvent(SystemExclusive event) {
-		proxy.fireSystemExclusiveEvent(event);
-	}
-
-	/**
-	 * @param event
-	 * @see org.jfugue.FireEventProxy#fireTempoEvent(org.jfugue.elements.Tempo)
-	 */
-	public void fireTempoEvent(Tempo event) {
-		proxy.fireTempoEvent(event);
-	}
-
-	/**
-	 * @param event
-	 * @see org.jfugue.FireEventProxy#fireTimeEvent(org.jfugue.elements.Time)
-	 */
-	public void fireTimeEvent(Time event) {
-		proxy.fireTimeEvent(event);
-	}
-
-	/**
-	 * @param event
-	 * @see org.jfugue.FireEventProxy#fireVoiceEvent(org.jfugue.elements.Voice)
-	 */
-	public void fireVoiceEvent(Voice event) {
-		proxy.fireVoiceEvent(event);
-	}
-
-	/**
 	 * Look up a byte from the dictionary
 	 * 
 	 * @param bracketedString
 	 *            the string to look up
-	 * @returns the byte value of the definition
+	 * @return the byte value of the definition
 	 * @throws JFugueException
 	 *             if there is a problem getting a byte from the dictionary
 	 *             look-up
@@ -229,7 +92,7 @@ public class Environment implements FireEventProxy {
 	 * 
 	 * @param bracketedString
 	 *            the string to look up
-	 * @returns the double value of the definition
+	 * @return the double value of the definition
 	 * @throws JFugueException
 	 *             if there is a problem getting a double from the dictionary
 	 *             look-up
@@ -252,7 +115,7 @@ public class Environment implements FireEventProxy {
 	 * 
 	 * @param bracketedString
 	 *            the string to look up
-	 * @returns the int value of the definition
+	 * @return the int value of the definition
 	 * @throws JFugueException
 	 *             if there is a problem getting a int from the dictionary
 	 *             look-up
@@ -282,7 +145,7 @@ public class Environment implements FireEventProxy {
 	 * 
 	 * @param bracketedString
 	 *            the string to look up
-	 * @returns the long value of the definition
+	 * @return the long value of the definition
 	 * @throws JFugueException
 	 *             if there is a problem getting a long from the dictionary
 	 *             look-up
@@ -301,16 +164,16 @@ public class Environment implements FireEventProxy {
 	}
 
 	/**
-	 * @return
-	 * @see org.jfugue.FireEventProxy#getParserListeners()
+	 * @return null because you aren't allowed
+	 * @see org.jfugue.parsers.FireEventProxy#getParserListeners()
 	 */
 	public ParserListener[] getParserListeners() {
-		return proxy.getParserListeners();
+		return null; //proxy.getParserListeners();
 	}
 
 	/**
 	 * @param listener
-	 * @see org.jfugue.FireEventProxy#removeParserListener(org.jfugue.ParserListener)
+	 * @see org.jfugue.parsers.FireEventProxy#removeParserListener(org.jfugue.ParserListener)
 	 */
 	public void removeParserListener(ParserListener listener) {
 		proxy.removeParserListener(listener);
@@ -334,7 +197,7 @@ public class Environment implements FireEventProxy {
 	 * 
 	 * @param bracketedString
 	 *            the string to look up in the dictionary
-	 * @returns the definition of the string
+	 * @return the definition of the string
 	 * @throws JFugueException
 	 *             if there is a problem looking up bracketedString
 	 */
@@ -422,6 +285,126 @@ public class Environment implements FireEventProxy {
 		public static final String EXPECTED_INT = Messages.getString("Environment.EXP_INT"); //$NON-NLS-1$
 		public static final String EXPECTED_LONG = Messages.getString("Environment.EXP_LONG"); //$NON-NLS-1$
 		public static final String WORD_NOT_DEFINED_EXC = Messages.getString("Environment.NO_DEF"); //$NON-NLS-1$
+	}
+
+	/**
+	 * @param listener
+	 * @see org.jfugue.parsers.FireEventProxy#addParserListener(org.jfugue.ParserListener)
+	 */
+	public void addParserListener(ParserListener listener) {
+		proxy.addParserListener(listener);
+	}
+	/**
+	 * 
+	 * @see org.jfugue.parsers.FireEventProxy#clearParserListeners()
+	 */
+	public void clearParserListeners() {
+		proxy.clearParserListeners();
+	}
+	/**
+	 * @param event
+	 * @see org.jfugue.parsers.FireEventProxy#fireVoiceEvent(org.jfugue.elements.Voice)
+	 */
+	public void fireVoiceEvent(Voice event) {
+		proxy.fireVoiceEvent(event);
+	}
+	/**
+	 * @param event
+	 * @see org.jfugue.parsers.FireEventProxy#fireTempoEvent(org.jfugue.elements.Tempo)
+	 */
+	public void fireTempoEvent(Tempo event) {
+		proxy.fireTempoEvent(event);
+	}
+	/**
+	 * @param event
+	 * @see org.jfugue.parsers.FireEventProxy#fireInstrumentEvent(org.jfugue.elements.Instrument)
+	 */
+	public void fireInstrumentEvent(Instrument event) {
+		proxy.fireInstrumentEvent(event);
+	}
+	/**
+	 * @param event
+	 * @see org.jfugue.parsers.FireEventProxy#fireLayerEvent(org.jfugue.elements.Layer)
+	 */
+	public void fireLayerEvent(Layer event) {
+		proxy.fireLayerEvent(event);
+	}
+	/**
+	 * @param event
+	 * @see org.jfugue.parsers.FireEventProxy#fireTimeEvent(org.jfugue.elements.Time)
+	 */
+	public void fireTimeEvent(Time event) {
+		proxy.fireTimeEvent(event);
+	}
+	/**
+	 * @param event
+	 * @see org.jfugue.parsers.FireEventProxy#fireSystemExclusiveEvent(org.jfugue.elements.SystemExclusive)
+	 */
+	public void fireSystemExclusiveEvent(SystemExclusive event) {
+		proxy.fireSystemExclusiveEvent(event);
+	}
+	/**
+	 * @param event
+	 * @see org.jfugue.parsers.FireEventProxy#fireKeySignatureEvent(org.jfugue.elements.KeySignature)
+	 */
+	public void fireKeySignatureEvent(KeySignature event) {
+		proxy.fireKeySignatureEvent(event);
+	}
+	/**
+	 * @param event
+	 * @see org.jfugue.parsers.FireEventProxy#fireMeasureEvent(org.jfugue.elements.Measure)
+	 */
+	public void fireMeasureEvent(Measure event) {
+		proxy.fireMeasureEvent(event);
+	}
+	/**
+	 * @param event
+	 * @see org.jfugue.parsers.FireEventProxy#fireControllerEvent(org.jfugue.elements.Controller)
+	 */
+	public void fireControllerEvent(Controller event) {
+		proxy.fireControllerEvent(event);
+	}
+	/**
+	 * @param event
+	 * @see org.jfugue.parsers.FireEventProxy#fireChannelPressureEvent(org.jfugue.elements.ChannelPressure)
+	 */
+	public void fireChannelPressureEvent(ChannelPressure event) {
+		proxy.fireChannelPressureEvent(event);
+	}
+	/**
+	 * @param event
+	 * @see org.jfugue.parsers.FireEventProxy#firePolyphonicPressureEvent(org.jfugue.elements.PolyphonicPressure)
+	 */
+	public void firePolyphonicPressureEvent(PolyphonicPressure event) {
+		proxy.firePolyphonicPressureEvent(event);
+	}
+	/**
+	 * @param event
+	 * @see org.jfugue.parsers.FireEventProxy#firePitchBendEvent(org.jfugue.elements.PitchBend)
+	 */
+	public void firePitchBendEvent(PitchBend event) {
+		proxy.firePitchBendEvent(event);
+	}
+	/**
+	 * @param event
+	 * @see org.jfugue.parsers.FireEventProxy#fireNoteEvent(org.jfugue.elements.Note)
+	 */
+	public void fireNoteEvent(Note event) {
+		proxy.fireNoteEvent(event);
+	}
+	/**
+	 * @param event
+	 * @see org.jfugue.parsers.FireEventProxy#fireSequentialNoteEvent(org.jfugue.elements.Note)
+	 */
+	public void fireSequentialNoteEvent(Note event) {
+		proxy.fireSequentialNoteEvent(event);
+	}
+	/**
+	 * @param event
+	 * @see org.jfugue.parsers.FireEventProxy#fireParallelNoteEvent(org.jfugue.elements.Note)
+	 */
+	public void fireParallelNoteEvent(Note event) {
+		proxy.fireParallelNoteEvent(event);
 	}
 
 }

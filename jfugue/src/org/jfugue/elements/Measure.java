@@ -67,8 +67,6 @@ public final class Measure implements JFugueElement {
 
 	/**
 	 * Returns verification string in this format: Measure
-	 * 
-	 * @version 4.0
 	 */
 	public String getVerifyString() {
 		return "Measure";

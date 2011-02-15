@@ -788,7 +788,7 @@ public final class MusicXmlParser extends Parser
      * converts beats per minute (BPM) to pulses per minute (PPM) assuming 240 pulses per second
      * In MusicXML, BPM can be fractional, so <code>BPMtoPPM</code> takes a float argument
      * @param bpm
-     * @return
+     * @return ppm
      */
     public static int BPMtoPPM(float bpm)
     {	//	convert BPM to PPM assuming 240 pulses per second

@@ -72,7 +72,7 @@ public class Pattern extends AbstractPattern implements JFugueElement, PatternIn
 
     /**
      * Instantiates a new pattern using the given music string
-     * @param s the music string
+     * @param musicString the music string
      */
     public Pattern(String musicString)
     {
@@ -119,10 +119,6 @@ public class Pattern extends AbstractPattern implements JFugueElement, PatternIn
     	add(elements);
     }
 
-    /**
-     * 
-     * @version 4.0
-     * */
     public static PatternInterface createPattern(Map<String, Pattern> context, PatternInterface pattern)
     {
     	StringBuilder buddy = new StringBuilder();
@@ -143,10 +139,6 @@ public class Pattern extends AbstractPattern implements JFugueElement, PatternIn
     	return new Pattern(buddy.toString());
     }
     
-    /**
-     * 
-     * @version 4.0
-     * */
     public static PatternInterface createPattern(Map<String, Pattern> context, Pattern... patterns)
     {
     	
@@ -169,7 +161,7 @@ public class Pattern extends AbstractPattern implements JFugueElement, PatternIn
 
     /**
      * Adds to the music string kept by this pattern.
-     * @param s the music string to add
+     * @param appendString the music string to add
      */
     private void appendMusicString(String appendString)
     {

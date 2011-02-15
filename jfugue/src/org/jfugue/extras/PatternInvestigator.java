@@ -69,7 +69,7 @@ public class PatternInvestigator extends ParserListenerAdapter{
 	/**
 	 * Called on note event.
 	 * 
-	 * @param Note note from note event.
+	 * @param note from note event.
      */
 	@Override
 	public void noteEvent(Note note){
@@ -79,7 +79,7 @@ public class PatternInvestigator extends ParserListenerAdapter{
 	/**
 	 * Called on sequential note event.
 	 * 
-	 * @param Note note from sequential note event.
+	 * @param note from sequential note event.
      */
 	@Override
 	public void sequentialNoteEvent(Note note){ 
@@ -89,7 +89,7 @@ public class PatternInvestigator extends ParserListenerAdapter{
 	/**
 	 * Called on parallel note event.
 	 * 
-	 * @param Note note from parallel note event.
+	 * @param note from parallel note event.
      */
     @Override
     public void parallelNoteEvent(Note note){ 
@@ -99,7 +99,7 @@ public class PatternInvestigator extends ParserListenerAdapter{
     /**
 	 * Performs evaluations for notes.
 	 * 
-	 * @param Note note to be evaluated.
+	 * @param note to be evaluated.
      */
     private void evaluateNoteDuration(Note note){
 		double thisNoteDuration = note.getDecimalDuration();

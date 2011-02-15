@@ -224,7 +224,7 @@ public class ParserContext extends FilterReader {
 	/**
 	 * Tries to read a byte or a symbol that resolves to a byte.
 	 * 
-	 * @return
+	 * @return byte
 	 * @throws JFugueException
 	 * @throws IOException
 	 * @throws ParserError 
@@ -263,7 +263,7 @@ public class ParserContext extends FilterReader {
 	/**
 	 * Tries to read an int or a symbol that resolves to an int.
 	 * 
-	 * @return
+	 * @return int
 	 * @throws JFugueException
 	 * @throws IOException
 	 * @throws ParserError 
@@ -303,7 +303,7 @@ public class ParserContext extends FilterReader {
 	/**
 	 * Tries to read a long or a symbol that resolves to a long.
 	 * 
-	 * @return
+	 * @return long
 	 * @throws JFugueException
 	 * @throws IOException
 	 * @throws ParserError 
@@ -335,7 +335,7 @@ public class ParserContext extends FilterReader {
 	/**
 	 * Tries to read a double or a symbol that resolves to a double.
 	 * 
-	 * @return
+	 * @return double
 	 * @throws JFugueException
 	 * @throws IOException
 	 * @throws ParserError 
@@ -437,7 +437,7 @@ public class ParserContext extends FilterReader {
 	 * Tries to read one of the {@code cs} and then a byte.
 	 * 
 	 * @param cs the acceptable chars
-	 * @return
+	 * @return CharThen<Byte>
 	 * @throws IOException
 	 * @throws ParserError 
 	 * @throws JFugueException 
@@ -574,11 +574,7 @@ public class ParserContext extends FilterReader {
 
 	/**
 	 * @param event
-<<<<<<< .mine
-	 * @see org.jfugue.Environment#fireSystemExclusiveEvent(org.jfugue.SystemExclusiveEvent)
-=======
-	 * @see org.jfugue.elements.Environment#fireSystemExclusiveEvent(org.jfugue.elements.SystemExclusive)
->>>>>>> .r102
+	 * @see org.jfugue.Environment#fireSystemExclusiveEvent(org.jfugue.elements.SystemExclusive)
 	 */
 	public SystemExclusive fireSystemExclusiveEvent(SystemExclusive event) {
 		environment.fireSystemExclusiveEvent(event);

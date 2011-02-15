@@ -162,7 +162,7 @@ public final class NoteFactory extends JFugueElementFactory<Note> {
 		List<Note> notes = new LinkedList<Note>();
 
 		/**
-		 * @param token
+		 * @param context
 		 * @throws ParserError
 		 * @throws IOException
 		 */

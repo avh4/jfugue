@@ -41,7 +41,7 @@ public class StatusTrackingParserListener implements ParserListener
 	 * could use this method to indicate that the Player's listener should be
 	 * prefixed with "PLAYER:", and the Anticipator's with "ANTICIPATOR:".
 	 *  
-	 * @param text
+	 * @param prefix
 	 */
 	public void setPrefix(String prefix) {
 		this.prefix = prefix;
