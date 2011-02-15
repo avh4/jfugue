@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
 
+import org.jfugue.JFugueDefinitions;
 import org.jfugue.elements.Note;
 import org.jfugue.factories.NoteFactory;
 import org.jfugue.parsers.MusicStringParser;
@@ -78,13 +79,13 @@ public class NoteTest {
     @Test
     public void testSetDecimalDuration() {
         Note n1 = new Note((byte) 60, 0.5);
-        assertEquals("Decimal duration and long duration don't match when setting decimal duration",n1.getDecimalDuration(), (n1.getDuration() / MusicStringParser.SEQUENCE_RES), 0.01);
+        assertEquals("Decimal duration and long duration don't match when setting decimal duration",n1.getDecimalDuration(), (n1.getDuration() / JFugueDefinitions.SEQUENCE_RESOLUTION), 0.01);
     }
 
     @Test
     public void testSetLongDuration() {
-        Note n1 = new Note((byte) 60, (long) (MusicStringParser.SEQUENCE_RES * 0.5));
-        assertEquals("Decimal duration and long duration don't match when setting long duration", n1.getDuration(), ((long) (MusicStringParser.SEQUENCE_RES * n1.getDecimalDuration())));
+        Note n1 = new Note((byte) 60, (long) (JFugueDefinitions.SEQUENCE_RESOLUTION * 0.5));
+        assertEquals("Decimal duration and long duration don't match when setting long duration", n1.getDuration(), ((long) (JFugueDefinitions.SEQUENCE_RESOLUTION * n1.getDecimalDuration())));
     }
 
     @Test

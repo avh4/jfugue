@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import org.jfugue.JFugueDefinitions;
 import org.jfugue.JFugueException;
 import org.jfugue.Messages;
 import org.jfugue.factories.JFugueElementFactory;
@@ -465,7 +466,7 @@ public class Note extends AbstractNote {
     public void setDecimalDuration(double duration)
     {
         this.decimalDuration = duration;
-        this.duration = (long) (MusicStringParser.SEQUENCE_RES * decimalDuration);
+        this.duration = (long) (JFugueDefinitions.SEQUENCE_RESOLUTION * decimalDuration);
     }
 
 	/**
@@ -477,7 +478,7 @@ public class Note extends AbstractNote {
         this.duration = duration;
         
         // duration = (long) (MusicStringParser.SEQUENCE_RES * decimalDuration);
-        this.decimalDuration = duration / MusicStringParser.SEQUENCE_RES;
+        this.decimalDuration = duration / JFugueDefinitions.SEQUENCE_RESOLUTION;
     }
     /**
      * Indicates whether this note is tied to some past note.
