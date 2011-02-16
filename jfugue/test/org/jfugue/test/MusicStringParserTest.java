@@ -231,5 +231,17 @@ public class MusicStringParserTest {
     public void testParseInstrument_Bracketed_Name() {
         verifyToken("I[Acoustic_Grand]","Instrument: instrument=0");
     }
+ 
+    // 4.1 System Exclusive
+    @Test
+    public void testParseSysex_Decimal() {
+        verifyToken("^dec:240,67,127,0,0,3,0,65,247"
+,"SysEx: bytes=-16,67,127,0,0,3,0,65,-9");
+    }
+
+    @Test
+    public void testParseSysex_Hex() {
+        verifyToken("^hex:F0,43,7F,00,00,03,00,41,F7","SysEx: bytes=-16,67,127,0,0,3,0,65,-9");
+    }
 
 }

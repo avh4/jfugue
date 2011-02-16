@@ -1626,10 +1626,6 @@ public final class MusicStringParser extends Parser
             parser.parseToken("D3");
             parser.parseToken("C##3"); // Should be like D3
 
-            // 4.1 System Exclusive
-            parser.parseToken("^dec:240,67,127,0,0,3,0,65,247");
-            parser.parseToken("^hex:F0,43,7F,00,00,03,00,41,F7");
-            
             long endTime = System.currentTimeMillis();
             System.out.println("Time taken: "+(endTime-startTime)+"ms");
 
