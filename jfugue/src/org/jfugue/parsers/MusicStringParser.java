@@ -1506,10 +1506,6 @@ public final class MusicStringParser extends Parser
 
             parser.parseToken("V0");
             parser.parseToken("V15");
-            parser.parseToken("I0");
-            parser.parseToken("I[13]");
-            parser.parseToken("I[Acoustic_Grand]");
-            parser.parseToken("IFlute");
             parser.parseToken("Cmaj7W");
             parser.parseToken("C#5Q");
             parser.parseToken("eb3Q.");

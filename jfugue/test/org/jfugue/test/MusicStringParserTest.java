@@ -211,4 +211,25 @@ public class MusicStringParserTest {
     public void testParseCmajor() {
         verifyToken("Cmaj", Note.createCompoundVerifyString(Note.createVerifyString(36, 0.25), Note.createVerifyString(40, 0.25, false, true, false), Note.createVerifyString(43, 0.25, false, true, false)));
     }
+
+    @Test
+    public void testParseInstrument_Unwrapped_Number() {
+        verifyToken("I0","Instrument: instrument=0");
+    }
+
+    @Test
+    public void testParseInstrument_Bracketed_Number() {
+        verifyToken("I[13]","Instrument: instrument=13");
+    }
+
+    @Test
+    public void testParseInstrument_Unwrapped_Name() {
+        verifyToken("IFlute","Instrument: instrument=73");
+    }
+
+    @Test
+    public void testParseInstrument_Bracketed_Name() {
+        verifyToken("I[Acoustic_Grand]","Instrument: instrument=0");
+    }
+
 }
