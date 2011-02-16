@@ -20,6 +20,8 @@ import org.jfugue.parsers.DummyParserEventProxy;
 import org.jfugue.parsers.FireEventProxy;
 import org.jfugue.parsers.ParserContext;
 
+import org.apache.log4j.Logger;
+
 /**
  * 
  * This class contains a dictionary with which symbols such as {@code [blah]}
@@ -234,14 +236,14 @@ public class Environment implements FireEventProxy {
 				}
 			}
 			if (isNumber) {
-				// trace("Dictionary lookup returning the number ",word);
+				// Logger.getRootLogger().trace("Dictionary lookup returning the number ",word);
 				return word;
 			} else {
 				throw new Error(Error.WORD_NOT_DEFINED_EXC,
 						word, bracketedString);
 			}
 		}
-		// trace("Word ",word," is defined as ",definition);
+		// Logger.getRootLogger().trace("Word ",word," is defined as ",definition);
 		return definition;
 	}
 

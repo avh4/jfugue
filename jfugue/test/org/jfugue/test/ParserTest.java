@@ -43,31 +43,6 @@ public class ParserTest {
         parser = new TestParser();
     }
 
-    @Test 
-    public void testGetTracing(){
-        assertEquals("Default state of tracing should be off", Parser.TRACING_OFF, parser.getTracing());
-    }
-
-    @Test 
-    public void testGetTracing_ON(){
-        parser.setTracing(Parser.TRACING_ON);
-        assertEquals("Tracing was not enabled",Parser.TRACING_ON, parser.getTracing());
-    }
-
-    @Test 
-    public void testGetTracing_RESET(){
-        parser.setTracing(Parser.TRACING_ON);
-        parser.setTracing(Parser.TRACING_OFF);
-        assertEquals("Tracing was not disabled", Parser.TRACING_OFF, parser.getTracing());
-    }
-
-    @Ignore("Undefined behaviour, so test cannot be authored.")  @Test 
-    public void testGetTracing_OUT_OF_BOUNDS(){
-        //This behaviour is, as-yet, undefined.
-        //  We should lock this down, but it is of
-        //  little import, being specifically for logging.
-        parser.setTracing(999);
-    }
 
     @Test 
     public void testProgressListenerList_DefaultState(){

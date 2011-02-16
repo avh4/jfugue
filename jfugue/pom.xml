@@ -55,6 +55,7 @@
         <directory>src</directory>
         <includes>
           <include>org/jfugue/messages.properties</include>
+          <include>log4j.properties</include>
         </includes>
       </resource>
     </resources>
@@ -194,6 +195,11 @@
       <artifactId>mockito-core</artifactId>  
       <version>1.8.5</version> 
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.16</version>
     </dependency>
   </dependencies>
 </project>

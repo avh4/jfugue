@@ -51,6 +51,8 @@ import org.jfugue.elements.Note;
 import org.jfugue.elements.Tempo;
 import org.jfugue.elements.Voice;
 
+import org.apache.log4j.Logger;
+
 //	helper class
 class XMLpart extends Object
 {	public String	ID;
@@ -632,14 +634,14 @@ public final class MusicXmlParser extends Parser
 //                }
 //            }
 //            if (isNumber) {
-//                trace("Dictionary lookup returning the number ",word);
+//                Logger.getRootLogger().trace("Dictionary lookup returning the number ",word);
 //                return word;
 //            } else {
 //                //throw new JFugueException(JFugueException.WORD_NOT_DEFINED_EXC,word,bracketedString);
 //            	definition = "";
 //            }
 //        }
-//        trace("Word ",word," is defined as ",definition);
+//        Logger.getRootLogger().trace("Word ",word," is defined as ",definition);
 //        return definition;
 //    }
 
@@ -779,7 +781,7 @@ public final class MusicXmlParser extends Parser
         catch (NumberFormatException e)
         {	instrumentNumber = getByteFromDictionary(inst);
         }
-        trace("Instrument element: inst = ",inst);
+        Logger.getRootLogger().trace("Instrument element: inst = " + inst);
         if (instrumentNumber > -1)
         	fireInstrumentEvent(new Instrument(instrumentNumber));
     }

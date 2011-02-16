@@ -135,51 +135,6 @@ public abstract class Parser
 
 	/******* End delegate to Environment *******/
 	
-	/** Pass this value to setTracing( ) to turn tracing off.  Tracing is off by default. */
-    public static final int TRACING_OFF = 0;
-
-    /** Pass this value to setTracing( ) to turn tracing on.  Tracing is off by default. */
-    public static final int TRACING_ON = 1;
-
-    private int tracing = TRACING_OFF;
-
-    /**
-     * Turns tracing on or off.  If you're having trouble with your music string,
-     * or if you've added new tokens to the parser, turn tracing on to make sure
-     * that your new tokens are parsed correctly.
-     * @param tracing the state of tracing - on or off
-     */
-    public void setTracing(int tracing)
-    {
-        this.tracing = tracing;
-    }
-
-    /**
-     * Returns the current state of tracing.
-     * @return the state of tracing
-     */
-    public int getTracing()
-    {
-        return this.tracing;
-    }
-
-    /**
-     * Displays the passed String.
-     * @param sentenceFragments the parts of the String to display
-     */
-    protected void trace(Object... sentenceFragments)
-    {
-        if (TRACING_ON == getTracing())
-        {
-            StringBuilder buddy = new StringBuilder();
-            for (int i=0; i < sentenceFragments.length; i++)
-            {
-                buddy.append(sentenceFragments[i]);
-            }
-            
-            System.out.println(buddy.toString());
-        }
-    }
 
     //
     // ParserProgressListener methods
