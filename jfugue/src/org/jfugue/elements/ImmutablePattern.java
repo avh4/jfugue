@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jfugue.Pattern;
+import org.jfugue.PatternInterface;
 
 public class ImmutablePattern extends Pattern {
 
@@ -73,7 +74,7 @@ public class ImmutablePattern extends Pattern {
     	throw new UnsupportedOperationException("This is an ImmutablePattern");
     }
 
-    public void add(Pattern pattern)
+    public void add(PatternInterface pattern)
     {
     	throw new UnsupportedOperationException("This is an ImmutablePattern");
     }
@@ -83,7 +84,7 @@ public class ImmutablePattern extends Pattern {
     	throw new UnsupportedOperationException("This is an ImmutablePattern");
     }
 
-    public void add(Pattern pattern, int numTimes)
+    public void add(PatternInterface pattern, int numTimes)
     {
     	throw new UnsupportedOperationException("This is an ImmutablePattern");
     }

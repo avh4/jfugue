@@ -13,6 +13,7 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EventListener;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +30,8 @@ import org.jfugue.extras.ReversePatternTransformer;
 @SuppressWarnings("serial")
 public abstract class AbstractPattern implements PatternInterface {
 
-	protected Map<String, String> properties;
+	protected Map<String, String> properties = new HashMap<String, String>();
+	protected Map<String, String> unmodifiableProperties = Collections.unmodifiableMap(properties);
 
 	/**
 	 * Load a {@code Pattern} from an {@code Reader} in {@code .jfugue} format.
@@ -90,14 +92,11 @@ public abstract class AbstractPattern implements PatternInterface {
 	}
 
 	public void setProperty(String key, String value) {
-	    getProperties().put(key, value);
+	    properties.put(key, value);
 	}
 
 	public Map<String, String> getProperties() {
-	    if (properties == null) {
-	        properties = new HashMap<String, String>();
-	    }
-	    return properties;
+	    return unmodifiableProperties;
 	}
 
 	public String getPropertiesAsSentence() {
@@ -105,15 +104,6 @@ public abstract class AbstractPattern implements PatternInterface {
 	    for (Map.Entry<String, String> entry : getProperties().entrySet()) {
 			buddy.append(String.format("%s: %s; ", entry.getKey(), entry.getValue()));
 		}
-//	    Iterator<String> iter = getProperties().keySet().iterator();
-//	    while (iter.hasNext()) {
-//	        String key = iter.next();
-//	        String value = getProperty(key);
-//	        buddy.append(key);
-//	        buddy.append(": ");
-//	        buddy.append(value);
-//	        buddy.append("; ");
-//	    }
 	    String result = buddy.toString();
 	    return result.endsWith("; ")
 	    			? result.substring(0, result.length()-2) // Take off the last semicolon-space
@@ -125,17 +115,7 @@ public abstract class AbstractPattern implements PatternInterface {
 	    for (Map.Entry<String, String> entry : getProperties().entrySet()) {
 	    	buddy.append(String.format("%s: %s\n", entry.getKey(), entry.getValue()));
 		}
-//	    Iterator<String> iter = getProperties().keySet().iterator();
-//	    while (iter.hasNext()) {
-//	        String key = iter.next();
-//	        String value = getProperty(key);
-//	        buddy.append(key);
-//	        buddy.append(": ");
-//	        buddy.append(value);
-//	        buddy.append("\n");
-//	    }
-	    String result = buddy.toString();
-	    return result.substring(0, result.length());
+	    return buddy.toString();
 	}
 
 	/**

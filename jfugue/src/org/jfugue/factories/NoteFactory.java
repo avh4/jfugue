@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 
 import org.jfugue.JFugueException;
 import org.jfugue.Messages;
+import org.jfugue.elements.AbstractNote.NoteTypes;
 import org.jfugue.elements.Chord;
 import org.jfugue.elements.Note;
 import org.jfugue.elements.NoteCollection;
@@ -150,7 +151,7 @@ public final class NoteFactory extends JFugueElementFactory<Note> {
 		boolean anotherNoteIsParallel = false;
 		boolean isStartOfTie = false;
 		boolean isEndOfTie = false;
-		byte type = 0;
+		NoteTypes type = NoteTypes.FIRST;
 		byte noteNumber = 0;
 		byte octave = 0;
 		String sChord = null;
@@ -773,11 +774,11 @@ public final class NoteFactory extends JFugueElementFactory<Note> {
 				index++;
 				existAnotherNote = true;
 				if (isFirstNote) {
-					type = Note.FIRST;
+					type = NoteTypes.FIRST;
 				} else if (isSequentialNote) {
-					type = Note.SEQUENTIAL;
+					type = NoteTypes.SEQUENTIAL;
 				} else if (isParallelNote) {
-					type = Note.PARALLEL;
+					type = NoteTypes.PARALLEL;
 				}
 				return s.substring(index, slen);
 			}
@@ -813,29 +814,17 @@ public final class NoteFactory extends JFugueElementFactory<Note> {
 				if (isChord)
 					notes.add(new Chord(this));
 				else
-					switch (type) {
-					case Note.FIRST:
-						notes.add(new Note(this));
-						break;
-					case Note.SEQUENTIAL:
-						notes.add(new Note.Sequential(this));
-						break;
-					case Note.PARALLEL:
-						notes.add(new Note.Parallel(this));
-						break;
-					default:
-						break;
-					}
+					notes.add(new Note(this));
 			}
 			for (Note note : notes) {
 				switch (note.getType()) {
-				case Note.FIRST:
+				case FIRST:
 					pContext.fireNoteEvent(note);
 					break;
-				case Note.SEQUENTIAL:
+				case SEQUENTIAL:
 					pContext.fireSequentialNoteEvent(note);
 					break;
-				case Note.PARALLEL:
+				case PARALLEL:
 					pContext.fireParallelNoteEvent(note);
 					break;
 				default:
@@ -1019,7 +1008,7 @@ public final class NoteFactory extends JFugueElementFactory<Note> {
 		/**
 		 * @return the type
 		 */
-		public byte getType() {
+		public NoteTypes getType() {
 			return type;
 		}
 	}

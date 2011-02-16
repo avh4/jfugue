@@ -5,12 +5,16 @@ import org.jfugue.visitors.ElementVisitor;
 @SuppressWarnings("serial")
 public class AbstractNote implements JFugueElement {
 
+	public enum NoteTypes {
+		FIRST, SEQUENTIAL, PARALLEL
+	}
+	
 	protected String noteString;
 	protected boolean accompanyingNotes = false;
 	protected long duration = 0;
 	protected boolean isEndOfTie = false;
 	protected boolean isStartOfTie = false;
-	protected byte type = 0;
+	protected NoteTypes type = NoteTypes.FIRST;
 
 	public String getMusicString() {
 		// TODO Auto-generated method stub
@@ -35,8 +39,12 @@ public class AbstractNote implements JFugueElement {
 	 * Returns the note type - either First, Sequential, or Parallel.
 	 * @return the note type
 	 */
-	public byte getType() {
+	public NoteTypes getType() {
 	    return this.type;
+	}
+	
+	public void setType(NoteTypes type) {
+		this.type = type;
 	}
 
 	/**

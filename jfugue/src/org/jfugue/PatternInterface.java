@@ -32,7 +32,7 @@ public interface PatternInterface extends JFugueElement {
 	 * Adds an additional pattern to the end of this pattern.
 	 * @param pattern the pattern to add
 	 */
-	public abstract void add(Pattern pattern);
+	public abstract void add(PatternInterface pattern);
 
 	/**
 	 * Adds a music string to the end of this pattern.
@@ -45,7 +45,7 @@ public interface PatternInterface extends JFugueElement {
 	 * @param pattern the pattern to add
 	 * @param numTimes the number of times to add it
 	 */
-	public abstract void add(Pattern pattern, int numTimes);
+	public abstract void add(PatternInterface pattern, int numTimes);
 
 	/**
 	 * Adds a music string to the end of this pattern.
@@ -102,7 +102,8 @@ public interface PatternInterface extends JFugueElement {
 	public abstract void setProperty(String key, String value);
 
 	/**
-	 * Get all properties set on this pattern, such as "author" or "date".
+	 * Get all properties set on this pattern, such as "author" or "date" as
+	 * an unmodifiable map.
 	 */
 	public abstract Map<String, String> getProperties();
 

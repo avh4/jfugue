@@ -73,7 +73,7 @@ public class Note extends AbstractNote {
     {
         this.value = 0;
         this.duration = 0;
-        this.type = 0;
+        this.type = NoteTypes.FIRST;
     }
 
     /**
@@ -386,7 +386,7 @@ public class Note extends AbstractNote {
         hash = 37 * hash + this.attackVelocity;
         hash = 37 * hash + this.decayVelocity;
         hash = 37 * hash + (this.rest ? 1 : 0);
-        hash = 37 * hash + this.type;
+        hash = 37 * hash + this.type.ordinal();
         hash = 37 * hash + (this.accompanyingNotes ? 1 : 0);
         return hash;
     }
@@ -515,12 +515,24 @@ public class Note extends AbstractNote {
     }
 
     /**
-     * Sets the note type - either First, Sequential, or Parallel.
+     * Sets the note type - either First (0), Sequential (1), or Parallel (2).
+     * @deprecated
      * @param type the note type
      */
     public void setType(byte type)
     {
-        this.type = type;
+    	switch (type) {
+		case 0:
+			this.type = FIRST;
+			break;
+		case 1:
+			this.type = SEQUENTIAL;
+			break;
+		case 2:
+			this.type = PARALLEL;
+		default:
+			throw new IllegalArgumentException("Type should be either First (0), Sequential (1), or Parallel (2)");
+		}
     }
     
     /**
@@ -742,7 +754,7 @@ public class Note extends AbstractNote {
     public static final byte DEFAULT_VELOCITY = 64;
     public static final byte ELECTRIC_SNARE = 40;
     /** Indicates that this note is the first note in the token. */
-    public static final byte FIRST      = 0;
+    public static final NoteTypes FIRST      = NoteTypes.FIRST;
     public static final byte HAND_CLAP = 39;
 
     public static final byte HI_BONGO = 60;
@@ -776,7 +788,7 @@ public class Note extends AbstractNote {
     public static final byte OPEN_HI_HAT = 46;
     public static final byte OPEN_TRIANGLE = 81;
     /** Indicates that this note is played at the same time as a previous note in the same token. */
-    public static final byte PARALLEL   = 2;
+    public static final NoteTypes PARALLEL   = NoteTypes.PARALLEL;
     public static final byte PEDAL_HI_HAT = 44;
     public static final byte RIDE_BELL = 53;
 
@@ -784,7 +796,7 @@ public class Note extends AbstractNote {
     public static final byte RIDE_CYMBAL_2 = 59;
 
     /** Indicates that this note immediately follows a previous note in the same token. */
-    public static final byte SEQUENTIAL = 1;
+    public static final NoteTypes SEQUENTIAL = NoteTypes.SEQUENTIAL;
 
     public static final byte SHORT_GUIRO = 73;
 

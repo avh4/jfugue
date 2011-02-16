@@ -187,9 +187,9 @@ public class Pattern extends AbstractPattern implements JFugueElement, PatternIn
     }
 
     /* (non-Javadoc)
-	 * @see org.jfugue.PatternInterface#add(org.jfugue.Pattern)
+	 * @see org.jfugue.PatternInterface#add(org.jfugue.PatternInterface)
 	 */
-    public void add(Pattern pattern)
+    public void add(PatternInterface pattern)
     {
         fireFragmentAdded(pattern);
         appendMusicString(" ");
@@ -205,9 +205,9 @@ public class Pattern extends AbstractPattern implements JFugueElement, PatternIn
     }
 
     /* (non-Javadoc)
-	 * @see org.jfugue.PatternInterface#add(org.jfugue.Pattern, int)
+	 * @see org.jfugue.PatternInterface#add(org.jfugue.PatternInterface, int)
 	 */
-    public void add(Pattern pattern, int numTimes)
+    public void add(PatternInterface pattern, int numTimes)
     {
         for (int i=0; i < numTimes; i++)
         {

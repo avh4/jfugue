@@ -88,13 +88,13 @@ public class VisitorToListenerAdaptor implements ElementVisitor {
 
 	public void visit(Note note) {
 		switch (note.getType()) {
-		case Note.FIRST:
+		case FIRST:
 			listener.noteEvent(note);
 			break;
-		case Note.SEQUENTIAL:
+		case SEQUENTIAL:
 			listener.sequentialNoteEvent(note);
 			break;
-		case Note.PARALLEL:
+		case PARALLEL:
 			listener.parallelNoteEvent(note);
 			break;
 		default:

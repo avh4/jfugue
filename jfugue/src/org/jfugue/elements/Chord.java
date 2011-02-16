@@ -40,9 +40,9 @@ public class Chord extends Note {
 		
 		private void createNotes(NoteFactory.NoteContext c) {
 			noteList = new LinkedList<Note>();
-			type = PARALLEL; 
 			for (byte hs : halfsteps) {
 				Note note = new Note(c);
+				note.setType(NoteTypes.PARALLEL);
 				note.setValue((byte) (note.getValue() + hs));
 				noteList.add(note);
 			}
