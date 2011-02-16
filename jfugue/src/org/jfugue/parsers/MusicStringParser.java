@@ -1486,7 +1486,7 @@ public final class MusicStringParser extends Parser
     private static void verifyTokenParsing()
     {
         MusicStringParser parser = new MusicStringParser();
-        parser.setTracing(MusicStringParser.TRACING_ON);
+        //parser.setTracing(MusicStringParser.TRACING_ON);
         try {
             long startTime = System.currentTimeMillis();
 
