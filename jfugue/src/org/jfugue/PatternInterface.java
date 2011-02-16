@@ -17,7 +17,7 @@ public interface PatternInterface extends JFugueElement {
 
 	/**
 	 * Sets the music string kept by this pattern.
-	 * @param s the music string
+	 * @param musicString the music string
 	 */
 	public abstract void setMusicString(String musicString);
 
@@ -43,20 +43,21 @@ public interface PatternInterface extends JFugueElement {
 	/**
 	 * Adds an additional pattern to the end of this pattern.
 	 * @param pattern the pattern to add
+	 * @param numTimes the number of times to add it
 	 */
 	public abstract void add(Pattern pattern, int numTimes);
 
 	/**
 	 * Adds a music string to the end of this pattern.
 	 * @param musicString the music string to add
+	 * @param numTimes the number of times to add it
 	 */
 	public abstract void add(String musicString, int numTimes);
 
 	/**
 	 * Adds a number of patterns sequentially
 	 * 
-	 * @param musicString the music string to add
-	 * @version 4.0
+	 * @param musicStrings the music string to add
 	 */
 	public abstract void add(String... musicStrings);
 
@@ -92,19 +93,16 @@ public interface PatternInterface extends JFugueElement {
 
 	/**
 	 * Get a property on this pattern, such as "author" or "date".
-	 * @version 4.0
 	 */
 	public abstract String getProperty(String key);
 
 	/**
 	 * Set a property on this pattern, such as "author" or "date".
-	 * @version 4.0
 	 */
 	public abstract void setProperty(String key, String value);
 
 	/**
 	 * Get all properties set on this pattern, such as "author" or "date".
-	 * @version 4.0
 	 */
 	public abstract Map<String, String> getProperties();
 
@@ -115,7 +113,6 @@ public interface PatternInterface extends JFugueElement {
 	 * key1: value1; key2: value2; key3: value3
 	 *
 	 * @return a String containing key-value pairs stored in this object's properties, separated by semicolons and spaces
-	 * @version 4.0
 	 */
 	public abstract String getPropertiesAsSentence();
 
@@ -129,7 +126,6 @@ public interface PatternInterface extends JFugueElement {
 	 * key3: value3\n
 	 *
 	 * @return a String containing key-value pairs stored in this object's properties, separated by newline characters
-	 * @version 4.0
 	 */
 	public abstract String getPropertiesAsParagraph();
 
@@ -146,7 +142,6 @@ public interface PatternInterface extends JFugueElement {
 	 * by the given number of times.
 	 * Example: If the pattern is "A B", calling <code>repeat(4)</code> will
 	 * make the pattern "A B A B A B A B".
-	 * @version 3.0
 	 */
 	public abstract void repeat(int times);
 
@@ -161,7 +156,6 @@ public interface PatternInterface extends JFugueElement {
 	 * In Version 4.1, this is fixed to work on the index of the token in the pattern, 
 	 * as opposed to the index of the string.
 	 *   
-	 * @version 3.0
 	 **/
 	public abstract void repeat(int times, int beginIndex);
 
@@ -176,7 +170,6 @@ public interface PatternInterface extends JFugueElement {
 	 * In Version 4.1, this is fixed to work on the index of the token in the pattern, 
 	 * as opposed to the index of the string.
 	 *   
-	 * @version 3.0
 	 */
 	public abstract void repeat(int times, int beginIndex, int endIndex);
 
@@ -186,7 +179,6 @@ public interface PatternInterface extends JFugueElement {
 	 * 
 	 * Version 4.1.0 improves on previous versions of this method by
 	 * returning tokens instead of substring of the pattern.
-	 * @version 4.1.0
 	 */
 	public abstract PatternInterface getSubPattern(int beginIndex);
 
@@ -196,7 +188,6 @@ public interface PatternInterface extends JFugueElement {
 	 * 
 	 * Version 4.1.0 improves on previous versions of this method by
 	 * returning tokens instead of substring of the pattern.
-	 * @version 4.1.0
 	 */
 	public abstract PatternInterface getSubPattern(int beginIndex, int endIndex);
 
@@ -214,7 +205,7 @@ public interface PatternInterface extends JFugueElement {
 	/**
 	 * Returns a Pattern that replaces a series of tokens with the new tokens.
 	 * 
-	 * @param index The index of the first token to replace
+	 * @param startingIndex The index of the first token to replace
 	 * @param newTokens An array of tokens that will be placed into the pattern
 	 * @return The new Pattern
 	 */
@@ -247,31 +238,26 @@ public interface PatternInterface extends JFugueElement {
 
 	/**
 	 * Returns an array of strings representing each token in the Pattern.
-	 * @return
+	 * @return the array of String tokens
 	 */
 	public abstract String[] getTokens();
 
 	/**
 	 * Indicates whether this pattern is composed of valid elements
 	 * that can be parsed by the MusicStringParser.
-	 * @param musicString the musicString to test
 	 * @return whether the musicString is valid
-	 * @version 4.1
 	 */
 	public abstract boolean isValid();
 
 	/**
-	 * @version 4.1
 	 */
 	public abstract List<Byte> getInstruments();
 
 	/**
-	 * @version 4.1
 	 */
 	public abstract Class<ReversePatternTransformer> getReversePatternTransformerClass();
 
 	/**
-	 * @version 4.1
 	 */
 	public abstract PatternInterface reverse();
 
@@ -281,17 +267,16 @@ public interface PatternInterface extends JFugueElement {
 	 *
 	 * @param listener the listener that is to be notified when new parts are added to the pattern
 	 */
-	public abstract void addPatternListener(PatternListener l);
+	public abstract void addPatternListener(PatternListener listener);
 
 	/**
 	 * Removes a <code>PatternListener</code>.
 	 *
 	 * @param listener the listener to remove
 	 */
-	public abstract void removePatternListener(PatternListener l);
+	public abstract void removePatternListener(PatternListener listener);
 
 	/**
-	 * @version 3.0
 	 */
 	public abstract String toString();
 

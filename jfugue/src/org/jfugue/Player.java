@@ -160,7 +160,6 @@ public class Player
      * You could also remove the Player's default MidiRenderer from this Parser. 
      * 
      * @return instance of this Player's MusicStringParser
-     * @version 4.1
      */
     public Parser getParser()
     {
@@ -176,7 +175,6 @@ public class Player
      * should call getParser() and add your listeners to that parser).
      * 
      * @param parser Your new instance of a MusicStringParser
-     * @version 4.1
      */
     public void setParser(MusicStringParser parser)
     {
@@ -186,7 +184,6 @@ public class Player
     /**
      * Returns the MidiRenderer that this Player will use to play MIDI events.  
      * @return the MidiRenderer that this Player will use to play MIDI events
-     * @version 4.1
      */
     public ParserListener getParserListener()
     {
@@ -242,8 +239,8 @@ public class Player
     }
     
     /**
-     * Plays a pattern by setting up a Renderer and feeding the pattern to it.
-     * @param pattern the pattern to play
+     * Plays a {@link Rhythm} by setting up a Renderer and feeding the {@link Rhythm} to it.
+     * @param rhythm the {@link Rhythm} to play
      * @see MidiRenderer
      */
     public void play(Rhythm rhythm)
@@ -307,7 +304,6 @@ public class Player
     /**
      * Plays a string of music.  Be sure to call player.close() after play() has returned.
      * @param musicString the MusicString (JFugue-formatted string) to play
-     * @version 3.0
      */
     public void play(String musicString)
     {
@@ -327,7 +323,6 @@ public class Player
      * @param file the MIDI file to play
      * @throws IOException
      * @throws InvalidMidiDataException
-     * @version 3.0
      */
     public void playMidiDirectly(File file) throws IOException, InvalidMidiDataException
     {
@@ -340,7 +335,6 @@ public class Player
      * @param url the URL to play
      * @throws IOException
      * @throws InvalidMidiDataException
-     * @version 3.0
      */
     public void playMidiDirectly(URL url) throws IOException, InvalidMidiDataException
     {
@@ -518,7 +512,7 @@ public class Player
      *  parser.parse(sequence);
      * </pre>
      *
-     * @param filename The name of the MIDI file
+     * @param file The name of the MIDI file
      * @return a Pattern containing the MusicString representing the MIDI music
      * @throws IOException If there is a problem opening the MIDI file
      * @throws InvalidMidiDataException If there is a problem obtaining MIDI resources
@@ -608,7 +602,6 @@ public class Player
      * @param synth The Synthesizer to use as the receiver for the returned Sequencer
      * @return a Sequencer with the provided Synthesizer as its receiver
      * @throws MidiUnavailableException
-     * @version 4.0
      */
     public static Sequencer getSequencerConnectedToSynthesizer(Synthesizer synth) throws MidiUnavailableException
     {

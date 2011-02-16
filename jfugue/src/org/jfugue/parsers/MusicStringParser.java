@@ -1089,7 +1089,7 @@ public final class MusicStringParser extends Parser
     /**
      * This is apparently the default {@link javax.sound.midi.Sequence} resolution.
      * @deprecated
-     * @see JFugueDefinitions.SEQUENCE_RESOLUTION
+     * @see JFugueDefinitions#SEQUENCE_RESOLUTION
      */
     public static final double SEQUENCE_RES = JFugueDefinitions.SEQUENCE_RESOLUTION;
     
