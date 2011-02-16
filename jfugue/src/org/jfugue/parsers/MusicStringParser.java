@@ -1476,7 +1476,7 @@ public final class MusicStringParser extends Parser
     public static void main(String[] args)
     {
         verifyTokenParsing();
-    }
+    }
 
     /**
      * Used for diagnostic purposes.  Contains an assortment of tokens that
@@ -1548,11 +1548,6 @@ public final class MusicStringParser extends Parser
             parser.parseToken("Gb4qd67");
             parser.parseToken("F#4qa55d77");
             parser.parseToken("B4qa[Volume]d[Number1]");
-
-            // 3.0  Layers
-            parser.parseToken("L8");
-            parser.parseToken("$number1=1");
-            parser.parseToken("L[Number1]");
 
             // 3.0  Times
             parser.parseToken("@100002");

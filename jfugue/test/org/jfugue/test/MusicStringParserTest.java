@@ -231,6 +231,18 @@ public class MusicStringParserTest {
     public void testParseInstrument_Bracketed_Name() {
         verifyToken("I[Acoustic_Grand]","Instrument: instrument=0");
     }
+
+    // 3.0  Layers
+    @Test
+    public void testParseLayer() {
+        verifyToken("L[8]","Layer: layer=8");
+    }
+
+    @Test
+    public void testParseLayerWithDictionary() {
+        verifyToken("$number1=1","");
+        verifyToken("L[Number1]","Layer: layer=1");
+    }
  
     // 4.1 System Exclusive
     @Test
