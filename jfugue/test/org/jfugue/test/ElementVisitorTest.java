@@ -7,7 +7,6 @@ import org.jfugue.visitors.ListenerToVisitorAdaptor;
 import org.jfugue.visitors.LoggingVisitor;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

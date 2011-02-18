@@ -23,6 +23,7 @@
 package org.jfugue.elements;
 
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 import org.jfugue.JFugueException;
 import org.jfugue.factories.JFugueElementFactory;
@@ -133,10 +134,15 @@ public final class ChannelPressure implements JFugueElement
 		public Class<ChannelPressure> type() {
 			return ChannelPressure.class;
 		}
-
+		
+		public static final String CHAN_PRES_RE = "\\A\\+";
+		public static final Pattern CHAN_PRES_PAT = Pattern.compile(CHAN_PRES_RE);
+		
 		public ChannelPressure createElement(ParserContext context) throws IOException,
 				IllegalArgumentException, JFugueException, ParserError {
-			return context.fireChannelPressureEvent(new ChannelPressure(context.readCharThenByte('+').getThen()));
+			context.readPastWhitespace();
+			context.readChar('+');
+			return context.fireChannelPressureEvent(new ChannelPressure(context.readByte()));
 			
 //			if (reader.ready()) {
 //				int cp = reader.read();

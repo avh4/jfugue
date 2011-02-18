@@ -3,6 +3,7 @@ package org.jfugue.test;
 
 import static org.junit.Assert.*;
 
+import java.io.StringReader;
 import java.util.regex.Matcher;
 
 import org.jfugue.*;
@@ -20,6 +21,7 @@ import org.jfugue.elements.Tempo;
 import org.jfugue.elements.Time;
 import org.jfugue.elements.Voice;
 import org.jfugue.factories.NoteFactory;
+import org.jfugue.parsers.ParserContext;
 import org.jfugue.visitors.ListenerToVisitorAdaptor;
 import org.jfugue.visitors.LoggingVisitor;
 import org.junit.After;
@@ -31,6 +33,7 @@ public class TestFactories {
 	protected LoggingVisitor visitor = new LoggingVisitor();
 	protected ParserListener listener = new ListenerToVisitorAdaptor(visitor);
 	protected Environment environment = new Environment();
+	protected ParserContext pc = new ParserContext(new StringReader(""), environment);
 
 	
 	@Before
@@ -42,30 +45,44 @@ public class TestFactories {
 	public void tearDown() throws Exception {
 	}
 	
+	protected void setString(String string) {
+		pc.setReader(new StringReader(string));
+	}
+	
+//	@Ignore
 	@Test
 	public void testChannelPressureFactory() throws Exception {
 		visitor.clearLog();
-		ChannelPressure pressure = ChannelPressure.Factory.getInstance().createElement("+50", environment);
+		String expected = "+50";
+		setString("+50");
+		ChannelPressure pressure = ChannelPressure.Factory.getInstance().createElement(pc);
+		assertEquals(expected, pressure.getMusicString());
 		assertEquals((byte) 50, pressure.getPressure());
 		assertEquals("[visitChannelPressure(+50)]", visitor.toString());
 	}
 	
-	@Ignore
+//	@Ignore
 	@Test
 	public void testControllerFactory() throws Exception {
 		visitor.clearLog();
 		Controller.Factory f = Controller.Factory.getInstance();
-		f.createElement("X[BANK_SELECT_FINE]=28", environment);
-		f.createElement("x[Foot_Pedal]=1345", environment);
+		setString("X[BANK_SELECT_FINE]=28 x[Foot_Pedal]=1345");
+//		f.createElement("X[BANK_SELECT_FINE]=28", environment);
+//		f.createElement("x[Foot_Pedal]=1345", environment);
+		f.createElement(pc);
+		f.createElement(pc);
+//		System.out.println(visitor.toString());
 		assertEquals("[visitController(X32=28), visitController(X36=65), visitController(X4=10)]", visitor.toString());
 	}
 	
+//	@Ignore
 	@Test
 	public void testInstrumentFactory() throws Exception {
 		Instrument i = Instrument.Factory.getInstance().createElement("I[PiAno]");
 		assertEquals("I[Piano]", i.getMusicString());
 	}
 	
+	@Ignore
 	@Test
 	public void testKeySignatureFactory() throws Exception {
 		String expected = "KCbmaj";
@@ -77,6 +94,7 @@ public class TestFactories {
 		assertEquals(expected, actual.getMusicString());
 	}
 
+//	@Ignore
 	@Test
 	public void testLayerFactory() throws Exception {
 		Layer l = Layer.Factory.getInstance().createElement("L5");
@@ -89,7 +107,7 @@ public class TestFactories {
 		assertEquals("|", m.getMusicString());
 	}
 	
-	@Ignore
+//	@Ignore
 	@Test
 	public void testPitchBendFactory() throws Exception {
 		visitor.clearLog();
@@ -101,6 +119,7 @@ public class TestFactories {
 		assertEquals("[visitPitchBend(&1345), visitPitchBend(&1345)]", visitor.toString());
 	}
 	
+//	@Ignore
 	@Test
 	public void testPolyphonicPressureFactory() throws Exception {
 		PolyphonicPressure.Factory f = PolyphonicPressure.Factory.getInstance();
@@ -108,6 +127,7 @@ public class TestFactories {
 		assertJEquals(exp, f.createElement(exp));
 	}
 	
+//	@Ignore
 	@Test
 	public void testSystemExclusiveEventFactory() throws Exception {
 		SystemExclusive.Factory f = SystemExclusive.Factory.getInstance();
@@ -149,18 +169,23 @@ public class TestFactories {
 		
 	}
 	
+//	@Ignore
 	@Test
 	public void testTempoFactory() throws Exception {
-		Tempo t = Tempo.Factory.getInstance().createElement("T160");
+		String expected = "T160";
+		setString(expected);
+		Tempo t = Tempo.Factory.getInstance().createElement(pc);
 		assertEquals("T160", t.getMusicString());
 	}
 	
+//	@Ignore
 	@Test
 	public void testTimeFactory() throws Exception {
 		String exp = "@123456";
 		assertJEquals(exp, Time.Factory.getInstance().createElement(exp));
 	}
 	
+//	@Ignore
 	@Test
 	public void testVoiceFactory() throws Exception {
 		Voice v = Voice.Factory.getInstance().createElement("V5");

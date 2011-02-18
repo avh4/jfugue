@@ -62,7 +62,8 @@ public final class SystemExclusive implements JFugueElement
 				ParserError {
 //			final char[] dec = new char[] { ',' };
 //			final char[] hex = new char[] { ',', 'A', 'B', 'C', 'D', 'E', 'F' };
-			context.readOneOfTheChars('^');
+			context.readPastWhitespace();
+			context.readChar('^');
 			String decOrHex = context.readIdentifier().toUpperCase();
 			int radix;
 			if ("DEC".equals(decOrHex)) {
@@ -71,12 +72,12 @@ public final class SystemExclusive implements JFugueElement
 				radix = 16;
 			} else
 				throw new ParserError();
-			context.readOneOfTheChars(':');
+			context.readChar(':');
 			List<Byte> byteList = new LinkedList<Byte>();
 			while (true) {
 				byteList.add(context.readByte(radix));
 				try {
-					context.readOneOfTheChars(',');
+					context.readChar(',');
 				} catch (Exception e) {
 					break;
 				}

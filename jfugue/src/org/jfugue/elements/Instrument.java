@@ -52,7 +52,8 @@ public final class Instrument implements JFugueElement
 		public Instrument createElement(ParserContext context)
 				throws IOException, IllegalArgumentException, JFugueException,
 				ParserError {
-			context.readOneOfTheChars('I', 'i');
+			context.readPastWhitespace();
+			context.readChar('I', 'i');
 			return context.fireInstrumentEvent(new Instrument(context.readByte()));
 		}
 

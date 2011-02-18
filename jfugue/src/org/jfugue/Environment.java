@@ -408,5 +408,8 @@ public class Environment implements FireEventProxy {
 	public void fireParallelNoteEvent(Note event) {
 		proxy.fireParallelNoteEvent(event);
 	}
+	public void setKeySig(KeySignature keySig) {
+		this.keySig = keySig;
+	}
 
 }

@@ -196,17 +196,9 @@ public final class Tempo implements JFugueElement {
 		@Override
 		public Tempo createElement(ParserContext context) throws IOException,
 				IllegalArgumentException, JFugueException, ParserError {
-			context.readOneOfTheChars('T', 't');
+			context.readPastWhitespace();
+			context.readChar('T', 't');
 			return context.fireTempoEvent(new Tempo(context.readInt()));
-//			if (reader.ready()) {
-//				int codePoint = reader.read();
-//				char ch = (char) codePoint;
-//				if (ch == 'T' || ch == 't') {
-//					int tempo = readInt(reader, environment);
-//					return new Tempo(tempo);
-//				}
-//			}
-//			throw new IllegalArgumentException("Cannot read tempo");
 		}
 	}
 

@@ -508,9 +508,10 @@ public final class Controller implements JFugueElement
 			/* TODO How am I going to distinguish between bytes and ints and pass
 			 * back a single controller.
 			 */
-			context.readOneOfTheChars('X', 'x');
+			context.readPastWhitespace();
+			context.readChar('X', 'x');
 			int index = context.readInt();
-			context.readOneOfTheChars('=');
+			context.readChar('=');
 			int value = context.readInt();
 			Controller controller = new Controller(index, value);
 			context.fireControllerEvent(controller);

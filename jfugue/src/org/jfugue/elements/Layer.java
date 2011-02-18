@@ -134,7 +134,9 @@ public final class Layer implements JFugueElement
 	
 		public Layer createElement(ParserContext context) throws IOException,
 				IllegalArgumentException, JFugueException, ParserError {
-			return context.fireLayerEvent(new Layer(context.readCharThenByte('L', 'l').getThen()));
+			context.readPastWhitespace();
+			context.readChar('L', 'l');
+			return context.fireLayerEvent(new Layer(context.readByte()));
 		}
 	
 		public Class<Layer> type() {

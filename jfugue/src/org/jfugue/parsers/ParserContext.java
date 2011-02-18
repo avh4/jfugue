@@ -3,10 +3,15 @@ package org.jfugue.parsers;
 import java.io.FilterReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.CharBuffer;
 import java.util.Scanner;
+import java.util.regex.MatchResult;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.jfugue.Environment;
+import org.jfugue.Environment.Error;
+import org.jfugue.JFugueDefinitions;
 import org.jfugue.JFugueException;
 import org.jfugue.ParserListener;
 import org.jfugue.elements.ChannelPressure;
@@ -35,23 +40,24 @@ public class ParserContext extends FilterReader {
 
 	public static final int CAPACITY = 10;
 
-	protected Reader reader;
+//	protected Reader reader;
 	protected Environment environment;
 	
-	// TODO How can I make this use Scanner
-	protected Scanner scanner;
+//	protected Scanner scanner;
+	protected StringBuilder pushbackSB = new StringBuilder(CAPACITY);
 	protected StringBuilder sb = new StringBuilder(CAPACITY);
+	protected Matcher matcher = null;
 	
 	protected byte keySig = 0;
-	public static final double SEQUENCE_RES = 128;
+	public static final double SEQUENCE_RES = JFugueDefinitions.SEQUENCE_RESOLUTION;
 	
-	public static final String HEX_BYTE_RE = "^[0-1A-F]{2}";
-	public static final String BYTE_RE = "^(?:-?(?:1[01]\\d|12[0-7]|\\d\\d?)|-128)";
-	public static final String INT_RE = "^-?\\d+";
-	public static final String LONG_RE = "^\\d+";
-	public static final String DOUBLE_RE = "^-?\\d+\\.\\d+";
-	public static final String SYMBOL_RE = "^[A-Za-z][A-Za-z_]*";
-	public static final String BRACKETED_SYMBOL_RE = "^\\[[A-Za-z][A-Za-z_]*\\]";
+	public static final String HEX_BYTE_RE = "\\A([0-9A-F]{2})";
+	public static final String BYTE_RE = "\\A(-?(?:1[01]\\d|12[0-7]|\\d\\d?)|-128)";
+	public static final String INT_RE = "\\A(-?\\d{1,10})";
+	public static final String LONG_RE = "\\A(-?\\d+)";
+	public static final String DOUBLE_RE = "\\A(-?\\d+(\\.\\d+)?)";
+	public static final String SYMBOL_RE = "\\A([A-Za-z]\\w*)";
+	public static final String BRACKETED_SYMBOL_RE = "\\A\\[([A-Za-z]\\w*)\\]";
 	
 	public static final Pattern HEX_BYTE_PAT = Pattern.compile(HEX_BYTE_RE, Pattern.CASE_INSENSITIVE);
 	public static final Pattern BYTE_PAT = Pattern.compile(BYTE_RE, Pattern.CASE_INSENSITIVE);
@@ -61,18 +67,15 @@ public class ParserContext extends FilterReader {
 	public static final Pattern SYMBOL_PAT = Pattern.compile(SYMBOL_RE, Pattern.CASE_INSENSITIVE);
 	public static final Pattern BRACKETED_SYMBOL_PAT = Pattern.compile(BRACKETED_SYMBOL_RE, Pattern.CASE_INSENSITIVE);
 	
-	/**
-	 * @return the keySig
-	 */
-	public byte getKeySig() {
-		return keySig;
-	}
+//	public Scanner getScanner() {
+//		return scanner;
+//	}
 
 	/**
 	 * @param keySig the keySig to set
 	 */
-	public void setKeySig(byte keySig) {
-		this.keySig = keySig;
+	public void setKeySig(KeySignature keySig) {
+		environment.setKeySig(keySig);
 	}
 
 	/**
@@ -89,32 +92,117 @@ public class ParserContext extends FilterReader {
 	public ParserContext(Reader reader, Environment environment) {
 		super(reader);
 //		this.reader = reader;
-		scanner = new Scanner(reader);
+//		scanner = new Scanner(reader);
 		this.environment = environment;
 	}
 	
+	/**
+	 * @param reader the reader to set
+	 */
+	public void setReader(Reader reader) {
+		in = reader;
+//		scanner = new Scanner(reader);
+	}
+
+	/////////// Delegate to Scanner ///////////
+//	/**
+//	 * @see java.util.Scanner#findInLine(java.util.regex.Pattern)
+//	 */
+//	public String findInLine(Pattern pattern) {
+//		String s = scanner.findInLine(pattern);
+//		if (s == null)
+//			throw new ParserError(ParserError.PATTERN_NOT_MATCH, pattern);
+//		return s;
+//	}
+//
+//	/**
+//	 * @see java.util.Scanner#findInLine(java.lang.String)
+//	 */
+//	public String findInLine(String pattern) {
+//		String s = scanner.findInLine(pattern);
+//		if (s == null)
+//			throw new ParserError(ParserError.PATTERN_NOT_MATCH, pattern);
+//		return s;
+//	}
+//
+//	/**
+//	 * @see java.util.Scanner#findWithinHorizon(java.util.regex.Pattern, int)
+//	 */
+//	public String findWithinHorizon(Pattern pattern, int horizon) {
+//		String s = scanner.findWithinHorizon(pattern, horizon);
+//		if (s == null)
+//			throw new ParserError(ParserError.PATTERN_NOT_MATCH, pattern);
+//		return s;
+//	}
+//
+//	/**
+//	 * @see java.util.Scanner#findWithinHorizon(java.lang.String, int)
+//	 */
+//	public String findWithinHorizon(String pattern, int horizon) {
+//		String s = scanner.findWithinHorizon(pattern, horizon);
+//		if (s == null)
+//			throw new ParserError(ParserError.PATTERN_NOT_MATCH, pattern);
+//		return s;
+//	}
+//
+//	/**
+//	 * @see java.util.Scanner#match()
+//	 */
+//	public MatchResult match() {
+//		return scanner.match();
+//	}
+//
+//	/**
+//	 * @see java.util.Scanner#next()
+//	 */
+//	public String next() {
+//		return scanner.next();
+//	}
+//
+//	/**
+//	 * @see java.util.Scanner#next(java.util.regex.Pattern)
+//	 */
+//	public String next(Pattern pattern) {
+//		return scanner.next(pattern);
+//	}
+//
+//	/**
+//	 * @see java.util.Scanner#next(java.lang.String)
+//	 */
+//	public String next(String pattern) {
+//		return scanner.next(pattern);
+//	}
+	/////////// End Delegate to Scanner ///////////
+	
 	/////////// Implementation of FilterReader ///////////
 	public boolean ready() throws IOException {
-		return super.ready() || sb.length() > 0;
+		return super.ready() || pushbackSB.length() > 0;
 	}
 	
+	public boolean checkReady() throws IOException, ParserError {
+		if (!ready())
+			throw new ParserError(ParserError.NOT_READY);
+		else
+			return true;
+	}
+
 	public int read() throws IOException {
-		if (sb.length() != 0) {
-			char ch = sb.charAt(0);
-			sb.deleteCharAt(0);
+		if (pushbackSB.length() != 0) {
+			char ch = pushbackSB.charAt(0);
+			pushbackSB.deleteCharAt(0);
 			return (int) ch;
 		}
 		return super.read();
 	}
 
 	public int read(char[] cbuf, int off, int len) throws IOException {
-		int blen = sb.length();
+		int blen = pushbackSB.length();
 		int overflow = len - blen;
 		int cutoff = (overflow > 0) ? blen : len;
 		int count = cutoff;
 		if (cutoff > 0) {
-			sb.getChars(0, cutoff, cbuf, off);
-			sb.delete(0, cutoff);
+			pushbackSB.getChars(0, cutoff, cbuf, off);
+			pushbackSB.delete(0, cutoff);
 		}
 		if (overflow > 0)
 			count += super.read(cbuf, cutoff, len - cutoff);
@@ -138,15 +226,46 @@ public class ParserContext extends FilterReader {
 	 * @throws IOException
 	 */
 	public void unread(char ch) throws IOException {
-		sb.insert(0, ch);
+		pushbackSB.insert(0, ch);
 	}
 	
+	/**
+	 * Tries to unread a code point, otherwise throws.
+	 * 
+	 * @param cp
+	 * @throws IOException
+	 */
 	public void unread(int cp) throws IOException {
 		unread((char) cp);
 	}
 	
+	/**
+	 * Tries to unread a {@link CharSequence}.
+	 * 
+	 * @param cs
+	 */
 	public void unread(CharSequence cs) {
-		sb.insert(0, cs);	
+		pushbackSB.insert(0, cs);	
+	}
+	
+	/**
+	 * Tries to unread an array of {@code char}.
+	 * 
+	 * @param cs the char array to copy back into the push back buffer
+	 * @param offset the position in the array to start
+	 * @param len the number of chars to unread
+	 */
+	public void unread(char[] cs, int offset, int len) {
+		unread(CharBuffer.allocate(len).put(cs, offset, len));		
+	}
+
+	/**
+	 * Tries to unread an array of {@code char}.
+	 * 
+	 * @param cs the char array to copy back into the push back buffer
+	 */
+	public void unread(char[] cs) {
+		unread(cs, 0, cs.length);
 	}
 	
 	/////////// End implementation of FilterReader ///////////
@@ -160,24 +279,36 @@ public class ParserContext extends FilterReader {
 	 * @throws ParserError 
 	 */
 	public String readSymbol() throws JFugueException, IOException, ParserError {
+//		String str = scanner.findInLine(BRACKETED_SYMBOL_PAT);
+//		if (str == null)
+//			return readIdentifier();
+//		return str;
 		final String type = "symbol";
 		checkReady();
 		int cp = read();
+		char ch = (char) cp;
 		if (cp == '[') {
 			String id = readIdentifier();
 			cp = read();
+			ch = (char) cp;
 			if (cp == ']') {
 				return "[" + id + "]";
 			} else {
 				unread(cp);
 				throw new ParserError(ParserError.CHAR_UNEXPECTED, (char) cp, type);
 			}
-		} else
+		} else {
 			unread(cp);
-			return "[" + readIdentifier() + "]";
+			String id = readIdentifier();
+			return "[" + id + "]";
+		}
 	}
 
 	public String readIdentifier() throws IOException, ParserError {
+//		String str = scanner.findInLine(SYMBOL_PAT);
+//		if (str == null)
+//			throw new ParserError(ParserError.EXPECTED_SYMBOL, str);
+//		return str;
 		StringBuilder sb = new StringBuilder(CAPACITY);
 		final String type = "identifier";
 		char ch = readChar();
@@ -194,6 +325,7 @@ public class ParserContext extends FilterReader {
 	}
 	
 	public String readToken(boolean unreadLastChar, char...cs) throws IOException, ParserError {
+//		return scanner.next();
 		@SuppressWarnings("unused")
 		final String type = "token";
 		if (cs.length == 1)
@@ -212,6 +344,10 @@ public class ParserContext extends FilterReader {
 	public String readToken(char...cs) throws IOException, ParserError {
 		return readToken(true, cs);
 	}
+	
+	public String readToken() throws IOException, ParserError {
+		return readToken(' ', '\n', '\r');
+	}
 
 	private boolean isNot(char ch, char[] cs) {
 		for (char c : cs) {
@@ -225,11 +361,19 @@ public class ParserContext extends FilterReader {
 	 * Tries to read a byte or a symbol that resolves to a byte.
 	 * 
 	 * @return byte
-	 * @throws JFugueException
-	 * @throws IOException
 	 * @throws ParserError 
 	 */
-	public byte readByte() throws JFugueException, IOException, ParserError {
+	public byte readByte() throws IOException, ParserError {
+//		String str = scanner.findInLine(BYTE_PAT);
+//		try {
+//			if (str == null) {
+//				str = readSymbol();
+//				return getByteFromDictionary(str);
+//			} else
+//				return Byte.parseByte(str);
+//		} catch (Exception e) {
+//			throw new ParserError(e, ParserError.EXPECTED_BYTE, str);
+//		}
 		StringBuilder sb = new StringBuilder(CAPACITY);
 		char ch = readChar();
 		if (Character.isDigit(ch)) {
@@ -250,65 +394,90 @@ public class ParserContext extends FilterReader {
 		}
 	}
 
-//	public byte readHexByte() throws IOException, ParserError {
-//		char[] b = new char[2];
-//		read(b);
-//		return Byte.parseByte(String.valueOf(b), 16);
-//	}
-	
+	/**
+	 * Tries to read a byte in hex format.
+	 * 
+	 * @return byte
+	 * @throws ParserError
+	 * @throws IOException
+	 */
 	public byte readHexByte() throws IOException, ParserError {
-		return Byte.parseByte(scanner.findWithinHorizon(HEX_BYTE_PAT, 2), 16);
+		char[] b = new char[2];
+		read(b);
+		try {
+			return Byte.parseByte(String.valueOf(b), 16);
+		} catch (NumberFormatException e) {
+			unread(b);
+			throw new ParserError(e, ParserError.EXPECTED_BYTE, new String(b));
+		}
 	}
+	
+//	public byte readHexByte() throws ParserError {
+//		String str = scanner.findWithinHorizon(HEX_BYTE_PAT, 2);
+//		try {
+//			return Byte.parseByte(str, 16);
+//		} catch (Exception e) {
+//			throw new ParserError(e, ParserError.EXPECTED_BYTE, str);
+//		}
+//	}
 	
 	/**
 	 * Tries to read an int or a symbol that resolves to an int.
 	 * 
 	 * @return int
-	 * @throws JFugueException
-	 * @throws IOException
 	 * @throws ParserError 
 	 */
-	public int readInt() throws JFugueException, IOException, ParserError {
-		String s = null;
-		s = scanner.findWithinHorizon(INT_RE, 11);
-		if (s != null && s.length() != 0)
-			return Integer.parseInt(s);
-		s = scanner.findWithinHorizon(BRACKETED_SYMBOL_PAT, 50);
-		if (s != null)
-			return environment.getIntFromDictionary(s);
-		throw new ParserError();
-//		StringBuilder sb = new StringBuilder(CAPACITY);
-//		checkReady();
-//		int cp = read();
-//		char ch = (char) cp;
-//		if (Character.isDigit(ch)) {
-//			sb.append(ch);
-//			while (checkReady()) {
-//				cp = read();
-//				ch = (char) cp;
-//				if (Character.isDigit(ch))
-//					sb.append(ch);
-//				else {
-//					unread(cp);
-//					break;
-//				}
-//			}
-//			return Integer.parseInt(sb.toString());
-//		} else {
-//			unread(cp);
-//			return environment.getIntFromDictionary(readSymbol());
-//		}
+	public int readInt() throws IOException, ParserError {
+		StringBuilder sb = new StringBuilder(CAPACITY);
+		try {
+			while (checkReady()) {
+				char ch = readChar();
+				if (Character.isDigit(ch))
+					sb.append(ch);
+				else {
+					unread(ch);
+					break;
+				}
+			}
+		} catch (IOException e) {
+		}
+		if (sb.length() > 0)
+			return Integer.parseInt(sb.toString());
+		else
+			try {
+				return getIntFromDictionary(readSymbol());
+			} catch (Environment.Error e) {
+				throw new ParserError(ParserError.EXPECTED_INT);
+			}
 	}
+//	public int readInt() throws ParserError {
+//		String s = null;
+//		try {
+//			s = scanner.findWithinHorizon(INT_RE, 11);
+//			if (s != null && s.length() != 0)
+//				return Integer.parseInt(s);
+//			s = scanner.findWithinHorizon(BRACKETED_SYMBOL_PAT, 50);
+//			return environment.getIntFromDictionary(s);
+//		} catch (Exception e) {
+//			throw new ParserError(e, ParserError.EXPECTED_INT);
+//		}
+//	}
 
 	/**
 	 * Tries to read a long or a symbol that resolves to a long.
 	 * 
 	 * @return long
-	 * @throws JFugueException
-	 * @throws IOException
 	 * @throws ParserError 
 	 */
-	public long readLong() throws JFugueException, IOException, ParserError {
+	public long readLong() throws IOException, ParserError {
+//		String str = findInLine(LONG_PAT);
+//		try {
+//			if (str == null)
+//				str = readSymbol();
+//			return Long.parseLong(str);
+//		} catch (Exception e) {
+//			throw new ParserError(e, ParserError.EXPECTED_LONG, str);
+//		}
 		StringBuilder sb = new StringBuilder(CAPACITY);
 		checkReady();
 		int cp = read();
@@ -336,11 +505,18 @@ public class ParserContext extends FilterReader {
 	 * Tries to read a double or a symbol that resolves to a double.
 	 * 
 	 * @return double
-	 * @throws JFugueException
-	 * @throws IOException
 	 * @throws ParserError 
 	 */
-	public double readDouble() throws JFugueException, IOException, ParserError {
+	public double readDouble() throws IOException, ParserError {
+//		String str = findInLine(DOUBLE_PAT);
+//		try {
+//			if (str != null)
+//				return Double.parseDouble(str);
+//			str = readSymbol();
+//			return getDoubleFromDictionary(str);
+//		} catch (Exception e) {
+//			throw new ParserError(e, ParserError.EXPECTED_DOUBLE, str);
+//		}
 		StringBuilder sb = new StringBuilder(CAPACITY);
 		final String type = "double";
 		checkReady();
@@ -378,6 +554,46 @@ public class ParserContext extends FilterReader {
 		}
 	}
 	
+	/**
+	 * Tries to match a regex against the first {@code horizon} chars
+	 * in the input.
+	 * 
+	 * @param pattern the pattern to match against
+	 * @param horizon the maximum number on chars to read
+	 * @return the matched string
+	 * @throws ParserError
+	 */
+	public String findWithinHorison(Pattern pattern, int horizon) throws ParserError {
+		char[] cb = new char[horizon];
+		int howMany = 0;
+		try {
+			howMany = read(cb);
+		} catch (IOException e) {
+			unread(cb);
+			throw new ParserError(e); // TODO
+		}
+		matcher = pattern.matcher(String.copyValueOf(cb, 0, howMany));
+		if (matcher.matches()) {
+			unread(cb, matcher.end(), cb.length - matcher.end());
+			return matcher.group();
+		} else {
+			throw new ParserError(); // TODO
+		}
+	}
+
+	/**
+	 * Tries to match a regex against the first {@code horizon} chars
+	 * in the input.
+	 * 
+	 * @param pattern the pattern to match against
+	 * @param horizon the maximum number on chars to read
+	 * @return the matched string
+	 * @throws ParserError
+	 */
+	public String findWithinHorison(String pattern, int horizon) throws ParserError {
+		return findWithinHorison(Pattern.compile(pattern), horizon);
+	}
+	
 	public char readOneUnicodeAndChar(byte[] bs, char...cs) throws IOException, ParserError {
 		char ch = readChar();
 		if (cs != null)
@@ -413,22 +629,33 @@ public class ParserContext extends FilterReader {
 		throw err;
 	}
 
-	public char readOneOfTheChars(char...cs) throws IOException, JFugueException, ParserError {
-			checkReady();
-			char ch = readChar();
-			for (char d : cs) {
-				if (ch == d)
-					return d;
-			}
-			unread(ch);
-			throw new ParserError(ParserError.CHAR_UNEXPECTED, ch, cs.toString());
+	public char readChar(char...cs) throws IOException, ParserError {
+		//		String pat = "\\A[" + String.valueOf(cs) + "]";
+		//		String s = findInLine(pat);
+		//		if (s != null)
+		//			return s.charAt(0);
+		checkReady();
+		char ch = readChar();
+		for (char d : cs) {
+			if (ch == d)
+				return d;
+		}
+		unread(ch);
+		throw new ParserError(ParserError.CHAR_UNEXPECTED, ch, cs.toString());
 	}
-
-	public boolean checkReady() throws IOException, ParserError {
-		if (!ready())
-			throw new ParserError(ParserError.NOT_READY);
-		else
-			return true;
+	
+	public void readPastWhitespace() {
+		try {
+			char ch;
+			while (checkReady()) {
+				ch = readChar();
+				if (!Character.isWhitespace(ch)) {
+					unread(ch);
+					break;
+				}
+			}
+		} catch (Exception e) {
+		}
 	}
 
 	// TODO Make a simple set of combinatorial parsers
@@ -442,10 +669,10 @@ public class ParserContext extends FilterReader {
 	 * @throws ParserError 
 	 * @throws JFugueException 
 	 */
-	public CharThen<Byte> readCharThenByte(char... cs) throws IOException, JFugueException, ParserError {
-		char c = readOneOfTheChars(cs);
-		return new CharThen<Byte>(c, readByte());
-	}
+//	public CharThen<Byte> readCharThenByte(char... cs) throws IOException, JFugueException, ParserError {
+//		char c = readOneOfTheChars(cs);
+//		return new CharThen<Byte>(c, readByte());
+//	}
 
 	public static class CharThen<T> {
 		protected char ch;
@@ -471,21 +698,6 @@ public class ParserContext extends FilterReader {
 		}
 
 	}
-	
-//	@SuppressWarnings("serial")
-//	public static class ParserError extends Exception {
-//		public ParserError(String format, Object...objects) {
-//			super(String.format(format, objects));
-//		}
-//		
-//		public ParserError() {
-//			super();
-//		}
-//		
-//		public ParserError(String exc) {
-//			super(exc);
-//		}
-//	}
 
 	public static interface ParserElement<T> {
 		public T getTerminal();
@@ -525,6 +737,57 @@ public class ParserContext extends FilterReader {
 			return null;
 		}
 
+	}
+	
+	
+
+	/**
+	 * @param bracketedString
+	 * @return
+	 * @throws Error
+	 * @see org.jfugue.Environment#getByteFromDictionary(java.lang.String)
+	 */
+	public byte getByteFromDictionary(String bracketedString) throws Error {
+		return environment.getByteFromDictionary(bracketedString);
+	}
+
+	/**
+	 * @param bracketedString
+	 * @return
+	 * @throws Error
+	 * @see org.jfugue.Environment#getDoubleFromDictionary(java.lang.String)
+	 */
+	public double getDoubleFromDictionary(String bracketedString) throws Error {
+		return environment.getDoubleFromDictionary(bracketedString);
+	}
+
+	/**
+	 * @param bracketedString
+	 * @return
+	 * @throws Error
+	 * @see org.jfugue.Environment#getIntFromDictionary(java.lang.String)
+	 */
+	public int getIntFromDictionary(String bracketedString) throws Error {
+		return environment.getIntFromDictionary(bracketedString);
+	}
+
+	/**
+	 * @return
+	 * @see org.jfugue.Environment#getKeySig()
+	 */
+	public KeySignature getKeySig() {
+		return environment.getKeySig();
+	}
+
+	/**
+	 * @param bracketedString
+	 * @return
+	 * @throws JFugueException
+	 * @see org.jfugue.Environment#getLongFromDictionary(java.lang.String)
+	 */
+	public long getLongFromDictionary(String bracketedString)
+			throws JFugueException {
+		return environment.getLongFromDictionary(bracketedString);
 	}
 
 	/**
@@ -663,26 +926,28 @@ public class ParserContext extends FilterReader {
 	}
 
 	protected static final char[] HEX = new char[] {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
-	public byte readByte(int radix) throws JFugueException, IOException, ParserError {
-//		final char[] HEX = new char[] {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+	public byte readByte(int radix) throws IOException, ParserError {
+		final char[] HEX = new char[] {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 		if (radix == 10)
 			return readByte();
 		else if (radix == 16) {
-			String rb = new String(new char[] { readOneOfTheChars(HEX), readOneOfTheChars(HEX) });
+			String rb = new String(new char[] { readChar(HEX), readChar(HEX) });
 			return Byte.parseByte(rb, radix);
 		} else
 			throw new ParserError();
 	}
+//	public byte readByte(int radix) throws ParserError {
+//		switch (radix) {
+//		case 10:
+//			return readByte();
+//		case 16:
+//			return readHexByte();
+//		default:
+//			throw new ParserError();
+//		}
+//	}
 
-	public void addParserListener(ParserListener listener) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void removeParserListener(ParserListener listener) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 	public ParserListener[] getParserListeners() {
 		// TODO Auto-generated method stub
@@ -693,4 +958,21 @@ public class ParserContext extends FilterReader {
 		// TODO Auto-generated method stub
 		
 	}
+
+	/**
+	 * @param listener
+	 * @see org.jfugue.Environment#removeParserListener(org.jfugue.ParserListener)
+	 */
+	public void removeParserListener(ParserListener listener) {
+		environment.removeParserListener(listener);
+	}
+
+	/**
+	 * @param listener
+	 * @see org.jfugue.Environment#addParserListener(org.jfugue.ParserListener)
+	 */
+	public void addParserListener(ParserListener listener) {
+		environment.addParserListener(listener);
+	}
+	
 }

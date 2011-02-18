@@ -15,21 +15,54 @@ public class ParserError extends JFugueException {
 	public static final String NOTE_EXC = Messages.getString("ParserError.NOTE_EXC"); //$NON-NLS-1$
 	public static final String OCTAVE_EXC = Messages.getString("ParserError.OCTAVE_EXC"); //$NON-NLS-1$
     public static final String PARSER_SPACES_EXC = Messages.getString("ParserError.PARSER_SPACES_EXC"); //$NON-NLS-1$
-	
-	protected Object[] args = null;
-	
+	public static final String EXPECTED_SYMBOL = "Expected symbol but got %s";
+	public static final String PATTERN_NOT_MATCH = "Regex failed: %s";
+
+	public static final String EXPECTED_BYTE   = "The parser expected a byte.";
+    public static final String EXPECTED_LONG   = "The parser expected a long.";
+    public static final String EXPECTED_INT    = "The parser expected an int.";
+    public static final String EXPECTED_DOUBLE = "The parser expected a double.";
+
+    /**
+	 * @see JFugueException#JFugueException()
+	 */
 	public ParserError() {
 		super();
 	}
-	
-	public ParserError(String arg0) {
-		super(arg0);
-	}
-	
-	public ParserError(String format, Object...objects) {
+
+	/**
+	 * @see JFugueException#JFugueException(String, Object...)
+	 */
+	public ParserError(String format, Object... objects) {
 		super(format, objects);
-//		args = objects;
 	}
+
+	/**
+	 * @see JFugueException#JFugueException(Throwable, String, Object...)
+	 */
+	public ParserError(Throwable cause, String format, Object... objects) {
+		super(cause, format, objects);
+	}
+
+	/**
+	 * @see JFugueException#JFugueException(Throwable)
+	 */
+	public ParserError(Throwable cause) {
+		super(cause);
+	}
+	
+	
+//	public ParserError() {
+//		super();
+//	}
+//	
+//	public ParserError(String arg0) {
+//		super(arg0);
+//	}
+//	
+//	public ParserError(String format, Object...objects) {
+//		super(format, objects);
+//	}
 
 //	public ParserError(String description, Throwable arg1) {
 //		super(description, arg1);

@@ -166,9 +166,10 @@ public final class PolyphonicPressure implements JFugueElement
 		public PolyphonicPressure createElement(ParserContext context)
 				throws IOException, IllegalArgumentException, JFugueException,
 				ParserError {
-			context.readOneOfTheChars('*');
+			context.readPastWhitespace();
+			context.readChar('*');
 			byte key = context.readByte();
-			context.readOneOfTheChars(',');
+			context.readChar(',');
 			byte pressure = context.readByte();
 			return context.firePolyphonicPressureEvent(new PolyphonicPressure(key, pressure));
 		}

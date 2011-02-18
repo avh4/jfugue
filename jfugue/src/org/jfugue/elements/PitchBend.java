@@ -164,12 +164,13 @@ public final class PitchBend implements JFugueElement
 //	            lsb = (byte)(value % 128);
 //	            msb = (byte)(value / 128);
 //	        }
-			context.readOneOfTheChars('&');
+			context.readPastWhitespace();
+			context.readChar('&');
 			int i = context.readInt();
 			byte lsb, msb;
 			if (i < 127) {
 				lsb = (byte) i;
-				context.readOneOfTheChars(',');
+				context.readChar(',');
 				msb = context.readByte();
 			} else {
 				lsb = (byte)(i % 128);

@@ -132,7 +132,8 @@ public final class Time implements JFugueElement
 		
 		public Time createElement(ParserContext context) throws IOException,
 				IllegalArgumentException, JFugueException, ParserError {
-			context.readOneOfTheChars('@');
+			context.readPastWhitespace();
+			context.readChar('@');
 			return context.fireTimeEvent(new Time(context.readLong()));
 		}
 	

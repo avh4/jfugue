@@ -170,7 +170,7 @@ public final class NoteFactory extends JFugueElementFactory<Note> {
 		protected NoteContext(ParserContext context) throws IOException,
 				ParserError {
 			pContext = context;
-			otoken = context.readToken(' ');
+			otoken = context.readToken();
 			token = otoken.toUpperCase();
 			end = token.length();
 		}
@@ -291,7 +291,7 @@ public final class NoteFactory extends JFugueElementFactory<Note> {
 				}
 			}
 
-			byte keySig = pContext.getKeySig();
+			byte keySig = pContext.getKeySig().getKeySig();
 			// Adjust for Key Signature
 			if ((keySig != 0) && (!isNatural)) {
 				if ((keySig <= -1) && (noteNumber == 11))

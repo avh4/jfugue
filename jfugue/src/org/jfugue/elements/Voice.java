@@ -136,7 +136,9 @@ public final class Voice implements JFugueElement
 		public Voice createElement(ParserContext context)
 				throws IOException, IllegalArgumentException, JFugueException,
 				ParserError {
-			return context.fireVoiceEvent(new Voice(context.readCharThenByte('V', 'v').getThen()));
+			context.readPastWhitespace();
+			context.readChar('V', 'v');
+			return context.fireVoiceEvent(new Voice(context.readByte()));
 		}
 
 		public Class<Voice> type() {

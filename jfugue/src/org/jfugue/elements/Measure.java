@@ -106,7 +106,8 @@ public final class Measure implements JFugueElement {
 
 		public Measure createElement(ParserContext context) throws IOException,
 				IllegalArgumentException, JFugueException, ParserError {
-			context.readOneOfTheChars('|');
+			context.readPastWhitespace();
+			context.readChar('|');
 			return context.fireMeasureEvent(new Measure());
 		}
 

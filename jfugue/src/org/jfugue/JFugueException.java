@@ -43,24 +43,36 @@ public class JFugueException extends RuntimeException
 	/**
      * Create a new JFugueException.
      *
-     * @param exc The string representing the exception.  
+     * @param cause The cause of the exception.  
      */
-    public JFugueException(Exception exc)
+    public JFugueException(Throwable cause)
     {
-        super(exc);
+        super(cause);
     }
 
     /**
      * Create a new JFugueException.
      *
-     * @param format The string representing the exception.  
-     * @param objects the Objects to be formatted within the format
+     * @param format The format string representing the exception.  
+     * @param objects the Objects to be formatted with the format string.
      */
     public JFugueException(String format, Object...objects)
     {
         super(format);
         this.objects = objects;
     }
+    
+    /**
+     * Create a new JFugueException.
+     * 
+     * @param cause The cause of the exception.
+     * @param format The format string representing the exception.  
+     * @param objects the Objects to be formatted with the format string.
+     */
+    public JFugueException(Throwable cause, String format, Object...objects) {
+		super(format, cause);
+		this.objects = objects;
+	}
     
     public String toString() {
 		if (objects == null)
@@ -74,6 +86,7 @@ public class JFugueException extends RuntimeException
      *
      * @param exc The string representing the exception.  This should contain the * character, so 'param' can be placed into the string.
      * @param token The token or dictionary entry in which the exception has been discovered
+ 	 * @deprecated
      */
     public JFugueException(String exc, String token)
     {
@@ -86,6 +99,7 @@ public class JFugueException extends RuntimeException
      * @param exc The string representing the exception.  This should contain the * character, so 'param' can be placed into the string.
      * @param param The direct object of the exception, the thing that has had some problem with it
      * @param token The token or dictionary entry in which the exception has been discovered
+ 	 * @deprecated
      */
     public JFugueException(String exc, String param, String token)
     {
