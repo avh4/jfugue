@@ -276,10 +276,13 @@ public final class MusicStringParser extends Parser
      */
     private void parseTimeElement(String s) throws JFugueException
     {
-        String timeNumberString = s.substring(1,s.length());
-        long timeNumber = getLongFromDictionary(timeNumberString);
+        long timeNumber = getLongValueOfToken(s);
         Logger.getRootLogger().trace("Time element: time = " + timeNumber);
         fireTimeEvent(new Time(timeNumber));
+    }
+
+    private long getLongValueOfToken(String token) {
+        return getLongFromDictionary(getTokenValuePart(token));
     }
 
     /**
@@ -1528,7 +1531,6 @@ public final class MusicStringParser extends Parser
             parser.parseToken("AW+[18]X+[cabasa]Q+Dmin");
 
             parser.parseToken("A/0.25");
-            parser.parseToken("[70]o");
 
             // 2.0  Dictionary Definition and Controller Events
             parser.parseToken("$UKELE=72");
@@ -1554,11 +1556,7 @@ public final class MusicStringParser extends Parser
             parser.parseToken("F#4qa55d77");
             parser.parseToken("B4qa[Volume]d[Number1]");
 
-            // 3.0  Times
-            parser.parseToken("@100002");
 
-            // 3.0  Measures
-            parser.parseToken("|");
 
             // 3.0  Tied notes
             parser.parseToken("Cq-");

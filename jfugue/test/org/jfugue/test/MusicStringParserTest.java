@@ -274,7 +274,44 @@ public class MusicStringParserTest {
     
     //Expected exception should be a JFugueException, but this is concealed by invokeRestrictedMethod
     @Test(expected=AssertionError.class)
-	public void testParseSysex_ErroneousRadix() {
+    public void testParseSysex_ErroneousRadix() {
 	parseToken("^boo:F0,43,7F,00,00,03,00,41,F7");
+    }
+
+    @Test
+    public void testParseNumericNote() {
+        verifyToken("[70]o", Note.createVerifyString(70,0.0078125));
+    }
+
+    @Test
+    public void testParseMeasure() {
+        // 3.0  Measures
+        verifyToken("|", "Measure");
+    }
+
+    @Test
+    public void testParseTime() {
+        // 3.0  Times
+        verifyToken("@100002", "Time: time=100002");
+    }
+
+    @Test
+    public void testParseNumericDuration_whole() {
+        verifyToken("C/1",Note.createVerifyString(60,1));
+    }
+
+    @Test
+    public void testParseNumericDuration_half() {
+        verifyToken("C/0.5",Note.createVerifyString(60,0.5));
+    }
+
+    @Test
+    public void testParseNumericDuration_quarter() {
+        verifyToken("C/0.25",Note.createVerifyString(60,0.25));
+    }
+
+    @Test
+    public void testParseNumericDuration_bracketed() {
+        verifyToken("C/[0.0078125]",Note.createVerifyString(60,0.0078125));
     }
 }
