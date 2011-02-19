@@ -165,11 +165,16 @@ public class MusicStringParserTest {
 	};
 
         parser.addParserListener(listener);
-	Class [] argTypes = {String.class};
-	Object [] args = {musicStringToken};
-        TestCaseHelpers.invokeRestrictedMethod(parser,MusicStringParser.class,"parseToken",argTypes,args);
+
+	parseToken(musicStringToken);
         parser.removeParserListener(listener);
 	assertEquals(expected,listener.toString());
+    }
+
+    private void parseToken(String token) {
+	Class [] argTypes = {String.class};
+	Object [] args = {token};
+        TestCaseHelpers.invokeRestrictedMethod(parser,MusicStringParser.class,"parseToken",argTypes,args);    
     }
 
     @Test 
@@ -256,4 +261,20 @@ public class MusicStringParserTest {
         verifyToken("^hex:F0,43,7F,00,00,03,00,41,F7","SysEx: bytes=-16,67,127,0,0,3,0,65,-9");
     }
 
+    @Test
+    public void testParseSysex_Decimal_UpperCase() {
+        verifyToken("^DEC:240,67,127,0,0,3,0,65,247"
+,"SysEx: bytes=-16,67,127,0,0,3,0,65,-9");
+    }
+
+    @Test
+    public void testParseSysex_Hex_UpperCase() {
+        verifyToken("^HEX:F0,43,7F,00,00,03,00,41,F7","SysEx: bytes=-16,67,127,0,0,3,0,65,-9");
+    }
+    
+    //Expected exception should be a JFugueException, but this is concealed by invokeRestrictedMethod
+    @Test(expected=AssertionError.class)
+	public void testParseSysex_ErroneousRadix() {
+	parseToken("^boo:F0,43,7F,00,00,03,00,41,F7");
+    }
 }

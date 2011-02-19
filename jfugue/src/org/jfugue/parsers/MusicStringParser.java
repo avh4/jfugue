@@ -209,8 +209,7 @@ public final class MusicStringParser extends Parser
      */
     private void parseVoiceElement(String s) throws JFugueException
     {
-        String voiceNumberString = s.substring(1,s.length());
-        byte voiceNumber = getByteFromDictionary(voiceNumberString);
+	byte voiceNumber = getByteValueOfToken(s);
         if (voiceNumber > 15) {
 //            throw new JFugueException(JFugueException.VOICE_EXC,voiceNumberString,s);
             return;
@@ -218,7 +217,14 @@ public final class MusicStringParser extends Parser
         Logger.getRootLogger().trace("Voice element: voice = " + voiceNumber);
         fireVoiceEvent(new Voice(voiceNumber));
     }
-
+    
+    private byte getByteValueOfToken(String token) {
+	return getByteFromDictionary(getTokenValuePart(token));
+    }
+    
+    private String getTokenValuePart(String token) {
+	return token.substring(1,token.length());
+    }
     /**
      * Parses a tempo element.
      * As of JFugue 4.0, Tempo can be specified in Beats Per Minute, which is much more intuitive than
@@ -246,8 +252,7 @@ public final class MusicStringParser extends Parser
      */
     private void parseInstrumentElement(String s) throws JFugueException
     {
-        String instrumentNumberString = s.substring(1,s.length());
-        byte instrumentNumber = getByteFromDictionary(instrumentNumberString);
+        byte instrumentNumber = getByteValueOfToken(s);
         Logger.getRootLogger().trace("Instrument element: instrument = " + instrumentNumber);
         fireInstrumentEvent(new Instrument(instrumentNumber));
     }
@@ -259,8 +264,7 @@ public final class MusicStringParser extends Parser
      */
     private void parseLayerElement(String s) throws JFugueException
     {
-        String layerNumberString = s.substring(1,s.length());
-        byte layerNumber = getByteFromDictionary(layerNumberString);
+        byte layerNumber = getByteValueOfToken(s);
         Logger.getRootLogger().trace("Layer element: layer = " + layerNumber);
         fireLayerEvent(new Layer(layerNumber));
     }
@@ -287,31 +291,31 @@ public final class MusicStringParser extends Parser
     {
         int indexOfColon = s.indexOf(':');
         String decOrHex = s.substring(1, indexOfColon);
-        int radix = 10;
-        if (decOrHex.toUpperCase().equals("DEC")) {
-        	radix = 10;
-        } else if (decOrHex.toUpperCase().equals("HEX")) {
-        	radix = 16;
-        } else {
-        	throw new JFugueException(JFugueException.SYSEX_FORMAT_EXC, s);
+        int radix = getRadixNumberFromBaseName(decOrHex);
+	if(radix == 0) {
+            throw new JFugueException(JFugueException.SYSEX_FORMAT_EXC, s);
         }
         
     	String sysexString = s.substring(indexOfColon+1,s.length());
         StringTokenizer strtok = new StringTokenizer(sysexString, ",");
         byte[] data = new byte[strtok.countTokens()];
-        StringBuilder traceReport = new StringBuilder();
-        int c=0;
-        while (strtok.hasMoreElements())
-        {
-        	String token = strtok.nextToken();
-      		int ti = Integer.parseInt(token, radix);
-        	data[c] = (byte)ti;
-        	traceReport.append(data[c]);
-        	traceReport.append(" ");
-        	c++;
+        int i = 0;
+        while (strtok.hasMoreTokens()) {
+        	data[i] = (byte) Integer.parseInt(strtok.nextToken(), radix);
+          	i++;
         }
-        Logger.getRootLogger().trace("Sysex element: bytes = " + traceReport.toString());
+        Logger.getRootLogger().trace("Sysex element: bytes = " + Arrays.toString(data));
         fireSystemExclusiveEvent(new SystemExclusive(data));
+    }
+
+    private int getRadixNumberFromBaseName(String radixName) {
+        if (radixName.equalsIgnoreCase("DEC")) {
+            return 10;
+        } else if (radixName.equalsIgnoreCase("HEX")) {
+            return 16;
+        } else {
+	    return 0;
+        }
     }
     
     /**
