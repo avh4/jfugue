@@ -211,8 +211,7 @@ public final class MusicStringParser extends Parser
     {
 	byte voiceNumber = getByteValueOfToken(s);
         if (voiceNumber > 15) {
-//            throw new JFugueException(JFugueException.VOICE_EXC,voiceNumberString,s);
-            return;
+            throw new JFugueException(JFugueException.VOICE_EXC, Byte.toString(voiceNumber), s);
         }
         Logger.getRootLogger().trace("Voice element: voice = " + voiceNumber);
         fireVoiceEvent(new Voice(voiceNumber));
