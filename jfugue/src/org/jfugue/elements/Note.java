@@ -61,7 +61,7 @@ public class Note extends AbstractNote {
     protected boolean isAdjustedForKey = false;
     protected boolean isNatural = false;
     protected boolean isChord = false;
-    protected boolean isNumericNote = false;
+    protected boolean isNumericNote = true;
     protected byte octave = 0;
     protected boolean rest = false;
     protected byte value = 0;
@@ -72,7 +72,7 @@ public class Note extends AbstractNote {
     public Note()
     {
         this.value = 0;
-        this.duration = 0;
+        setDecimalDuration(0.25);
         this.type = NoteTypes.FIRST;
     }
 
@@ -189,25 +189,15 @@ public class Note extends AbstractNote {
     }
 
     public Note adjustForKey(KeySignature keySignature) {
+        Note note = new Note(this);
         // Don't compute note value for a rest 
         if (isRest() || isAdjustedForKey()) {
-            return this;
+            return note;
         }
         
-        Note note = new Note(this);
         byte noteNumber = note.getValue(), octaveNumber = note.getOctave();
         byte keySig = keySignature.getKeySig();
         
-        // If we happen not to have an octave yet, set it to a default value.
-        // Default octave: 5 for notes, 3 for chords
-        if ((octaveNumber == 0) && (!note.isNumericNote())) {
-            if (isChord()) {
-                octaveNumber = 3;
-            } else {
-                octaveNumber = 5;
-            }
-        }
-
         // TODO Is there a prettier way?
         // Adjust for Key Signature
         if ((keySig != 0) && (!note.isNatural())) {

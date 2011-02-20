@@ -304,7 +304,6 @@ public class MusicStringParserTest {
     public void testParseNumericDuration_half() {
         verifyToken("C/0.5",Note.createVerifyString(60,0.5));
     }
-
     @Test
     public void testParseNumericDuration_quarter() {
         verifyToken("C/0.25",Note.createVerifyString(60,0.25));
@@ -313,5 +312,25 @@ public class MusicStringParserTest {
     @Test
     public void testParseNumericDuration_bracketed() {
         verifyToken("C/[0.0078125]",Note.createVerifyString(60,0.0078125));
+    }
+
+    @Test
+    public void testParseLetterNoteWithOctave() {
+        verifyToken("C10",Note.createVerifyString(120,0.25));
+    }
+
+    @Test
+    public void testParseLetterNoteWithSingleDigitOctave() {
+        verifyToken("F2",Note.createVerifyString(29,0.25));
+    }
+
+    @Test
+    public void testParseLetterNoteWithLeadingZeroOctave() {
+        verifyToken("E03",Note.createVerifyString(40,0.25));
+    }
+
+    @Test
+    public void testParseLetterNoteWithOctave0() {
+        verifyToken("D0",Note.createVerifyString(2,0.25));	
     }
 }

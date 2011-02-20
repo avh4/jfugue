@@ -299,16 +299,20 @@ public final class MusicStringParser extends Parser
             throw new JFugueException(JFugueException.SYSEX_FORMAT_EXC, s);
         }
         
-    	String sysexString = s.substring(indexOfColon+1,s.length());
-        StringTokenizer strtok = new StringTokenizer(sysexString, ",");
+        byte[] data = parseSystemExclusiveData(s.substring(indexOfColon+1,s.length()), radix);
+        Logger.getRootLogger().trace("Sysex element: bytes = " + Arrays.toString(data));
+        fireSystemExclusiveEvent(new SystemExclusive(data));
+    }
+
+    private byte [] parseSystemExclusiveData(String sysexData, int radix) {
+        StringTokenizer strtok = new StringTokenizer(sysexData, ",");
         byte[] data = new byte[strtok.countTokens()];
         int i = 0;
         while (strtok.hasMoreTokens()) {
         	data[i] = (byte) Integer.parseInt(strtok.nextToken(), radix);
           	i++;
         }
-        Logger.getRootLogger().trace("Sysex element: bytes = " + Arrays.toString(data));
-        fireSystemExclusiveEvent(new SystemExclusive(data));
+	return data;
     }
 
     private int getRadixNumberFromBaseName(String radixName) {
@@ -612,25 +616,38 @@ public final class MusicStringParser extends Parser
         NoteContext context = new NoteContext();
 
         while (context.existAnotherNote) {
-        	int startChord;
-            Logger.getRootLogger().trace(" ");
-        	Logger.getRootLogger().trace("--Parsing note from token "+s);
-        	context.isRest = false;
+            Logger.getRootLogger().trace("--Parsing note from token "+s);
+            int startChord, startChordInversion;
+            context.isRest = false;
             decideSequentialOrParallel(context);
             int index = 0;
             int slen = s.length(); // We pass the length of the string because it is an invariant value that is used often
             index = parseNoteRoot(s, slen, index, context);
-            index = parseNoteOctave(s, slen, index, context);
-            startChord = index;
-            index = parseNoteChord(s, slen, index, context);
+            startChord = parseNoteOctave(s, slen, index, context);
+            startChordInversion = parseNoteChord(s, slen, startChord, context);
+	    if (index == startChord)
+	    {
+		Logger.getRootLogger().trace("No octave spec found, setting default octave");
+		setDefaultOctave(context);
+	    }
+	    Logger.getRootLogger().trace("Octave: " +  context.octaveNumber);
+
             computeNoteValue(context);
-            index = parseNoteChordInversion(s, slen, index, context);
+            index = parseNoteChordInversion(s, slen, startChordInversion, context);
             if (context.isChord)
             	context.chordName = s.substring(startChord, index);
             index = parseNoteDuration(s, slen, index, context);
             index = parseNoteVelocity(s, slen, index, context);
             s = parseNoteConnector(s, slen, index, context);
             fireNoteEvents(context);
+        }
+    }
+
+    private void setDefaultOctave(NoteContext context) {
+	if(context.isChord) {
+            context.octaveNumber = (byte)3;
+        } else {
+            context.octaveNumber = (byte)5;
         }
     }
 
@@ -686,6 +703,7 @@ public final class MusicStringParser extends Parser
     /** Returns the index with which to start parsing the next part of the string, once this method is done with its part */
      private int parseLetterNote(String s, int slen, int index, NoteContext context)
      {
+	 context.isNumericNote = false;
          switch(s.charAt(index)) {
              case 'C' : context.noteNumber = 0; break;
              case 'D' : context.noteNumber = 2; break;
@@ -744,8 +762,10 @@ public final class MusicStringParser extends Parser
             if ((possibleOctave2 >= '0') && (possibleOctave2 <= '9')) {
                 definiteOctaveLength = 2;
             }
+	    Logger.getRootLogger().trace("Octave is " + definiteOctaveLength + " digits long");
 
             String octaveNumberString = s.substring(index, index+definiteOctaveLength);
+	    Logger.getRootLogger().trace("Octave spec is " + octaveNumberString);
             try {
                 context.octaveNumber = Byte.parseByte(octaveNumberString);
             } catch (NumberFormatException e) {
@@ -755,7 +775,6 @@ public final class MusicStringParser extends Parser
                 throw new ParserError(ParserError.OCTAVE_EXC, octaveNumberString, s);
             }
         }
-
         return index+definiteOctaveLength;
     }
 
@@ -886,17 +905,7 @@ public final class MusicStringParser extends Parser
         if (context.isRest) {
             return;
         }
-        
-        // If we happen not to have an octave yet, set it to a default value.
-        // Default octave: 5 for notes, 3 for chords
-        if ((context.octaveNumber == 0) && (!context.isNumericNote)) {
-            if (context.isChord) {
-                context.octaveNumber = 3;
-            } else {
-                context.octaveNumber = 5;
-            }
-        }
-        Logger.getRootLogger().trace("Octave: " +  context.octaveNumber);
+	        
 
         // Adjust for Key Signature
         if ((keySig != 0) && (!context.isNatural)) {
@@ -1530,7 +1539,6 @@ public final class MusicStringParser extends Parser
             parser.parseToken("[105]Xa20+[98]X+[78]X");
             parser.parseToken("AW+[18]X+[cabasa]Q+Dmin");
 
-            parser.parseToken("A/0.25");
 
             // 2.0  Dictionary Definition and Controller Events
             parser.parseToken("$UKELE=72");

@@ -9,12 +9,14 @@ import java.util.Map;
 
 import org.jfugue.JFugueDefinitions;
 import org.jfugue.elements.Note;
+import org.jfugue.elements.KeySignature;
 import org.jfugue.factories.NoteFactory;
 import org.jfugue.parsers.MusicStringParser;
 import org.jfugue.visitors.LoggingVisitor;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.Ignore;;
 
 public class NoteTest {
     private static final byte NOTE_DEFAULT_VELOCITY = Note.DEFAULT_VELOCITY + 10;
@@ -41,7 +43,7 @@ public class NoteTest {
     @Test
     public void testIsNumericNote() {
         Note note = new Note();
-        assertFalse("Note should not be numeric by default", note.isNumericNote());
+        assertTrue("Note should be numeric by default", note.isNumericNote());
     }
 
     @Test
@@ -179,4 +181,31 @@ public class NoteTest {
 	assertEquals(75,note.getValue());
     }
     
+    @Test
+    public void testAdjustForKey_Rest() {
+	Note note = new Note();
+	note.setRest(true);
+	assertEquals(note, note.adjustForKey(new KeySignature((byte)1,(byte)1)));
+    }
+
+    @Test
+    public void testAdjustForKey_IsAlreadyAdjusted() { 
+	Note note = new Note();
+	note.setAdjustedForKey(true);
+	assertEquals(note, note.adjustForKey(new KeySignature((byte)1,(byte)1)));
+    }
+
+    @Test
+    public void testAdjustForKey_ZeroKeysig() { 
+	Note note = new Note((byte)12);
+	Note note2 = note.adjustForKey(new KeySignature((byte)0,(byte)0));
+	assertEquals(note,note2);
+    }
+
+    @Test
+    public void testAdjustForKey_Natural() { 
+	Note note = new Note((byte)12);
+	Note note2 = note.adjustForKey(new KeySignature((byte)0,(byte)0));
+	assertEquals(note,note2);
+    }
 }
