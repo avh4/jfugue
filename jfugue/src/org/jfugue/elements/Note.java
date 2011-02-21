@@ -40,6 +40,7 @@ import org.jfugue.parsers.ParserContext;
 import org.jfugue.parsers.ParserError;
 import org.jfugue.visitors.ElementVisitor;
 
+import org.apache.log4j.Logger;
 /**
  * Contains all information necessary for a musical note, including
  * pitch, duration, attack velocity, and decay velocity.
@@ -61,8 +62,6 @@ public class Note extends AbstractNote {
     protected boolean isAdjustedForKey = false;
     protected boolean isNatural = false;
     protected boolean isChord = false;
-    protected boolean isNumericNote = true;
-    protected byte octave = 0;
     protected boolean rest = false;
     protected byte value = 0;
 
@@ -166,12 +165,6 @@ public class Note extends AbstractNote {
 		isNatural = c.isNatural();
 	}
 
-    /**
-     * @return the isNumericNote
-     */
-    public boolean isNumericNote() {
-        return isNumericNote;
-    }
 
     /**
      * @return the isChord
@@ -189,18 +182,20 @@ public class Note extends AbstractNote {
     }
 
     public Note adjustForKey(KeySignature keySignature) {
+        Logger.getRootLogger().trace("Adjusting note for keysig");
         Note note = new Note(this);
-        // Don't compute note value for a rest 
-        if (isRest() || isAdjustedForKey()) {
+        byte keySig = keySignature.getKeySig();
+	
+        if (isRest() || isAdjustedForKey() || (keySig == 0) || note.isNatural()) {
+	    Logger.getRootLogger().trace("No need to adjust for keysig");
             return note;
         }
         
-        byte noteNumber = note.getValue(), octaveNumber = note.getOctave();
-        byte keySig = keySignature.getKeySig();
-        
+        byte noteNumber = note.getSemitoneWithinOctave();
+	byte octaveNumber = note.getOctave();
+    	Logger.getRootLogger().trace("Before adjustment: Octave = " + octaveNumber +  ",  note = " + noteNumber);
         // TODO Is there a prettier way?
         // Adjust for Key Signature
-        if ((keySig != 0) && (!note.isNatural())) {
             if ((keySig <= -1) && (noteNumber == 11)) noteNumber = 10;
             if ((keySig <= -2) && (noteNumber == 4)) noteNumber = 3;
             if ((keySig <= -3) && (noteNumber == 9)) noteNumber = 8;
@@ -215,25 +210,20 @@ public class Note extends AbstractNote {
             if ((keySig >= +5) && (noteNumber == 9)) noteNumber = 10;
             if ((keySig >= +6) && (noteNumber == 4)) noteNumber = 5;
             if ((keySig >= +7) && (noteNumber == 11)) { noteNumber = 0; octaveNumber++; }
+	    Logger.getRootLogger().trace("Adjustment made: New Octave = " + octaveNumber +  ",  New Note = " + noteNumber);
+        int intNoteNumber = (octaveNumber * 12) + noteNumber;
+        if ( intNoteNumber > 127) {
+        	// TODO Something else - maybe we need a NoteError class
+           throw new JFugueException(JFugueException.NOTE_OCTAVE_EXC, Integer.toString(intNoteNumber), "");
         }
-
-        // Compute the actual note number, based on octave and note
-        if (!isNumericNote)
-        {
-            int intNoteNumber = (octaveNumber * 12) + noteNumber;
-            if ( intNoteNumber > 127) {
-            	// TODO Something else - maybe we need a NoteError class
-                throw new JFugueException(JFugueException.NOTE_OCTAVE_EXC, Integer.toString(intNoteNumber), "");
-            }
-            noteNumber = (byte)intNoteNumber;
-        }
+        noteNumber = (byte)intNoteNumber;
         note.setValue(noteNumber);
-        note.setOctave(octaveNumber);
+	note.setOctave(octaveNumber);
         note.setAdjustedForKey(true);
         return note;
-	}
+    }
     
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (obj == null) {
             return false;
         }
@@ -357,6 +347,11 @@ public class Note extends AbstractNote {
         return this.value;
     }
 
+    public byte getSemitoneWithinOctave() {
+	return (byte)(this.value % 12);
+    }
+
+
     /**
      * Returns verification string in this format:
      * Note: value={#}, duration={#}, startTie={T|F}, endTie={T|F}, attack={#}, decay={#}, isFirst={T|F}, isParallel={T|F}, isSequential={T|F}
@@ -408,14 +403,19 @@ public class Note extends AbstractNote {
 	 * @return the octave
 	 */
 	public byte getOctave() {
-		return octave;
+	    return (byte)((this.value - (this.value % 12))/12);
 	}
 
 	/**
 	 * @param octave the octave to set
 	 */
 	public void setOctave(byte octave) {
-		this.octave = octave;
+	    int delta  = ((octave - getOctave()) * 12);
+	    int intvalue = value + delta;
+	    if (intvalue > 127 || intvalue < 0) {
+		throw new JFugueException(JFugueException.NOTE_OCTAVE_EXC);
+	    }
+	    value += delta;
 	}
 
 	/**

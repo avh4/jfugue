@@ -8,6 +8,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.Map;
 
 import org.jfugue.JFugueDefinitions;
+import org.jfugue.JFugueException;
+
 import org.jfugue.elements.Note;
 import org.jfugue.elements.KeySignature;
 import org.jfugue.factories.NoteFactory;
@@ -40,11 +42,6 @@ public class NoteTest {
         assertEquals(40,n.getDecayVelocity());
     }
 
-    @Test
-    public void testIsNumericNote() {
-        Note note = new Note();
-        assertTrue("Note should be numeric by default", note.isNumericNote());
-    }
 
     @Test
     public void testIsChord() {
@@ -208,4 +205,102 @@ public class NoteTest {
 	Note note2 = note.adjustForKey(new KeySignature((byte)0,(byte)0));
 	assertEquals(note,note2);
     }
+
+    @Test
+    public void testAdjustForKey_LowestF_in_GMajor() { 
+	Note F = new Note((byte)5);
+	Note adjustedF = F.adjustForKey(new KeySignature((byte)1,(byte)0));
+	Note sharpF = new Note((byte)6);
+	assertEquals(sharpF,adjustedF);
+    }
+
+    @Test
+    public void testAdjustForKey_MiddleF_in_GMajor() { 
+	Note F = new Note((byte)65);
+	Note adjustedF = F.adjustForKey(new KeySignature((byte)1,(byte)0));
+	Note sharpF = new Note((byte)66);
+	assertEquals(sharpF,adjustedF);
+    }
+
+    @Test 
+    public void testGetSemitoneWithinOctave_ZeroOctave() {
+        Note F = new Note((byte)5);
+        assertEquals(5,F.getSemitoneWithinOctave());
+    }
+
+    @Test
+    public void testGetSemitoneWithinOctave_HigherOctave() {
+        Note Db = new Note((byte)123);
+        assertEquals(3,Db.getSemitoneWithinOctave());
+    }
+
+    @Test
+    public void testGetSemitoneWithinOctave_NoteZero() {
+        Note C = new Note();
+        assertEquals(0,C.getSemitoneWithinOctave());
+    }
+
+    @Test
+    public void testGetSemitoneWithinOctave_HighestNote() {
+        Note G = new Note((byte)127);
+        assertEquals(7,G.getSemitoneWithinOctave());
+    }
+
+    @Test
+    public void testGetOctave_Zero() {
+        Note Db = new Note((byte)5);
+        assertEquals(0,Db.getOctave());
+    }
+
+    @Test
+    public void testGetOctave_One() {
+        Note Gb = new Note((byte)18);
+        assertEquals(1,Gb.getOctave());
+    }
+
+    @Test
+    public void testGetOctave_Ten() {
+        Note G = new Note((byte)127);
+        assertEquals(10,G.getOctave());
+    }
+
+    @Test
+    public void testSetOctave_getOctave() {
+        Note C = new Note();
+	C.setOctave((byte)6);
+        assertEquals(6,C.getOctave());
+    }    
+
+    @Test
+    public void testSetOctave_getNote() {
+        Note C = new Note();
+	C.setOctave((byte)6);
+        assertEquals(72,C.getValue());
+    }    
+
+    @Test
+    public void testSetOctave_LowerOctave() {
+        Note C = new Note();
+	C.setOctave((byte)3);
+        assertEquals(3,C.getOctave());
+        assertEquals(36,C.getValue());
+    }    
+
+    @Test(expected=JFugueException.class)
+    public void testSetOctave_Out_Of_Upper_Bounds() {
+        Note C = new Note();
+	C.setOctave((byte)11);
+    }    
+
+    @Test(expected=JFugueException.class)
+    public void testSetOctave_Out_Of_Upper_Bounds_In_Highest_Octave() {
+        Note Ab = new Note((byte)80);
+	Ab.setOctave((byte)10);
+    }    
+
+    @Test(expected=JFugueException.class)
+    public void testSetOctave_Out_Of_Lower_Bounds() {
+        Note C = new Note();
+	C.setOctave((byte)-1);
+    }    
 }
