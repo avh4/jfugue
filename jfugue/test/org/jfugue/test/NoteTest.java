@@ -302,5 +302,147 @@ public class NoteTest {
     public void testSetOctave_Out_Of_Lower_Bounds() {
         Note C = new Note();
 	C.setOctave((byte)-1);
-    }    
+    }
+
+    @Test 
+    public void testGetMusicString() {
+        assertEquals("C5q", new Note((byte)60).getMusicString());
+    }
+
+    @Test 
+    public void testGetMusicString_Rest() {
+	Note r = new Note();
+	r.setRest(true);
+        assertEquals("Rq",r.getMusicString());
+    }
+
+    @Test
+    public void testGetMusicString_Sequential() {
+	Note C = new Note((byte)60);
+	C.setType(Note.SEQUENTIAL);
+        assertEquals("_C5q",C.getMusicString());
+    }
+
+    @Test
+    public void testGetMusicString_Parallel() {
+	Note C = new Note((byte)60);
+	C.setType(Note.PARALLEL);
+        assertEquals("+C5q",C.getMusicString());
+    }
+
+    @Test
+    public void testGetMusicString_NonDefault_Attack() {
+        assertEquals("C5qa5", new Note((byte)60,32,(byte)5,Note.DEFAULT_VELOCITY).getMusicString());
+    }
+
+    @Test
+    public void testGetMusicString_NonDefault_Decay() {
+        assertEquals("C5qd5", new Note((byte)60,32,Note.DEFAULT_VELOCITY,(byte)5).getMusicString());
+    }
+
+    @Test
+    public void testGetMusicString_NonDefault_AttackAndDecay() {
+        assertEquals("C5qa6d7",new Note((byte)60,32,(byte)6,(byte)7).getMusicString());
+    }
+
+    @Test
+    public void testGetMusicString_Semibreve() {
+	assertEquals("C5w", new Note((byte)60,128).getMusicString());
+    }
+
+    @Test
+    public void testGetMusicString_DottedMinim() {
+	assertEquals("C5h.", new Note((byte)60,96).getMusicString());
+    }
+
+    @Test
+    public void testGetMusicString_Minim() {
+	assertEquals("C5h", new Note((byte)60,64).getMusicString());
+    }
+
+    @Test
+    public void testGetMusicString_DottedCrotchet() {
+	assertEquals("C5q.", new Note((byte)60,48).getMusicString());
+    }
+
+    @Test
+    public void testGetMusicString_Crotchet() {
+	assertEquals("C5q", new Note((byte)60,32).getMusicString());
+    }
+
+    @Test
+    public void testGetMusicString_DottedQuaver() {
+	assertEquals("C5i.", new Note((byte)60,24).getMusicString());
+    }
+
+    @Test
+    public void testGetMusicString_Quaver() {
+	assertEquals("C5i", new Note((byte)60,16).getMusicString());
+    }
+
+    @Test
+    public void testGetMusicString_DottedSemiQuaver() {
+	assertEquals("C5s.", new Note((byte)60,12).getMusicString());
+    }
+
+    @Test
+    public void testGetMusicString_SemiQuaver() {
+	assertEquals("C5s", new Note((byte)60,8).getMusicString());
+    }
+
+    @Test
+    public void testGetMusicString_DottedDemiSemiQuaver() {
+	assertEquals("C5t.", new Note((byte)60,6).getMusicString());
+    }
+
+    @Test
+    public void testGetMusicString_DemiSemiQuaver() {
+	assertEquals("C5t", new Note((byte)60,4).getMusicString());
+    }
+
+    @Test
+    public void testGetMusicString_DottedHemiDemiSemiQuaver() {
+	assertEquals("C5x.", new Note((byte)60,3).getMusicString());
+    }
+
+    @Test
+    public void testGetMusicString_HemiDemiSemiQuaver() {
+	assertEquals("C5x", new Note((byte)60,2).getMusicString());
+    }
+
+    @Test
+    public void testGetMusicString_DottedSemiHemiDemiSemiQuaver() {
+	assertEquals("C5o.", new Note((byte)60,0.01171875).getMusicString());
+    }
+
+    @Test
+    public void testGetMusicString_SemiHemiDemiSemiQuaver() {
+	assertEquals("C5o", new Note((byte)60,1).getMusicString());
+    }
+
+    @Test
+    public void testGetMusicString_CustomDuration() {
+	assertEquals("C5/2.0", new Note((byte)60,256).getMusicString());
+    }
+
+    @Test
+    public void testGetFrequencyForNote_LowestC() {
+	assertEquals(8.175, Note.getFrequencyForNote(0),0.1);
+    }
+
+    @Test
+    public void testGetFrequencyForNote_HigestG() {
+	assertEquals(12543.854, Note.getFrequencyForNote(127),0.1);
+    }
+
+    @Test
+    public void testGetFrequencyForNote_MiddleAb() {
+	assertEquals(415.305, Note.getFrequencyForNote(68),0.1);
+    }
+
+    @Test
+    public void testGetFrequencyForNote_3rdOctaveB() {
+	assertEquals(61.735, Note.getFrequencyForNote(35),0.1);
+    }
+
 }

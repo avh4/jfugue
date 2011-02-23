@@ -649,19 +649,20 @@ public class Note extends AbstractNote {
      */
     public static double getFrequencyForNote(int noteValue)
     {
-        double freq = 0.0;
-        double freq0 = 8.1757989156;
-        for (double d=0; d <= noteValue; d++)
-        {
-            freq = freq0 * Math.pow(2.0, d / 12.0);
-        }
-
-        // Truncate to 4 significant digits
-        double retVal = Math.rint(freq * 10000.0) / 10000.0;
-
-        return retVal;
+        return truncateTo3DP(getPreciseFrequencyForNote(noteValue));
     }
 
+    private static double truncateTo3DP(double preciseNumber) {
+	return Math.rint(preciseNumber * 10000.0) / 10000.0;
+    }
+    
+    private static double getPreciseFrequencyForNote(int noteValue) {
+	return getFrequencyAboveBase(8.1757989156, noteValue / 12.0);
+    }
+
+    private static double getFrequencyAboveBase(double baseFrequency, double octavesAboveBase) {
+	return baseFrequency * Math.pow(2.0,octavesAboveBase);
+    }
     /**
      * Returns a MusicString representation of a decimal duration.  This code
      * currently only converts single duration values representing whole, half,
