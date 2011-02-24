@@ -188,7 +188,7 @@ public final class KeySignature implements JFugueElement
 				ParserError {
 			context.readPastWhitespace();
 			context.readChar('K', 'k');
-			String sKeySig = context.findWithinHorison("\\A[A-Ga-g][BbNn#]{0,2}", 3).toUpperCase();
+			String sKeySig = context.findWithinHorison("\\A[A-Ga-g][BbNn#]?", 2).toUpperCase();
 			String majOrMinStr = context.findWithinHorison("\\A(MAJ|MIN|maj|min)", 3).toUpperCase();
 			byte scale;
 			if ("MAJ".equals(majOrMinStr))

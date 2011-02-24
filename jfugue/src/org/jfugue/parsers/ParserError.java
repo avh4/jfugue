@@ -17,6 +17,7 @@ public class ParserError extends JFugueException {
     public static final String PARSER_SPACES_EXC = Messages.getString("ParserError.PARSER_SPACES_EXC"); //$NON-NLS-1$
 	public static final String EXPECTED_SYMBOL = "Expected symbol but got %s";
 	public static final String PATTERN_NOT_MATCH = "Regex failed: %s";
+	public static final String PATTERN_NOT_MATCH_ON = "Regex '%s' failed to match '%s'";
 
 	public static final String EXPECTED_BYTE   = "The parser expected a byte.";
     public static final String EXPECTED_LONG   = "The parser expected a long.";

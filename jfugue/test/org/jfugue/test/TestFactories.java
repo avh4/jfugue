@@ -92,6 +92,9 @@ public class TestFactories {
 		expected = "KF#maj";
 		actual = f.createElement(expected);
 		assertEquals(expected, actual.getMusicString());
+		expected = "KFmaj";
+		actual = f.createElement(expected);
+		assertEquals(expected, actual.getMusicString());
 	}
 
 //	@Ignore

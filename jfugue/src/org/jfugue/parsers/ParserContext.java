@@ -570,14 +570,15 @@ public class ParserContext extends FilterReader {
 			howMany = read(cb);
 		} catch (IOException e) {
 			unread(cb);
-			throw new ParserError(e); // TODO
+			throw new ParserError(e);
 		}
-		matcher = pattern.matcher(String.copyValueOf(cb, 0, howMany));
+		String s = String.copyValueOf(cb, 0, howMany);
+		matcher = pattern.matcher(s);
 		if (matcher.matches()) {
 			unread(cb, matcher.end(), cb.length - matcher.end());
 			return matcher.group();
 		} else {
-			throw new ParserError(); // TODO
+			throw new ParserError(ParserError.PATTERN_NOT_MATCH_ON, pattern, s);
 		}
 	}
 
