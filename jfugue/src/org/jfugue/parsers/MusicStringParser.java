@@ -1557,14 +1557,6 @@ public final class MusicStringParser extends Parser
             parser.parseToken("C4q");
             parser.parseToken("[Number1]/[Quarter]");
 
-            // 2.0  Note velocity
-            parser.parseToken("Cb4qa45");
-            parser.parseToken("Gb4qd67");
-            parser.parseToken("F#4qa55d77");
-            parser.parseToken("B4qa[Volume]d[Number1]");
-
-
-
             // 3.0  Tied notes
             parser.parseToken("Cq-");
             parser.parseToken("C5q-");

@@ -245,7 +245,7 @@ public class MusicStringParserTest {
 
     @Test
     public void testParseLayerWithDictionary() {
-        verifyToken("$number1=1","");
+        parseToken("$number1=1");
         verifyToken("L[Number1]","Layer: layer=1");
     }
  
@@ -333,4 +333,72 @@ public class MusicStringParserTest {
     public void testParseLetterNoteWithOctave0() {
         verifyToken("D0",Note.createVerifyString(2,0.25));	
     }
+
+    // 2.0  Note velocity
+    @Test 
+    public void testParseVelocity_Attack() {
+	verifyToken("Cb4qa45",Note.createVerifyString(47,0.25, false, false, 45,64,true,false,false));
+    }
+
+    @Test 
+    public void testParseVelocity_Decay() {
+	verifyToken("Gb4qd67",Note.createVerifyString(54,0.25, false, false,64,67,true,false,false));
+    }
+
+    @Test 
+    public void testParseVelocity_AttackAndDecay() {
+	verifyToken("F#4qa55d77",Note.createVerifyString(54,0.25, false, false, 55,77,true,false,false));
+    }
+
+    @Test 
+    public void testParseVelocity_AttackAndDecay_SingleDigit() {
+	verifyToken("F#4qa5d7",Note.createVerifyString(54,0.25, false, false, 5,7,true,false,false));
+    }
+
+    @Test 
+    public void testParseVelocity_DecayAndAttack() {
+	verifyToken("F#4qd77a55",Note.createVerifyString(54,0.25, false, false, 55,77,true,false,false));
+    }
+
+    @Test
+    public void testParseVelocityWithDictionary() {
+        parseToken("$number1=1");
+        parseToken("$volume=43");
+        verifyToken("B4qa[Volume]d[Number1]", Note.createVerifyString(59,0.25, false, false, 43,1,true,false,false));
+    }
+
+
+    @Test 
+    public void testParseVelocity_Attack_AngleNotation() {
+	verifyToken("Cb4q<45",Note.createVerifyString(47,0.25, false, false, 45,64,true,false,false));
+    }
+
+    @Test 
+    public void testParseVelocity_Decay_AngleNotation() {
+	verifyToken("Gb4q>67",Note.createVerifyString(54,0.25, false, false,64,67,true,false,false));
+    }
+
+    @Test 
+    public void testParseVelocity_AttackAndDecay_AngleNotation() {
+	verifyToken("F#4q<55>77",Note.createVerifyString(54,0.25, false, false, 55,77,true,false,false));
+    }
+
+    @Test 
+    public void testParseVelocity_DecayAndAttack_AngleNotation() {
+	verifyToken("F#4q>77<55",Note.createVerifyString(54,0.25, false, false, 55,77,true,false,false));
+    }
+
+    @Test
+    public void testParseVelocityWithDictionary_AngleNotation() {
+        parseToken("$number1=1");
+        parseToken("$volume=43");
+        verifyToken("B4q<[Volume]>[Number1]", Note.createVerifyString(59,0.25, false, false, 43,1,true,false,false));
+    }
+
+
+    @Test(expected=AssertionError.class)
+    public void testParseVelocity_InvalidChar() {
+	parseToken("F#4qs40");
+    }
+
 }
