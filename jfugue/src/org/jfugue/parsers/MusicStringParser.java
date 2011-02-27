@@ -1217,21 +1217,7 @@ public final class MusicStringParser extends Parser
             context.decimalDuration += getDoubleFromDictionary(s.substring(index+1, indexOfEndingBracket));
             index = indexOfEndingBracket+1;
         } else {
-            int endingIndex = index;
-            boolean keepAdvancingPointer = true;
-            while (keepAdvancingPointer) {
-                try {
-                    char numericDurationChar = s.charAt(endingIndex);
-                    if ((numericDurationChar >= '0') && (numericDurationChar <= '9') || (numericDurationChar == '.'))  // Decimal dot, not dotted duration
-                    {
-                        endingIndex++;
-                    } else {
-                        keepAdvancingPointer = false;
-                    }
-                } catch (IndexOutOfBoundsException e) {
-                    keepAdvancingPointer = false;
-                }
-            }
+	    int endingIndex = seekToEndOfDecimal(s,index);
             String durationNumberString = s.substring(index, endingIndex);
             context.decimalDuration += Double.parseDouble(durationNumberString);
             index = endingIndex;
@@ -1240,7 +1226,20 @@ public final class MusicStringParser extends Parser
         Logger.getRootLogger().trace("Decimal duration is " + context.decimalDuration);
         return index;
     }
+    
+    private int seekToEndOfDecimal(String s, int startingIndex) {
+        int cursor = startingIndex;
+        int end = s.length();
+        while (cursor < end && isDecimalCharacter(s.charAt(cursor))) {
+            cursor++;
+	}
+        return cursor;
+    }
 
+    private boolean isDecimalCharacter(char candidateCharacter) {
+	return candidateCharacter == '.' || ((candidateCharacter >= '0') && (candidateCharacter <= '9'));
+    }
+    
     /** Returns the index with which to start parsing the next part of the string, once this method is done with its part */
     private int parseTuplet(String s, int slen, int index, NoteContext context)
     {
@@ -1613,9 +1612,6 @@ public final class MusicStringParser extends Parser
             parser.parseToken("Cn");
             parser.parseToken("Cn6");
 
-            // 4.0 New parser
-            parser.parseToken("D3");
-            parser.parseToken("C##3"); // Should be like D3
 
             long endTime = System.currentTimeMillis();
             System.out.println("Time taken: "+(endTime-startTime)+"ms");

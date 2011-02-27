@@ -400,6 +400,12 @@ public class MusicStringParserTest {
 	parseToken("F#4qs40");
     }
 
+    @Test 
+    public void testParseNumericDurationWithAttack() {
+	verifyToken("Cb4/0.5a45",Note.createVerifyString(47,0.5, false, false, 45,64,true,false,false));
+    }
+
+
     // 3.0 Channel Pressure
     
     @Test 
