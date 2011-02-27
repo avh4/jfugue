@@ -395,10 +395,21 @@ public class MusicStringParserTest {
         verifyToken("B4q<[Volume]>[Number1]", Note.createVerifyString(59,0.25, false, false, 43,1,true,false,false));
     }
 
-
     @Test(expected=AssertionError.class)
     public void testParseVelocity_InvalidChar() {
 	parseToken("F#4qs40");
     }
 
+    // 3.0 Channel Pressure
+    
+    @Test 
+    public void testParseVelocity_ChannelPressure() {
+	verifyToken("+100","ChannelPressure: pressure=100");
+    }
+
+    @Test 
+    public void testParseVelocity_ChannelPressureWithDictionary() {
+        parseToken("$number110=110");
+        verifyToken("+[number110]","ChannelPressure: pressure=110");
+    }
 }

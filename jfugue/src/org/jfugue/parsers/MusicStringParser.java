@@ -1579,7 +1579,6 @@ public final class MusicStringParser extends Parser
             parser.parseToken("&[number1010]");
 
             // 3.0 Channel Pressure
-            parser.parseToken("+100");
             parser.parseToken("$number110=110");
             parser.parseToken("+[number110]");
             parser.parseToken("+[number110]");
