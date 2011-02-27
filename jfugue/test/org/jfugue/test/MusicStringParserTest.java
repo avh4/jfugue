@@ -413,4 +413,16 @@ public class MusicStringParserTest {
         verifyToken("+[number110]","ChannelPressure: pressure=110");
     }
 
+    // 4.0 New parser
+    
+    @Test 
+    public void testD3() {
+        verifyToken("D3",Note.createVerifyString(38,0.25));
+    }
+
+    @Test 
+    public void testDoubleSharp() {
+        verifyToken("C##3",Note.createVerifyString(38,0.25));
+    }
+
 }
