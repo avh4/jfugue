@@ -403,13 +403,14 @@ public class MusicStringParserTest {
     // 3.0 Channel Pressure
     
     @Test 
-    public void testParseVelocity_ChannelPressure() {
-	verifyToken("+100","ChannelPressure: pressure=100");
+    public void testParseChannelPressure() {
+        verifyToken("+100","ChannelPressure: pressure=100");
     }
 
     @Test 
-    public void testParseVelocity_ChannelPressureWithDictionary() {
+    public void testParseChannelPressure_WithDictionary() {
         parseToken("$number110=110");
         verifyToken("+[number110]","ChannelPressure: pressure=110");
     }
+
 }
