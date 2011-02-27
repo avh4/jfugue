@@ -452,8 +452,7 @@ public final class MusicStringParser extends Parser
         //
         // where "pressure" can each be bytes or dictionary items
 
-        String pressureString = s.substring(1,s.length());
-        byte pressureNumber = getByteFromDictionary(pressureString);
+        byte pressureNumber = getByteValueOfToken(s);
 
         Logger.getRootLogger().trace("ChannelPressure element: pressure = " + pressureNumber);
         fireChannelPressureEvent(new ChannelPressure(pressureNumber));
@@ -1578,10 +1577,6 @@ public final class MusicStringParser extends Parser
             parser.parseToken("$number1010=1010");
             parser.parseToken("&[number1010]");
 
-            // 3.0 Channel Pressure
-            parser.parseToken("$number110=110");
-            parser.parseToken("+[number110]");
-            parser.parseToken("+[number110]");
 
             // 3.0 Polyphonic Pressure
             parser.parseToken("*100,20");
