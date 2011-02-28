@@ -461,4 +461,39 @@ public class MusicStringParserTest {
     public void testKeySignature_FMinor() {
         verifyToken("KFmin","KeySig: keySig=-4, scale=1");
     }
+
+    //Should be JFugueException, but exceptions are masked by Reflection
+    @Test(expected=AssertionError.class)
+    public void testKeySignature_MajorMinorException() {
+        parseToken("KFmij");
+    }
+
+    @Test 
+    public void testVoice_0() {
+        verifyToken("V0","Voice: voice=0");
+    }
+
+    @Test 
+    public void testVoice_15() {
+        verifyToken("V15","Voice: voice=15");
+    }
+    
+    //Should be JFugueException, but exceptions are masked by Reflection
+    @Test(expected=AssertionError.class)
+    public void testVoice_Negative1() {
+        parseToken("V-1");
+    }
+
+    //Should be JFugueException, but exceptions are masked by Reflection
+    @Test(expected=AssertionError.class)
+    public void testVoice_16() {
+        parseToken("V16");
+    }
+
+    @Test 
+    public void testVoice_WithDictionary() {
+        parseToken("$number1=1");
+        verifyToken("V[number1]","Voice: voice=1");
+    }
+
 }

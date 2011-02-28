@@ -1499,8 +1499,6 @@ public final class MusicStringParser extends Parser
             parser.parseToken("(C+E+G)q");
             parser.parseToken("(Cmin+Emaj)h.a100d100");
 
-            parser.parseToken("V0");
-            parser.parseToken("V15");
             parser.parseToken("Cmaj7W");
             parser.parseToken("C#5Q");
             parser.parseToken("eb3Q.");
@@ -1588,8 +1586,7 @@ public final class MusicStringParser extends Parser
             parser.parseToken("Chx.*10:11");
 
             // 3.0 Key Signatures
-            parser.parseToken("KC#maj");
-            parser.parseToken("KAbmin");
+
             parser.parseToken("Cn");
             parser.parseToken("Cn6");
 
