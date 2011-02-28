@@ -1,5 +1,7 @@
 package org.jfugue.parsers.msp5
 import scala.util.parsing.combinator._
+import org.jfugue.parsers.msp5.expressions._
+import org.jfugue.parsers.msp5.elements._
 
 class MusicStringParser extends JavaTokenParsers {
 
@@ -9,28 +11,28 @@ class MusicStringParser extends JavaTokenParsers {
 
   lazy val element = voice | tempo | instrument | layer | key | controller | time | poly_pressure | channel_pressure | pitch_bend | measure | dict_add | collected_note | note | comment
 
-  lazy val voice = "[Vv]".r ~> bytePossInDict ^^ { Voice(_) }
+  lazy val voice = "[Vv]".r ~> byteExp ^^ { Voice(_) }
 
-  lazy val tempo = "[Tt]".r ~> intPossInDict ^^ { Tempo(_) }
+  lazy val tempo = "[Tt]".r ~> intExp ^^ { Tempo(_) }
 
-  lazy val instrument = "[Ii]".r ~> bytePossInDict ^^ { Instrument(_) }
+  lazy val instrument = "[Ii]".r ~> byteExp ^^ { Instrument(_) }
 
-  lazy val layer = "[Ll]".r ~> bytePossInDict ^^ { Layer(_) }
+  lazy val layer = "[Ll]".r ~> byteExp ^^ { Layer(_) }
 
   lazy val key = "[Kk]".r ~> letterNote ~ scale ^^ { case r ~ s => KeySignature(r,s) }
   lazy val scale = "(?i)(MAJ|MIN)".r
 
-  lazy val controller = "[Xx]".r ~> intPossInDict ~ "=" ~ intPossInDict ^^ { case i ~ _ ~ v => Controller(i, v) }
+  lazy val controller = "[Xx]".r ~> intExp ~ "=" ~ intExp ^^ { case i ~ _ ~ v => Controller(i, v) }
 
-  lazy val time = "@" ~> longPossInDict ^^ { Time(_) }
+  lazy val time = "@" ~> longExp ^^ { Time(_) }
 
-  lazy val poly_pressure = "*" ~> bytePossInDict ~ "," ~ bytePossInDict ^^ { case k ~ _ ~ p => PolyphonicPressure(k,p) }
+  lazy val poly_pressure = "*" ~> byteExp ~ "," ~ byteExp ^^ { case k ~ _ ~ p => PolyphonicPressure(k,p) }
 
-  lazy val channel_pressure = "+" ~> bytePossInDict ^^ { ChannelPressure(_) }
+  lazy val channel_pressure = "+" ~> byteExp ^^ { ChannelPressure(_) }
 
   lazy val pitch_bend = "&" ~> (int_pitch_bend | byte_pitch_bend)
-  lazy val int_pitch_bend = intPossInDict ^^ { i : Int => PitchBend((i % 128).asInstanceOf[Byte], (i / 128).asInstanceOf[Byte]) }
-  lazy val byte_pitch_bend = bytePossInDict ~ "," ~ bytePossInDict ^^ { case lsb ~ _ ~ msb => PitchBend(lsb, msb) }
+  lazy val int_pitch_bend = intExp ^^ { i : IntExp => PitchBend(LSB(i), MSB(i)) }
+  lazy val byte_pitch_bend = byteExp ~ "," ~ byteExp ^^ { case lsb ~ _ ~ msb => PitchBend(lsb, msb) }
 
   lazy val measure = "|" ^^ { _ => new Measure }
 
@@ -57,9 +59,19 @@ class MusicStringParser extends JavaTokenParsers {
 
   lazy val velocity = "(?i)([AD<>][0-9]+)+".r
 
+  lazy val byteExp = (dec_byte ^^ { x => LByte(x.toByte) }
+		      | inDict ^^ { x => ByteInDict(x) } )
+
+  lazy val intExp = (decimalNumber ^^ { x => LInt(x.toInt) }
+		     | inDict ^^ { x => IntInDict(x) } )
+
+  lazy val longExp = (decimalNumber ^^ { x => LLong(x.toLong) }
+		     | inDict ^^ { x => LongInDict(x) } )
+
+
   lazy val bytePossInDict = dec_byte ^^ { _.toByte }
 			   //  | inDict ^^ { ByteInDict(_) })
-			  //| (hex_byte ^^ { Byte.parseByte(_, 16) }) //| inDict
+			  //| (hex_byte ^^ { Byte.parseByte(_, 16) }) | inDict
   lazy val dec_byte = "-?[0-9]{1,3}".r
   lazy val hex_byte = "(?i)[0-9A-F]{2}".r
 
@@ -77,8 +89,7 @@ class MusicStringParser extends JavaTokenParsers {
 
   lazy val numericNote = "[" ~> dec_byte <~ "]" ^^ { _.toByte }
 
-  lazy val comment = "(?m)^#.*?$".r ^^ { Comment(_) }
-// ~> (property_comment | ordinary_comment)
+  lazy val comment = "(?m)^#".r ~> (property_comment | ordinary_comment)
   lazy val ordinary_comment = "(?m).*?$".r ^^ { OrdinaryComment(_) }
   lazy val property_comment = "\\s*".r ~> ident ~ ": " ~ "(?m).*?$".r ^^ { case k ~ _ ~ v => PropertyComment(k,v) }
 

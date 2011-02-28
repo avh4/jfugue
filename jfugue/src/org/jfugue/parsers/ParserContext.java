@@ -29,7 +29,7 @@ import org.jfugue.elements.Time;
 import org.jfugue.elements.Voice;
 
 /**
- * This class wraps a PushbackReader and Environment and provides helper methods to parsers and factories.  It also has readByte, readInt, readLong, and readDouble methods that take dictionary elements.
+ * This class wraps a Reader and Environment and provides helper methods to parsers and factories.  It also has readByte, readInt, readLong, and readDouble methods that take dictionary elements.
  * 
  * <p>Warning: Be careful about passing this class around as it exposes the fire methods from the parser.
  * 
@@ -40,10 +40,8 @@ public class ParserContext extends FilterReader {
 
 	public static final int CAPACITY = 10;
 
-//	protected Reader reader;
 	protected Environment environment;
 	
-//	protected Scanner scanner;
 	protected StringBuilder pushbackSB = new StringBuilder(CAPACITY);
 	protected StringBuilder sb = new StringBuilder(CAPACITY);
 	protected Matcher matcher = null;
@@ -67,10 +65,6 @@ public class ParserContext extends FilterReader {
 	public static final Pattern SYMBOL_PAT = Pattern.compile(SYMBOL_RE, Pattern.CASE_INSENSITIVE);
 	public static final Pattern BRACKETED_SYMBOL_PAT = Pattern.compile(BRACKETED_SYMBOL_RE, Pattern.CASE_INSENSITIVE);
 	
-//	public Scanner getScanner() {
-//		return scanner;
-//	}
-
 	/**
 	 * @param keySig the keySig to set
 	 */
@@ -91,8 +85,6 @@ public class ParserContext extends FilterReader {
 	 */
 	public ParserContext(Reader reader, Environment environment) {
 		super(reader);
-//		this.reader = reader;
-//		scanner = new Scanner(reader);
 		this.environment = environment;
 	}
 	
@@ -101,79 +93,8 @@ public class ParserContext extends FilterReader {
 	 */
 	public void setReader(Reader reader) {
 		in = reader;
-//		scanner = new Scanner(reader);
 	}
 
-	/////////// Delegate to Scanner ///////////
-//	/**
-//	 * @see java.util.Scanner#findInLine(java.util.regex.Pattern)
-//	 */
-//	public String findInLine(Pattern pattern) {
-//		String s = scanner.findInLine(pattern);
-//		if (s == null)
-//			throw new ParserError(ParserError.PATTERN_NOT_MATCH, pattern);
-//		return s;
-//	}
-//
-//	/**
-//	 * @see java.util.Scanner#findInLine(java.lang.String)
-//	 */
-//	public String findInLine(String pattern) {
-//		String s = scanner.findInLine(pattern);
-//		if (s == null)
-//			throw new ParserError(ParserError.PATTERN_NOT_MATCH, pattern);
-//		return s;
-//	}
-//
-//	/**
-//	 * @see java.util.Scanner#findWithinHorizon(java.util.regex.Pattern, int)
-//	 */
-//	public String findWithinHorizon(Pattern pattern, int horizon) {
-//		String s = scanner.findWithinHorizon(pattern, horizon);
-//		if (s == null)
-//			throw new ParserError(ParserError.PATTERN_NOT_MATCH, pattern);
-//		return s;
-//	}
-//
-//	/**
-//	 * @see java.util.Scanner#findWithinHorizon(java.lang.String, int)
-//	 */
-//	public String findWithinHorizon(String pattern, int horizon) {
-//		String s = scanner.findWithinHorizon(pattern, horizon);
-//		if (s == null)
-//			throw new ParserError(ParserError.PATTERN_NOT_MATCH, pattern);
-//		return s;
-//	}
-//
-//	/**
-//	 * @see java.util.Scanner#match()
-//	 */
-//	public MatchResult match() {
-//		return scanner.match();
-//	}
-//
-//	/**
-//	 * @see java.util.Scanner#next()
-//	 */
-//	public String next() {
-//		return scanner.next();
-//	}
-//
-//	/**
-//	 * @see java.util.Scanner#next(java.util.regex.Pattern)
-//	 */
-//	public String next(Pattern pattern) {
-//		return scanner.next(pattern);
-//	}
-//
-//	/**
-//	 * @see java.util.Scanner#next(java.lang.String)
-//	 */
-//	public String next(String pattern) {
-//		return scanner.next(pattern);
-//	}
-	/////////// End Delegate to Scanner ///////////
-	
 	/////////// Implementation of FilterReader ///////////
 	public boolean ready() throws IOException {
 		return super.ready() || pushbackSB.length() > 0;
@@ -279,18 +200,12 @@ public class ParserContext extends FilterReader {
 	 * @throws ParserError 
 	 */
 	public String readSymbol() throws JFugueException, IOException, ParserError {
-//		String str = scanner.findInLine(BRACKETED_SYMBOL_PAT);
-//		if (str == null)
-//			return readIdentifier();
-//		return str;
 		final String type = "symbol";
 		checkReady();
 		int cp = read();
-		char ch = (char) cp;
 		if (cp == '[') {
 			String id = readIdentifier();
 			cp = read();
-			ch = (char) cp;
 			if (cp == ']') {
 				return "[" + id + "]";
 			} else {
@@ -305,10 +220,6 @@ public class ParserContext extends FilterReader {
 	}
 
 	public String readIdentifier() throws IOException, ParserError {
-//		String str = scanner.findInLine(SYMBOL_PAT);
-//		if (str == null)
-//			throw new ParserError(ParserError.EXPECTED_SYMBOL, str);
-//		return str;
 		StringBuilder sb = new StringBuilder(CAPACITY);
 		final String type = "identifier";
 		char ch = readChar();
@@ -325,7 +236,6 @@ public class ParserContext extends FilterReader {
 	}
 	
 	public String readToken(boolean unreadLastChar, char...cs) throws IOException, ParserError {
-//		return scanner.next();
 		@SuppressWarnings("unused")
 		final String type = "token";
 		if (cs.length == 1)
@@ -364,16 +274,6 @@ public class ParserContext extends FilterReader {
 	 * @throws ParserError 
 	 */
 	public byte readByte() throws IOException, ParserError {
-//		String str = scanner.findInLine(BYTE_PAT);
-//		try {
-//			if (str == null) {
-//				str = readSymbol();
-//				return getByteFromDictionary(str);
-//			} else
-//				return Byte.parseByte(str);
-//		} catch (Exception e) {
-//			throw new ParserError(e, ParserError.EXPECTED_BYTE, str);
-//		}
 		StringBuilder sb = new StringBuilder(CAPACITY);
 		char ch = readChar();
 		if (Character.isDigit(ch)) {
@@ -412,15 +312,6 @@ public class ParserContext extends FilterReader {
 		}
 	}
 	
-//	public byte readHexByte() throws ParserError {
-//		String str = scanner.findWithinHorizon(HEX_BYTE_PAT, 2);
-//		try {
-//			return Byte.parseByte(str, 16);
-//		} catch (Exception e) {
-//			throw new ParserError(e, ParserError.EXPECTED_BYTE, str);
-//		}
-//	}
-	
 	/**
 	 * Tries to read an int or a symbol that resolves to an int.
 	 * 
@@ -450,18 +341,6 @@ public class ParserContext extends FilterReader {
 				throw new ParserError(ParserError.EXPECTED_INT);
 			}
 	}
-//	public int readInt() throws ParserError {
-//		String s = null;
-//		try {
-//			s = scanner.findWithinHorizon(INT_RE, 11);
-//			if (s != null && s.length() != 0)
-//				return Integer.parseInt(s);
-//			s = scanner.findWithinHorizon(BRACKETED_SYMBOL_PAT, 50);
-//			return environment.getIntFromDictionary(s);
-//		} catch (Exception e) {
-//			throw new ParserError(e, ParserError.EXPECTED_INT);
-//		}
-//	}
 
 	/**
 	 * Tries to read a long or a symbol that resolves to a long.
@@ -470,14 +349,6 @@ public class ParserContext extends FilterReader {
 	 * @throws ParserError 
 	 */
 	public long readLong() throws IOException, ParserError {
-//		String str = findInLine(LONG_PAT);
-//		try {
-//			if (str == null)
-//				str = readSymbol();
-//			return Long.parseLong(str);
-//		} catch (Exception e) {
-//			throw new ParserError(e, ParserError.EXPECTED_LONG, str);
-//		}
 		StringBuilder sb = new StringBuilder(CAPACITY);
 		checkReady();
 		int cp = read();
@@ -508,15 +379,6 @@ public class ParserContext extends FilterReader {
 	 * @throws ParserError 
 	 */
 	public double readDouble() throws IOException, ParserError {
-//		String str = findInLine(DOUBLE_PAT);
-//		try {
-//			if (str != null)
-//				return Double.parseDouble(str);
-//			str = readSymbol();
-//			return getDoubleFromDictionary(str);
-//		} catch (Exception e) {
-//			throw new ParserError(e, ParserError.EXPECTED_DOUBLE, str);
-//		}
 		StringBuilder sb = new StringBuilder(CAPACITY);
 		final String type = "double";
 		checkReady();
@@ -631,10 +493,6 @@ public class ParserContext extends FilterReader {
 	}
 
 	public char readChar(char...cs) throws IOException, ParserError {
-		//		String pat = "\\A[" + String.valueOf(cs) + "]";
-		//		String s = findInLine(pat);
-		//		if (s != null)
-		//			return s.charAt(0);
 		checkReady();
 		char ch = readChar();
 		for (char d : cs) {
@@ -659,92 +517,11 @@ public class ParserContext extends FilterReader {
 		}
 	}
 
-	// TODO Make a simple set of combinatorial parsers
-	
-	/**
-	 * Tries to read one of the {@code cs} and then a byte.
-	 * 
-	 * @param cs the acceptable chars
-	 * @return CharThen<Byte>
-	 * @throws IOException
-	 * @throws ParserError 
-	 * @throws JFugueException 
-	 */
-//	public CharThen<Byte> readCharThenByte(char... cs) throws IOException, JFugueException, ParserError {
-//		char c = readOneOfTheChars(cs);
-//		return new CharThen<Byte>(c, readByte());
-//	}
-
-	public static class CharThen<T> {
-		protected char ch;
-
-		public char getChar() {
-			return ch;
-		}
-
-		protected T then;
-
-		public T getThen() {
-			return then;
-		}
-
-		/**
-		 * @param ch
-		 * @param then
-		 */
-		public CharThen(char ch, T then) {
-			super();
-			this.ch = ch;
-			this.then = then;
-		}
-
-	}
-
-	public static interface ParserElement<T> {
-		public T getTerminal();
-	}
-
-	public static class ParserPair<F extends ParserElement<?>, S extends ParserElement<?>>
-			implements
-			ParserElement<ParserPair<? extends ParserElement<?>, ? extends ParserElement<?>>> {
-		protected F first;
-		protected S second;
-
-		/**
-		 * @return the first
-		 */
-		public F getFirst() {
-			return first;
-		}
-
-		/**
-		 * @return the second
-		 */
-		public S getSecond() {
-			return second;
-		}
-
-		/**
-		 * @param first
-		 * @param second
-		 */
-		public ParserPair(F first, S second) {
-			super();
-			this.first = first;
-			this.second = second;
-		}
-
-		public ParserPair<? extends ParserElement<?>, ? extends ParserElement<?>> getTerminal() {
-			return null;
-		}
-
-	}
-	
 	
 
 	/**
 	 * @param bracketedString
-	 * @return
+	 * @return byte
 	 * @throws Error
 	 * @see org.jfugue.Environment#getByteFromDictionary(java.lang.String)
 	 */
@@ -754,7 +531,7 @@ public class ParserContext extends FilterReader {
 
 	/**
 	 * @param bracketedString
-	 * @return
+	 * @return double
 	 * @throws Error
 	 * @see org.jfugue.Environment#getDoubleFromDictionary(java.lang.String)
 	 */
@@ -764,7 +541,7 @@ public class ParserContext extends FilterReader {
 
 	/**
 	 * @param bracketedString
-	 * @return
+	 * @return int
 	 * @throws Error
 	 * @see org.jfugue.Environment#getIntFromDictionary(java.lang.String)
 	 */
@@ -773,7 +550,7 @@ public class ParserContext extends FilterReader {
 	}
 
 	/**
-	 * @return
+	 * @return key
 	 * @see org.jfugue.Environment#getKeySig()
 	 */
 	public KeySignature getKeySig() {
@@ -782,7 +559,7 @@ public class ParserContext extends FilterReader {
 
 	/**
 	 * @param bracketedString
-	 * @return
+	 * @return long
 	 * @throws JFugueException
 	 * @see org.jfugue.Environment#getLongFromDictionary(java.lang.String)
 	 */

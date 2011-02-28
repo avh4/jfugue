@@ -1,21 +1,17 @@
 package org.jfugue.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+
 import java.io.IOException;
-import java.io.PushbackReader;
 import java.io.Reader;
 import java.io.StringReader;
-import java.nio.CharBuffer;
-import java.util.Scanner;
 
 import org.jfugue.Environment;
 import org.jfugue.JFugueException;
 import org.jfugue.parsers.ParserContext;
-import org.jfugue.parsers.ParserContext.CharThen;
 import org.jfugue.parsers.ParserError;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class ParserContextTest {
@@ -34,7 +30,6 @@ public class ParserContextTest {
 	}
 
 	public void setString(String string) {
-//		context.setReader(new StringReader(string));
 		context = new ParserContext(new StringReader(string), environment);
 	}
 

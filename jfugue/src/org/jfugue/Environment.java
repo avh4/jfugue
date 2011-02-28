@@ -40,7 +40,14 @@ import org.apache.log4j.Logger;
  * 
  */
 public class Environment implements FireEventProxy {
+	private static Environment instance;
 
+	public static Environment getInstance() {
+		if (instance == null)
+			instance = new Environment();
+		return instance;
+	}
+	
 	private Map<String, String> dictionaryMap;
 
 	private FireEventProxy proxy;
@@ -246,19 +253,6 @@ public class Environment implements FireEventProxy {
 		// Logger.getRootLogger().trace("Word ",word," is defined as ",definition);
 		return definition;
 	}
-
-	/**
-	 * @return the instance
-	 */
-	public static Environment getInstance() {
-		if (instance == null) {
-			instance = new Environment(new HashMap<String, String>(
-					JFugueDefinitions.DICT_MAP), new DummyParserEventProxy());
-		}
-		return instance;
-	}
-
-	private static Environment instance;
 
 	/**
 	 * @author joshua

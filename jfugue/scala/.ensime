@@ -1,0 +1,18 @@
+;; This config was generated using ensime-config-gen. Feel free to customize its contents manually.
+
+(
+
+:project-name "jfugue-scala"
+
+:project-package "org.jfugue"
+
+:sources ("src" "test")
+
+:formatting-prefs (:alignParameters t
+		   :doubleIndentClassDeclaration t
+		   :indentLocalDefs t
+		   :indentPackageBlocks t)
+
+:use-maven t
+
+)
