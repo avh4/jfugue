@@ -346,26 +346,7 @@ public final class MusicStringParser extends Parser
             throw new JFugueException(JFugueException.KEYSIG_EXC, majOrMin, s);
         }
         int scale = (majOrMin.equalsIgnoreCase("MAJ") ? 0 : 1);
-        int keySig = 0;
-
-        if (rootNote.equalsIgnoreCase("CBMAJ") || rootNote.equalsIgnoreCase("ABMIN")) keySig = -7;
-        else if (rootNote.equalsIgnoreCase("GBMAJ") || rootNote.equalsIgnoreCase("EBMIN")) keySig = -6;
-        else if (rootNote.equalsIgnoreCase("DBMAJ") || rootNote.equalsIgnoreCase("BBMIN")) keySig = -5;
-        else if (rootNote.equalsIgnoreCase("ABMAJ") || rootNote.equalsIgnoreCase("FMIN")) keySig = -4;
-        else if (rootNote.equalsIgnoreCase("EBMAJ") || rootNote.equalsIgnoreCase("CMIN")) keySig = -3;
-        else if (rootNote.equalsIgnoreCase("BBMAJ") || rootNote.equalsIgnoreCase("GMIN")) keySig = -2;
-        else if (rootNote.equalsIgnoreCase("FMAJ") || rootNote.equalsIgnoreCase("DMIN")) keySig = -1;
-        else if (rootNote.equalsIgnoreCase("CMAJ") || rootNote.equalsIgnoreCase("AMIN")) keySig = 0;
-        else if (rootNote.equalsIgnoreCase("GMAJ") || rootNote.equalsIgnoreCase("EMIN")) keySig = +1;
-        else if (rootNote.equalsIgnoreCase("DMAJ") || rootNote.equalsIgnoreCase("BMIN")) keySig = +2;
-        else if (rootNote.equalsIgnoreCase("AMAJ") || rootNote.equalsIgnoreCase("F#MIN")) keySig = +3;
-        else if (rootNote.equalsIgnoreCase("EMAJ") || rootNote.equalsIgnoreCase("C#MIN")) keySig = +4;
-        else if (rootNote.equalsIgnoreCase("BMAJ") || rootNote.equalsIgnoreCase("G#MIN")) keySig = +5;
-        else if (rootNote.equalsIgnoreCase("F#MAJ") || rootNote.equalsIgnoreCase("D#MIN")) keySig = +6;
-        else if (rootNote.equalsIgnoreCase("C#MAJ") || rootNote.equalsIgnoreCase("A#MIN")) keySig = +7;
-        else {
-            throw new JFugueException(JFugueException.KEYSIG_EXC,s);
-        }
+        int keySig = KeySignature.keyNameToMIDIKey(rootNote);
         Logger.getRootLogger().trace("Key signature: sig=" + keySig + " scale=" + scale);
         fireKeySignatureEvent(new KeySignature((byte)keySig, (byte)scale));
         this.keySig = (byte)keySig;

@@ -431,4 +431,34 @@ public class MusicStringParserTest {
         verifyToken("C##3",Note.createVerifyString(38,0.25));
     }
 
+    // 3.0 Key Signatures
+    @Test 
+    public void testKeySignature_CSharpMajor() {
+        verifyToken("KC#maj","KeySig: keySig=7, scale=0");
+    }
+
+    @Test
+    public void testKeySignature_CFlatMajor() {
+        verifyToken("KCbmaj","KeySig: keySig=-7, scale=0");
+    }
+
+    @Test 
+    public void testKeySignature_CMajor() {
+        verifyToken("KCmaj","KeySig: keySig=0, scale=0");
+    }
+
+    @Test 
+    public void testKeySignature_AMinor() {
+        verifyToken("KAmin","KeySig: keySig=0, scale=1");
+    }
+
+    @Test 
+    public void testKeySignature_CSharpMinor() {
+        verifyToken("KC#min","KeySig: keySig=4, scale=1");
+    }
+
+    @Test 
+    public void testKeySignature_FMinor() {
+        verifyToken("KFmin","KeySig: keySig=-4, scale=1");
+    }
 }

@@ -170,6 +170,31 @@ public final class KeySignature implements JFugueElement
         return hash;
     }
 
+    public static byte keyNameToMIDIKey(String sKeySig) {
+	byte keySig;
+        // TODO Somehow make this less messy -ska
+        if (sKeySig.equalsIgnoreCase("CBMAJ") || sKeySig.equalsIgnoreCase("ABMIN")) keySig = -7;
+        else if (sKeySig.equalsIgnoreCase("GBMAJ") || sKeySig.equalsIgnoreCase("EBMIN")) keySig = -6;
+        else if (sKeySig.equalsIgnoreCase("DBMAJ") || sKeySig.equalsIgnoreCase("BBMIN")) keySig = -5;
+        else if (sKeySig.equalsIgnoreCase("ABMAJ") || sKeySig.equalsIgnoreCase("FMIN")) keySig = -4;
+        else if (sKeySig.equalsIgnoreCase("EBMAJ") || sKeySig.equalsIgnoreCase("CMIN")) keySig = -3;
+        else if (sKeySig.equalsIgnoreCase("BBMAJ") || sKeySig.equalsIgnoreCase("GMIN")) keySig = -2;
+        else if (sKeySig.equalsIgnoreCase("FMAJ") || sKeySig.equalsIgnoreCase("DMIN")) keySig = -1;
+        else if (sKeySig.equalsIgnoreCase("CMAJ") || sKeySig.equalsIgnoreCase("AMIN")) keySig = 0;
+        else if (sKeySig.equalsIgnoreCase("GMAJ") || sKeySig.equalsIgnoreCase("EMIN")) keySig = +1;
+        else if (sKeySig.equalsIgnoreCase("DMAJ") || sKeySig.equalsIgnoreCase("BMIN")) keySig = +2;
+        else if (sKeySig.equalsIgnoreCase("AMAJ") || sKeySig.equalsIgnoreCase("F#MIN")) keySig = +3;
+        else if (sKeySig.equalsIgnoreCase("EMAJ") || sKeySig.equalsIgnoreCase("C#MIN")) keySig = +4;
+        else if (sKeySig.equalsIgnoreCase("BMAJ") || sKeySig.equalsIgnoreCase("G#MIN")) keySig = +5;
+        else if (sKeySig.equalsIgnoreCase("F#MAJ") || sKeySig.equalsIgnoreCase("D#MIN")) keySig = +6;
+        else if (sKeySig.equalsIgnoreCase("C#MAJ") || sKeySig.equalsIgnoreCase("A#MIN")) keySig = +7;
+        else {
+            throw new ParserError(JFugueException.KEYSIG_EXC, "K" + sKeySig);
+        }
+        return keySig;
+    }
+ 
+
     public static class Factory extends JFugueElementFactory<KeySignature> {
 
 		private static Factory instance;
@@ -198,29 +223,8 @@ public final class KeySignature implements JFugueElement
 			else
 				throw new ParserError("The scale must be MAJ or MIN but it is '%s'", majOrMinStr);
 			sKeySig += majOrMinStr;
-	        byte keySig = 0;
-
-	        // TODO Somehow make this less messy -ska
-	        if (sKeySig.equalsIgnoreCase("CBMAJ") || sKeySig.equalsIgnoreCase("ABMIN")) keySig = -7;
-	        else if (sKeySig.equalsIgnoreCase("GBMAJ") || sKeySig.equalsIgnoreCase("EBMIN")) keySig = -6;
-	        else if (sKeySig.equalsIgnoreCase("DBMAJ") || sKeySig.equalsIgnoreCase("BBMIN")) keySig = -5;
-	        else if (sKeySig.equalsIgnoreCase("ABMAJ") || sKeySig.equalsIgnoreCase("FMIN")) keySig = -4;
-	        else if (sKeySig.equalsIgnoreCase("EBMAJ") || sKeySig.equalsIgnoreCase("CMIN")) keySig = -3;
-	        else if (sKeySig.equalsIgnoreCase("BBMAJ") || sKeySig.equalsIgnoreCase("GMIN")) keySig = -2;
-	        else if (sKeySig.equalsIgnoreCase("FMAJ") || sKeySig.equalsIgnoreCase("DMIN")) keySig = -1;
-	        else if (sKeySig.equalsIgnoreCase("CMAJ") || sKeySig.equalsIgnoreCase("AMIN")) keySig = 0;
-	        else if (sKeySig.equalsIgnoreCase("GMAJ") || sKeySig.equalsIgnoreCase("EMIN")) keySig = +1;
-	        else if (sKeySig.equalsIgnoreCase("DMAJ") || sKeySig.equalsIgnoreCase("BMIN")) keySig = +2;
-	        else if (sKeySig.equalsIgnoreCase("AMAJ") || sKeySig.equalsIgnoreCase("F#MIN")) keySig = +3;
-	        else if (sKeySig.equalsIgnoreCase("EMAJ") || sKeySig.equalsIgnoreCase("C#MIN")) keySig = +4;
-	        else if (sKeySig.equalsIgnoreCase("BMAJ") || sKeySig.equalsIgnoreCase("G#MIN")) keySig = +5;
-	        else if (sKeySig.equalsIgnoreCase("F#MAJ") || sKeySig.equalsIgnoreCase("D#MIN")) keySig = +6;
-	        else if (sKeySig.equalsIgnoreCase("C#MAJ") || sKeySig.equalsIgnoreCase("A#MIN")) keySig = +7;
-	        else {
-	            throw new ParserError(JFugueException.KEYSIG_EXC, "K" + sKeySig);
-	        }
-	        
-	        return context.fireKeySignatureEvent(new KeySignature(keySig, scale));
+			byte keySig = KeySignature.keyNameToMIDIKey(sKeySig);
+			return context.fireKeySignatureEvent(new KeySignature(keySig, scale));
 		}
 
 		public Class<KeySignature> type() {
