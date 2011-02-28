@@ -112,6 +112,7 @@ public class JFugueException extends RuntimeException
     public static final String TEMPO_EXC = "Tempo %s is not a number";
     /** The KeySignature command, K<i>keysig</i>, is poorly formed. */
     public static final String KEYSIG_EXC = " %s is not a proper key signature; should be like KC#maj or KAbmin.";
+    public static final String KEYSIG_SCALE_EXC = " %s is not a proper key signature scale name; should be either min or maj";
     /** The Layer command, L<i>layer</i>, is out of range. */
     public static final String LAYER_EXC = "Layer %s is not a number, or is not in the range 0 - 127.";
     /** The Instrument command, I<i>instrument</i>, is not a valid instrument. */

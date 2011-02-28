@@ -331,25 +331,37 @@ public final class MusicStringParser extends Parser
      */
     private void parseKeySignatureElement(String s) throws JFugueException
     {
-        String rootNote = null;
-        String majOrMin = null;
-        if (s.length() == 5)
-        {
-            rootNote = s.substring(1, 5);
-            majOrMin = s.substring(2, 5);
-        } else {
-            rootNote = s.substring(1, 6);
-            majOrMin = s.substring(3, 6);
+        Logger.getRootLogger().trace("Key signature element: "+ s.substring(1));
+
+        int scale = getMIDIKeySignatureScale(s);
+        int key = KeySignature.keyNameToMIDIKey(s.substring(1));
+        Logger.getRootLogger().trace("Key signature: sig=" + key + " scale=" + scale);
+        fireKeySignatureEvent(new KeySignature((byte)key, (byte)scale));
+        this.keySig = (byte)key;
+    }
+
+    /**
+     * Extracts the MIDI scale value from a MusicString key signature.
+     * @param keysigToken a token representing a MusicString key signature 
+     * @returns 0 for a major key; 1 for a minor key.
+     */
+    private int getMIDIKeySignatureScale(String keysigToken) throws JFugueException {
+        return scaleAbbreviationToMIDIScale(getKeySignatureScalePart(keysigToken));
+    }
+
+    private String getKeySignatureScalePart(String sKeysig) {
+        return sKeysig.substring(sKeysig.length() - 3);
+    }
+
+    private int scaleAbbreviationToMIDIScale(String scale) throws JFugueException {
+        if (!isValidScaleAbbreviation(scale)) {
+            throw new JFugueException(JFugueException.KEYSIG_SCALE_EXC, scale);
         }
-        Logger.getRootLogger().trace("Key signature element: root=" + rootNote + " majOrMin=" + majOrMin);
-        if (!(majOrMin.equalsIgnoreCase("MAJ") || (majOrMin.equalsIgnoreCase("MIN")))) {
-            throw new JFugueException(JFugueException.KEYSIG_EXC, majOrMin, s);
-        }
-        int scale = (majOrMin.equalsIgnoreCase("MAJ") ? 0 : 1);
-        int keySig = KeySignature.keyNameToMIDIKey(rootNote);
-        Logger.getRootLogger().trace("Key signature: sig=" + keySig + " scale=" + scale);
-        fireKeySignatureEvent(new KeySignature((byte)keySig, (byte)scale));
-        this.keySig = (byte)keySig;
+        return ("MAJ".equalsIgnoreCase(scale) ? 0 : 1);
+    }
+
+    private boolean isValidScaleAbbreviation(String scale) {
+        return "MAJ".equalsIgnoreCase(scale) || "MIN".equalsIgnoreCase(scale);
     }
 
     /**
