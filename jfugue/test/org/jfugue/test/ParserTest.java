@@ -1,12 +1,8 @@
 package org.jfugue.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 import org.jfugue.ParserListener;
 import org.jfugue.ParserProgressListener;
@@ -25,11 +21,7 @@ import org.jfugue.elements.Time;
 import org.jfugue.elements.Voice;
 import org.jfugue.parsers.Parser;
 
-import org.jfugue.test.TestCaseHelpers;
-
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.*;
 
 public class ParserTest {
     public class TestParser extends Parser {

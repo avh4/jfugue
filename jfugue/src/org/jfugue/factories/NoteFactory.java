@@ -133,7 +133,7 @@ public final class NoteFactory extends JFugueElementFactory<Note> {
 		JFugueElementFactoryManager.addFactory(getInstance());
 	}
 
-	public class NoteContext {
+	public static class NoteContext {
 		ParserContext pContext;
 		String token, otoken;
 		int start = 0, end;

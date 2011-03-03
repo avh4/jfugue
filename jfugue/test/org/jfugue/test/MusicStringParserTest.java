@@ -26,7 +26,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 
-import org.jfugue.test.TestCaseHelpers;
 
 public class MusicStringParserTest {
     private MusicStringParser parser;
