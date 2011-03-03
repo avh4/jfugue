@@ -54,13 +54,12 @@ public class StreamingMidiEventManager
     private long initialTime;
     private boolean isActive;
 
-    public StreamingMidiEventManager()
+    public StreamingMidiEventManager(Synthesizer synthesizer)
     {
         timerMap = new HashMap<Long, List<TimerEvent>>();
         isActive = true;
         
         try {
-            Synthesizer synthesizer = MidiSystem.getSynthesizer();
             synthesizer.open();
             channels = synthesizer.getChannels();
         } catch (MidiUnavailableException e)

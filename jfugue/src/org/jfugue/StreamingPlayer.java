@@ -49,6 +49,7 @@ public final class StreamingPlayer
     private Sequencer sequencer;
     private StreamingMidiRenderer renderer;
     private MusicStringParser parser;
+    private Synthesizer synthesizer;
     
     /**
      * Instantiates a new StreamingPlayer object, which is used for playing music in realtime.
@@ -68,9 +69,11 @@ public final class StreamingPlayer
     public StreamingPlayer(boolean connected)
     {
         try {
-            init(MidiSystem.getSequencer());
-        } 
-        catch (MidiUnavailableException e)
+            // Get default sequencer.
+            setSequencer(MidiSystem.getSequencer(connected));
+            init(MidiSystem.getSynthesizer());
+            openSequencer();
+        } catch (MidiUnavailableException e)
         {
             throw new JFugueException(JFugueException.SEQUENCER_DEVICE_NOT_SUPPORTED_WITH_EXCEPTION + e.getMessage());
         }
@@ -82,26 +85,35 @@ public final class StreamingPlayer
      */
     public StreamingPlayer(Sequencer sequencer)
     {
-        init(sequencer);
-        openSequencer();
+        try {
+            // Get default sequencer.
+            setSequencer(sequencer);
+            init(MidiSystem.getSynthesizer());
+            openSequencer();
+        } catch (MidiUnavailableException e)
+        {
+            throw new JFugueException(JFugueException.SEQUENCER_DEVICE_NOT_SUPPORTED_WITH_EXCEPTION + e.getMessage());
+        }
     }
-
+    
     /**
      * Creates a new StreamingPlayer instance using a Sequencer obtained from the Synthesizer that you have provided.  
      * @param synth The Synthesizer you want to use for this Player. 
      */
     public StreamingPlayer(Synthesizer synth) throws MidiUnavailableException
     {
-        this(Player.getSequencerConnectedToSynthesizer(synth));
+        setSequencer(Player.getSequencerConnectedToSynthesizer(synth));
+        init(synth);
+        openSequencer();
     }
     
-    private void init(Sequencer sequencer)
+    private void init(Synthesizer synthesizer)
     {
-        setSequencer(sequencer);
+        this.synthesizer = synthesizer;
         
         parser = new MusicStringParser();
         parser.setDefaultTempoEnabled(false);
-        renderer = new StreamingMidiRenderer();
+        renderer = new StreamingMidiRenderer(synthesizer);
         parser.addParserListener(renderer);
     }
 
@@ -131,12 +143,8 @@ public final class StreamingPlayer
         parser.removeParserListener(renderer);
         
         getSequencer().close();
-        try {
-            if (MidiSystem.getSynthesizer() != null) {
-                MidiSystem.getSynthesizer().close();
-            }
-        } catch (MidiUnavailableException e) {
-            throw new JFugueException(JFugueException.GENERAL_ERROR + e.getMessage());
+        if (this.synthesizer != null) {
+            this.synthesizer.close();
         }
         renderer.close();
     }
@@ -147,12 +155,21 @@ public final class StreamingPlayer
     }
 
     /**
-     * Returns the sequencer containing the MIDI data from a pattern that has been parsed.
-     * @return the Sequencer from the pattern that was recently parsed
+     * Returns the sequencer 
+     * @return the Sequencer 
      */
     public Sequencer getSequencer()
     {
         return this.sequencer;
+    }
+
+    /**
+     * Returns the synthesizer 
+     * @return the synthesizer 
+     */
+    public Synthesizer getSynthesizer()
+    {
+        return this.synthesizer;
     }
 
     /**

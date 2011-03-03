@@ -23,6 +23,7 @@
 package org.jfugue;
 
 import javax.sound.midi.ShortMessage;
+import javax.sound.midi.Synthesizer;
 
 import org.jfugue.elements.ChannelPressure;
 import org.jfugue.elements.Controller;
@@ -51,6 +52,7 @@ public class StreamingMidiRenderer implements ParserListener
 {
     private StreamingMidiEventManager eventManager;
     private MusicStringParser parser;
+    private Synthesizer synthesizer;
     private long initialNoteTime = 0;
     private long lastParallelNoteDuration = 0;
     private int currentTempo = Tempo.ALLEGRO;
@@ -58,10 +60,11 @@ public class StreamingMidiRenderer implements ParserListener
     /**
      * Instantiates a Renderer
      */
-    public StreamingMidiRenderer()
+    public StreamingMidiRenderer(Synthesizer synthesizer)
     {
         this.parser = new MusicStringParser();
         this.parser.addParserListener(this);
+        this.synthesizer = synthesizer;
         reset();
     }
 
@@ -76,7 +79,7 @@ public class StreamingMidiRenderer implements ParserListener
      */
     public void reset()
     {
-        this.eventManager = new StreamingMidiEventManager();
+        this.eventManager = new StreamingMidiEventManager(synthesizer);
     }
 
     // ParserListener methods
