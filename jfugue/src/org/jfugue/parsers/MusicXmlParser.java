@@ -264,7 +264,14 @@ public final class MusicXmlParser extends Parser
 	 * the <code>part-list</code> elements
 	 */
 	private void parsePartHeader(Element part, XMLpart partHeader)
-	{	//	ID
+	{	
+	    // I added the following check to satisfy a MusicXML file that contained a part-group,
+	    // but I am not convinced that this is the proper way to handle such an element.
+	    // - dmkoelle, 2 MAR 2011
+	    if (part.getLocalName().equals("part-group")) {
+	        return;
+	    }
+	    //	ID
 		Attribute ID = part.getAttribute("id");
 		//	may be changed by midi-instrument below
 		partHeader.ID = ID.getValue();
@@ -763,8 +770,12 @@ public final class MusicXmlParser extends Parser
 	    	if (midiArray.length != 1)
 	    		parseInstrument(midiArray[1]);
     	}
-    	else
-    		parseInstrument(instruments);
+    	else {
+            if (instruments.charAt(instruments.length()-1) == '|') {
+                instruments = instruments.substring(0, instruments.length() - 1);
+            }
+            parseInstrument(instruments);
+    	}
     }
     
     /**
