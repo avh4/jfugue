@@ -401,6 +401,7 @@ public class Player
     {
         getSequencer().close();
         try {
+            // TODO: This is a potential bug, if the Player has been passed in a Synthesizer
             if (MidiSystem.getSynthesizer() != null) {
                 MidiSystem.getSynthesizer().close();
             }
@@ -539,6 +540,7 @@ public class Player
     public static void allNotesOff()
     {
         try {
+            // TODO: This is a potential bug, if the Player has been passed in a Synthesizer
             allNotesOff(MidiSystem.getSynthesizer());
         } catch (MidiUnavailableException e)
         {
