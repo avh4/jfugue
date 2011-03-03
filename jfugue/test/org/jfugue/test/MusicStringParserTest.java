@@ -497,7 +497,7 @@ public class MusicStringParserTest {
 
     //Should be JFugueException, but exceptions are masked by Reflection
     @Test(expected=AssertionError.class)
-    public void testVoice_WithDictionary() {
+    public void testVoice_NegativeWithDictionary() {
         parseToken("$numberminus1=-1");
         parseToken("V[numberminus1]");
     }
