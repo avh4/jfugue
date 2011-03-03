@@ -210,7 +210,7 @@ public final class MusicStringParser extends Parser
     private void parseVoiceElement(String s) throws JFugueException
     {
 	byte voiceNumber = getByteValueOfToken(s);
-        if (voiceNumber > 15) {
+        if ((voiceNumber < 0) || (voiceNumber > 15)) {
             throw new JFugueException(JFugueException.VOICE_EXC, Byte.toString(voiceNumber), s);
         }
         Logger.getRootLogger().trace("Voice element: voice = " + voiceNumber);
@@ -264,6 +264,9 @@ public final class MusicStringParser extends Parser
     private void parseLayerElement(String s) throws JFugueException
     {
         byte layerNumber = getByteValueOfToken(s);
+        if ((layerNumber < 0) || (layerNumber > 15)) {
+            throw new JFugueException(JFugueException.LAYER_EXC, Byte.toString(layerNumber), s);
+        }
         Logger.getRootLogger().trace("Layer element: layer = " + layerNumber);
         fireLayerEvent(new Layer(layerNumber));
     }
