@@ -502,4 +502,58 @@ public class MusicStringParserTest {
         parseToken("V[numberminus1]");
     }
 
+    @Test 
+    public void testController_coarseValue() {
+        verifyToken("X[PORTAMENTO_TIME_COARSE]=6","Controller: index=5, value=6");
+    }
+
+    @Test 
+    public void testController_fineValue() {
+        verifyToken("X[PORTAMENTO_TIME_FINE]=9","Controller: index=37, value=9");
+    }
+
+    @Test 
+    public void testController_both() {
+        // 777 = ((6<<7) + 9)
+        verifyToken("X[PORTAMENTO_TIME]=777","Controller: index=5, value=6; Controller: index=37, value=9");
+    }
+
+    @Test 
+    public void testController_numericValue() {
+        verifyToken("X[37]=9","Controller: index=37, value=9");
+    }
+
+    @Test 
+    public void testController_DictionaryValue() {
+	parseToken("$VOLUME=37");
+        verifyToken("X[VOLUME]=9","Controller: index=37, value=9");
+    }
+
+    @Test 
+    public void testController_Volume() {
+        verifyToken("X[VOLUME]=10200","Controller: index=7, value=79; Controller: index=39, value=88");
+    }
+
+    @Test 
+    public void testController_ON() {
+        verifyToken("X[Local_Keyboard]=ON","Controller: index=122, value=127");
+    }
+
+    @Test 
+    public void testController_OFF() {
+        verifyToken("X[Local_Keyboard]=OFF","Controller: index=122, value=0");
+    }
+
+    @Test 
+    public void testController_Default() {
+        verifyToken("X[EXPRESSION_FINE]=DEFAULT","Controller: index=43, value=64");
+    }
+
+    //Should be JFugueException, but exceptions are masked by Reflection
+    @Test(expected=AssertionError.class)
+    public void testController_NoEquals() {
+        parseToken("X[MOD_WHEEL]12");
+    }
+
+
 }

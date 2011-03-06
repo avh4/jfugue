@@ -1536,7 +1536,7 @@ public final class MusicStringParser extends Parser
             parser.parseToken("IUKELE");
             parser.parseToken("$Volume=43");
             parser.parseToken("X[Volume]=10");
-            parser.parseToken("X[PORTAMENTO_TIME]=777");
+
 
             // 2.0  Dictionary Definition in odd situations that should work
             parser.parseToken("XVolume=ON");
