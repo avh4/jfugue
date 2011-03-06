@@ -242,6 +242,18 @@ public class MusicStringParserTest {
         verifyToken("L[8]","Layer: layer=8");
     }
 
+    //Expected exception should be a JFugueException, but this is concealed by invokeRestrictedMethod
+    @Test(expected=AssertionError.class)
+    public void testParseLayer_OutOfBounds_Upper() {
+        parseToken("L[16]");
+    }
+
+    //Expected exception should be a JFugueException, but this is concealed by invokeRestrictedMethod
+    @Test(expected=AssertionError.class)
+    public void testParseLayer_OutOfBounds_Lower() {
+        parseToken("L[-1]");
+    }
+
     @Test
     public void testParseLayerWithDictionary() {
         parseToken("$number1=1");
