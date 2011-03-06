@@ -3,7 +3,9 @@ package org.jfugue.visitors;
 import org.jfugue.Pattern;
 import org.jfugue.elements.ChannelPressure;
 import org.jfugue.elements.Chord;
+import org.jfugue.elements.CommentProperty;
 import org.jfugue.elements.Controller;
+import org.jfugue.elements.DictAdd;
 import org.jfugue.elements.Instrument;
 import org.jfugue.elements.KeySignature;
 import org.jfugue.elements.Layer;
@@ -85,6 +87,16 @@ public class DefaultElementVisitor implements ElementVisitor {
 	}
 
 	public void visit(Sequential sequential) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void visit(DictAdd dictAdd) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void visit(CommentProperty property) {
 		// TODO Auto-generated method stub
 		
 	}

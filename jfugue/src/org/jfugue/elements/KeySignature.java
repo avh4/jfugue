@@ -65,6 +65,10 @@ public final class KeySignature implements JFugueElement
     	this((byte) keySig, (byte) scale);
     }
 
+    public KeySignature(String root, String scale) {
+    	this(keyNameToMIDIKey(root + scale), scaleToNumber(scale));
+    }
+    
     /**
      * Sets the key signature, from -7 to +7, for this object.
      * See the MIDI specification for more details
@@ -171,7 +175,7 @@ public final class KeySignature implements JFugueElement
     }
 
     public static byte keyNameToMIDIKey(String sKeySig) {
-	byte keySig;
+    	byte keySig;
         // TODO Somehow make this less messy -ska
         if (sKeySig.equalsIgnoreCase("CBMAJ") || sKeySig.equalsIgnoreCase("ABMIN")) keySig = -7;
         else if (sKeySig.equalsIgnoreCase("GBMAJ") || sKeySig.equalsIgnoreCase("EBMIN")) keySig = -6;
@@ -193,6 +197,16 @@ public final class KeySignature implements JFugueElement
         }
         return keySig;
     }
+    
+    public static byte scaleToNumber(String scale) {
+		scale = scale.toUpperCase();
+		if ("MAJ".equals(scale))
+			return (byte)0;
+		else if ("MIN".equals(scale))
+			return (byte)1;
+		else
+			throw new IllegalArgumentException("The scala must be either MAJ or MIN");
+	}
  
 
     public static class Factory extends JFugueElementFactory<KeySignature> {

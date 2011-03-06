@@ -1,4 +1,5 @@
 package org.jfugue.parsers.msp5.expressions
+
 import org.jfugue.Environment
 
 abstract class Expression[T] {

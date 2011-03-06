@@ -3,31 +3,14 @@
  */
 package org.jfugue.visitors;
 
-import org.jfugue.elements.ChannelPressure;
-import org.jfugue.elements.Chord;
-import org.jfugue.elements.Controller;
-import org.jfugue.elements.Instrument;
-import org.jfugue.elements.KeySignature;
-import org.jfugue.elements.Layer;
-import org.jfugue.elements.Measure;
-import org.jfugue.elements.Note;
-import org.jfugue.elements.NoteCollection;
-import org.jfugue.elements.PitchBend;
-import org.jfugue.elements.PolyphonicPressure;
-import org.jfugue.elements.SystemExclusive;
-import org.jfugue.elements.Tempo;
-import org.jfugue.elements.Time;
-import org.jfugue.elements.Voice;
-import org.jfugue.elements.Note.Parallel;
-import org.jfugue.elements.Note.Sequential;
+import org.jfugue.elements.*;
 import org.jfugue.ParserListener;
-import org.jfugue.Pattern;
 
 /**
  * @author joshua
  *
  */
-public class VisitorToListenerAdaptor implements ElementVisitor {
+public class VisitorToListenerAdaptor extends DefaultElementVisitor {
 
 	protected ParserListener listener;
 	
@@ -57,9 +40,6 @@ public class VisitorToListenerAdaptor implements ElementVisitor {
 
 	public void visit(Measure measure) {
 		listener.measureEvent(measure);
-	}
-
-	public void visit(Pattern pattern) {
 	}
 
 	public void visit(PitchBend pitchBend) {
@@ -101,36 +81,5 @@ public class VisitorToListenerAdaptor implements ElementVisitor {
 			break;
 		}
 	}
-
-	public void visitParallelNote(Note n) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void visitSequentialNote(Note note) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void visit(Chord chord) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void visit(NoteCollection collection) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void visit(Parallel parallel) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void visit(Sequential sequential) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 
 }

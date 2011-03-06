@@ -16,13 +16,55 @@ public class Chord extends Note {
     	protected String inversion;
     	protected byte[] halfsteps;
     	protected List<Note> noteList = null;
+   	
+    	/**
+		 * @param value
+		 * @param duration
+		 * @param attackVelocity
+		 * @param decayVelocity
+		 * @param fullname
+		 * @param chordName
+		 * @param inversion
+		 * @param halfsteps
+		 */
+		public Chord(byte value, long duration, byte attackVelocity,
+				byte decayVelocity, String fullname, String chordName,
+				String inversion, byte[] halfsteps) {
+			super(value, duration, attackVelocity, decayVelocity);
+			this.fullname = fullname;
+			this.chordName = chordName;
+			this.inversion = inversion;
+			this.halfsteps = halfsteps;
+			createNotes();
+		}
+		
+		/**
+		 * @param value
+		 * @param duration
+		 * @param attackVelocity
+		 * @param decayVelocity
+		 * @param natural
+		 * @param fullname
+		 * @param halfsteps
+		 */
+		public Chord(byte value, long duration, byte attackVelocity,
+				byte decayVelocity, boolean natural, String fullname,
+				byte[] halfsteps) {
+			super(value, duration, attackVelocity, decayVelocity, natural);
+			this.fullname = fullname;
+			this.halfsteps = halfsteps;
+			createNotes();
+		}
 
-    	public Chord(NoteFactory.NoteContext c) {
+
+
+
+		public Chord(NoteFactory.NoteContext c) {
     		super(c);
 			fullname = c.getOtoken();
     		chordName = c.getsChord();
     		halfsteps = c.getChord();
-    		createNotes(c);
+    		createNotes();
     	}
     	
 		public Chord(Chord chord) {
@@ -38,10 +80,10 @@ public class Chord extends Note {
 			noteList = Collections.unmodifiableList(noteList);
 		}
 		
-		private void createNotes(NoteFactory.NoteContext c) {
+		private void createNotes() {
 			noteList = new LinkedList<Note>();
 			for (byte hs : halfsteps) {
-				Note note = new Note(c);
+				Note note = new Note(this);
 				note.setType(NoteTypes.PARALLEL);
 				note.setValue((byte) (note.getValue() + hs));
 				noteList.add(note);

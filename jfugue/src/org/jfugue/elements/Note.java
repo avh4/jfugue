@@ -144,6 +144,11 @@ public class Note extends AbstractNote {
     	setDecayVelocity(decayVelocity);
     }
     
+    public Note(byte value, long duration, byte attackVelocity, byte decayVelocity, boolean natural) {
+    	this(value, duration, attackVelocity, decayVelocity);
+    	isNatural = natural;
+    }
+    
     public Note(Note note) {
 		this(note.getValue(), note.getDuration(), note.getAttackVelocity(), note.getDecayVelocity());
 		setEndOfTie(note.isEndOfTie());
