@@ -459,23 +459,27 @@ public final class MusicStringParser extends Parser
      * @param s the token that contains a polyphonic pressure element
      * @throws JFugueException if there is a problem parsing the element
      */
-    private void parsePolyPressureElement(String s) throws JFugueException
-    {
+    private void parsePolyPressureElement(String s) throws JFugueException {
         // A PolyphonicPressure token looks like this:
         //      *key,pressure
         //
         // where "key" and "pressure" can each be bytes or dictionary items
 
-        String keyString = s.substring(1,s.indexOf(','));
-        byte keyNumber = getByteFromDictionary(keyString);
-
-        String pressureString = s.substring(s.indexOf(',')+1, s.length());
-        byte pressureNumber = getByteFromDictionary(pressureString);
+        byte keyNumber = getPolyPressureKey(s);
+        byte pressureNumber = getPolyPressurePressure(s);
 
         Logger.getRootLogger().trace("PolyphonicPressure element: key = " + keyNumber+ ", pressure = " + pressureNumber);
         firePolyphonicPressureEvent(new PolyphonicPressure(keyNumber, pressureNumber));
     }
 
+    private byte getPolyPressureKey(String token) {
+        return getByteFromDictionary(token.substring(1,token.indexOf(',')));
+    }
+    
+    private byte getPolyPressurePressure(String polyPressureToken) {
+	return  getByteFromDictionary(polyPressureToken.substring(polyPressureToken.indexOf(',') + 1, polyPressureToken.length()));
+    }
+	
     /**
      * Parses a pitch bend element.
      * @param s the token that contains a pitch bend pressure element
@@ -1486,7 +1490,7 @@ public final class MusicStringParser extends Parser
     public static void main(String[] args)
     {
         verifyTokenParsing();
-    }
+    }
 
     /**
      * Used for diagnostic purposes.  Contains an assortment of tokens that
@@ -1534,8 +1538,6 @@ public final class MusicStringParser extends Parser
             // 2.0  Dictionary Definition and Controller Events
             parser.parseToken("$UKELE=72");
             parser.parseToken("IUKELE");
-            parser.parseToken("$Volume=43");
-            parser.parseToken("X[Volume]=10");
 
 
             // 2.0  Dictionary Definition in odd situations that should work
@@ -1570,13 +1572,6 @@ public final class MusicStringParser extends Parser
             parser.parseToken("$number1010=1010");
             parser.parseToken("&[number1010]");
 
-
-            // 3.0 Polyphonic Pressure
-            parser.parseToken("*100,20");
-            parser.parseToken("$number110=110");
-            parser.parseToken("*[number110],50");
-            parser.parseToken("*[number110],[number110]");
-
             // 4.0 Chord Inversions
             parser.parseToken("Cmaj");
             parser.parseToken("C7maj");
@@ -1604,7 +1599,7 @@ public final class MusicStringParser extends Parser
 
             parser.parseToken("Cn");
             parser.parseToken("Cn6");
-
+	
 
             long endTime = System.currentTimeMillis();
             System.out.println("Time taken: "+(endTime-startTime)+"ms");
@@ -1614,3 +1609,4 @@ public final class MusicStringParser extends Parser
         }
     }
 }
+    

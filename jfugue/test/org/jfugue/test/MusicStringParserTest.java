@@ -567,5 +567,28 @@ public class MusicStringParserTest {
         parseToken("X[MOD_WHEEL]12");
     }
 
+    // 3.0 Polyphonic Pressure
+    @Test 
+    public void testPolyPressure() {
+        verifyToken("*100,20","PolyphonicPressure: key=100, pressure=20");
+    }
+
+    @Test 
+    public void testPolyPressure_DictionaryKey() {
+	parseToken("$number110=110");
+        verifyToken("*[number110],20","PolyphonicPressure: key=110, pressure=20");
+    }
+    @Test 
+    public void testPolyPressure_DictionaryPressure() {
+	parseToken("$number10=10");
+        verifyToken("*120,10","PolyphonicPressure: key=120, pressure=10");
+    }
+
+    @Test 
+    public void testPolyPressure_DictionaryKeyAndPressure() {
+	parseToken("$number110=110");
+	parseToken("$number90=90");
+        verifyToken("*[number90],[number110]","PolyphonicPressure: key=90, pressure=110");
+    }
 
 }
