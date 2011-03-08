@@ -23,6 +23,7 @@
 package org.jfugue.elements;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.jfugue.JFugueException;
 import org.jfugue.factories.JFugueElementFactory;
@@ -97,7 +98,7 @@ public final class PitchBend implements JFugueElement
     {
         StringBuffer buffy = new StringBuffer();
         buffy.append("PitchBend: bend=");
-        buffy.append(getBend());
+        buffy.append(Arrays.toString(getBend()));
         return buffy.toString();
     }
     

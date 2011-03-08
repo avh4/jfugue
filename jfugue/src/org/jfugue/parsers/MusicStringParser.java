@@ -477,7 +477,7 @@ public final class MusicStringParser extends Parser
     }
     
     private byte getPolyPressurePressure(String polyPressureToken) {
-	return  getByteFromDictionary(polyPressureToken.substring(polyPressureToken.indexOf(',') + 1, polyPressureToken.length()));
+	return  getByteFromDictionary(polyPressureToken.substring(polyPressureToken.indexOf(',') + 1));
     }
 	
     /**
@@ -493,28 +493,45 @@ public final class MusicStringParser extends Parser
         //
         // where "byte1" and "byte2" or "int" can be bytes/ints or dictionary items
 
-        byte lsb = 0;
-        byte msb = 0;
+	byte [] bytes;
+	String [] valueStrings = s.substring(1).split("," , 2);
+	if(valueStrings.length == 2) {
+            bytes = byteStringsToBytes(valueStrings);
+	} else {
+            bytes = intStringToOctets(valueStrings[0]);
+	}
 
-        if (s.indexOf(',') > -1) {
-            // We're dealing with two bytes
-            String b1String = s.substring(1,s.indexOf(','));
-            lsb = getByteFromDictionary(b1String);
-
-            String b2String = s.substring(s.indexOf(',')+1, s.length());
-            msb = getByteFromDictionary(b2String);
-        } else {
-            // We're dealing with a single integer, which we will break into bytes
-            String valueString = s.substring(1,s.length());
-            int value = getIntFromDictionary(valueString);
-            lsb = (byte)(value % 128);
-            msb = (byte)(value / 128);
-        }
-
-        Logger.getRootLogger().trace("PitchBend element: byte1 = " + lsb + ", byte2 = " + msb);
-        firePitchBendEvent(new PitchBend(lsb, msb));
+        Logger.getRootLogger().trace("PitchBend element: byte1 = " + bytes[0] + ", byte2 = " + bytes[1]);
+        firePitchBendEvent(new PitchBend(bytes[0], bytes[1]));
     }
 
+    private final byte [] byteStringsToBytes(final String [] byteStrings) {
+	byte [] bytes = new byte[byteStrings.length];
+	for (int i = 0; i < byteStrings.length; ++i) {
+	    bytes[i] = getByteFromDictionary(byteStrings[i]);
+	}
+	return bytes;
+    }
+
+    /**
+     * Given a String representation of an int, breaks the int that it represents  into two bytes.
+     * @returns An array of two bytes, [0] is the Least Significant Byte, [1] the Most Significant Byte
+     */
+    private final byte [] intStringToOctets(final String valueString) {
+        return intToOctets(getIntFromDictionary(valueString));
+    }
+    
+    /**
+     * Breaks an int into two bytes.
+     * @returns An array of two bytes, [0] is the Least Significant Byte, [1] the Most Significant Byte
+     */
+
+    private static byte [] intToOctets(final int value) {
+	byte [] octets = new byte [2];
+        octets[0] = (byte)(value % 128);
+        octets[1] = (byte)(value / 128);
+	return octets;
+    }
 
     /**
      * Parses a dictionary element.
@@ -1562,15 +1579,6 @@ public final class MusicStringParser extends Parser
             parser.parseToken("C5-qh");
             parser.parseToken("C-q-");
             parser.parseToken("C--");
-
-            // 3.0 Pitch Bend
-            parser.parseToken("&100,50");
-            parser.parseToken("&512");
-            parser.parseToken("$number110=110");
-            parser.parseToken("&[number110],50");
-            parser.parseToken("&[number110],[number110]");
-            parser.parseToken("$number1010=1010");
-            parser.parseToken("&[number1010]");
 
             // 4.0 Chord Inversions
             parser.parseToken("Cmaj");

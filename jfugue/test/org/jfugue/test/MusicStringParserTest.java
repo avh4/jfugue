@@ -578,6 +578,7 @@ public class MusicStringParserTest {
 	parseToken("$number110=110");
         verifyToken("*[number110],20","PolyphonicPressure: key=110, pressure=20");
     }
+
     @Test 
     public void testPolyPressure_DictionaryPressure() {
 	parseToken("$number10=10");
@@ -589,6 +590,36 @@ public class MusicStringParserTest {
 	parseToken("$number110=110");
 	parseToken("$number90=90");
         verifyToken("*[number90],[number110]","PolyphonicPressure: key=90, pressure=110");
+    }
+
+    // 3.0 Pitch Bend
+    @Test
+    public void testPitchBend_SeparateBits() {
+       verifyToken("&100,50","PitchBend: bend=[100, 50]");
+    }
+
+    @Test
+    public void testPitchBend_SingleValue() {
+       verifyToken("&512","PitchBend: bend=[0, 4]");
+    }
+
+    @Test
+    public void testPitchBend_SeparateBits_WithDictionary() {
+       parseToken("$number110=110");
+       verifyToken("&[number110],50","PitchBend: bend=[110, 50]");
+    }
+
+    @Test
+    public void testPitchBend_SeparateBits_WithDictionary_Both() {
+       parseToken("$number110=110");
+       parseToken("$number49=49");
+       verifyToken("&[number110],[number49]","PitchBend: bend=[110, 49]");
+    }
+
+    @Test
+    public void testPitchBend_SingleValue_WithDictionary() {
+       parseToken("$number1010=1010");
+       verifyToken("&[number1010]","PitchBend: bend=[114, 7]");
     }
 
 }
