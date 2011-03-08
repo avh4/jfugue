@@ -622,4 +622,15 @@ public class MusicStringParserTest {
        verifyToken("&[number1010]","PitchBend: bend=[114, 7]");
     }
 
+    @Test
+    public void testCollectedNote() {
+	verifyToken("(C+E+G)h",Note.createCompoundVerifyString(Note.createVerifyString(60, 0.5), Note.createVerifyString(64, 0.5, false, true, false), Note.createVerifyString(67, 0.5, false, true, false)));
+    }
+
+    //Should be JFugueException, but exceptions are masked by Reflection
+    @Test(expected=AssertionError.class)
+    public void testCollectedNote_Underscores() {
+        parseToken("(C_E_G)q");
+    }
+
 }

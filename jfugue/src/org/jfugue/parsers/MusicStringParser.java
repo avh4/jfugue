@@ -1532,7 +1532,6 @@ public final class MusicStringParser extends Parser
             parser.parseToken("Cwhqistxo");
 
             parser.parseToken("C10");
-            parser.parseToken("(C+E+G)q");
             parser.parseToken("(Cmin+Emaj)h.a100d100");
 
             parser.parseToken("Cmaj7W");
