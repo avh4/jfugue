@@ -326,6 +326,81 @@ public class MusicStringParserTest {
     }
 
     @Test
+    public void testParseLetterDuration_whole() {
+        verifyToken("Cw",Note.createVerifyString(60,1));
+    }
+
+    @Test
+    public void testParseLetterDuration_dottedhalf() {
+        verifyToken("Ch.",Note.createVerifyString(60,0.75));
+    }
+
+    @Test
+    public void testParseLetterDuration_half() {
+        verifyToken("Ch",Note.createVerifyString(60,0.5));
+    }
+
+    @Test
+    public void testParseLetterDuration_dottedquarter() {
+        verifyToken("Cq.",Note.createVerifyString(60,1/4.0 + 1/8.0));
+    }
+
+    @Test
+    public void testParseLetterDuration_quarter() {
+        verifyToken("Cq",Note.createVerifyString(60,1/4.0));
+    }
+
+    @Test
+    public void testParseLetterDuration_dottedeighth() {
+        verifyToken("Ci.",Note.createVerifyString(60,1/8.0 + 1/16.0));
+    }
+
+    @Test
+    public void testParseLetterDuration_eighth() {
+        verifyToken("Ci",Note.createVerifyString(60,1/8.0));
+    }
+
+    @Test
+    public void testParseLetterDuration_dottedsixteenth() {
+        verifyToken("Cs.",Note.createVerifyString(60,1/16.0 + 1/32.0));
+    }
+
+    @Test
+    public void testParseLetterDuration_sixteenth() {
+        verifyToken("Cs",Note.createVerifyString(60,1/16.0));
+    }
+
+    @Test
+    public void testParseLetterDuration_dottedthirtysecond() {
+        verifyToken("Ct.",Note.createVerifyString(60,1/32.0 + 1/64.0));
+    }
+
+    @Test
+    public void testParseLetterDuration_thirtysecond() {
+        verifyToken("Ct",Note.createVerifyString(60,1/32.0));
+    }
+
+    @Test
+    public void testParseLetterDuration_dottedsixtyfourth() {
+        verifyToken("Cx.",Note.createVerifyString(60,1/64.0 + 1/128.0));
+    }
+
+    @Test
+    public void testParseLetterDuration_sixtyfourth() {
+        verifyToken("Cx",Note.createVerifyString(60,1/64.0));
+    }
+
+    @Test
+    public void testParseLetterDuration_dottedhundredandtwentyeighth() {
+        verifyToken("Co.",Note.createVerifyString(60,1/128.0 + 1/256.0));
+    }
+
+    @Test
+    public void testParseLetterDuration_hundredandtwentyeighth() {
+        verifyToken("Co",Note.createVerifyString(60,1/128.0));
+    }
+
+    @Test
     public void testParseLetterNoteWithOctave() {
         verifyToken("C10",Note.createVerifyString(120,0.25));
     }
