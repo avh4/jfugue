@@ -1,5 +1,8 @@
 package org.jfugue.parsers.msp5.elements
 
+import org.jfugue.parsers.ParserError
+import org.jfugue.JFugueDefinitions
+
 abstract class AbstChord
 object Chord {
   lazy val CHORDS_MAP = org.jfugue.factories.NoteFactory.CHORDS_MAP
@@ -11,11 +14,27 @@ object Chord {
       new Chord(name, intervals)
   }
 }
-case class Chord(name: String, intervals: Array[Byte]) extends AbstChord
-case class InvalidChord(name: String) extends AbstChord
+case class Chord(val name: String, private val intervals: Array[Byte]) extends AbstChord {
+  def getName() = name
+  def getIntervals() = java.util.Arrays.copyOf(intervals, intervals.length)
+}
+case class InvalidChord(val name: String) extends AbstChord {
+  lazy val e = new ParserError("Invalid chord %s", name)
+  def getName() = throw e
+  def getIntervals() = throw e
+}
 
 abstract class NoteValue
-case class LetterNote(letter: String, value : Byte, octave: Option[Byte]) extends NoteValue
+case class LetterNote(val letter: String, val value : Byte, val octave: Option[Byte],
+                      val natural: Boolean) extends NoteValue {
+  private lazy val _octave = octave match {
+    case Some(o) => o
+    case _ => (0).toByte
+  }
+  def getValue() = value
+  def getOctave() = _octave
+  def isNatural() = natural
+}
 object CLetterNote {
   val ValidNoteRE = """^(?i)([A-G])([B#]{0,2}|N)$""".r
   val letterInvalid = "Letter notes must be A-G possibly followed by at most two of B,# or N, but it was %s"
@@ -49,13 +68,18 @@ object CLetterNote {
     	new InvalidNoteValue(octaveInvalid.format(octave))
     else
     	value match {
-    	  case Some(v) => new LetterNote(letter, v.toByte, octave)
+    	  case Some(v) => new LetterNote(letter, v.toByte, octave, letter.toUpperCase.contains("N"))
     	  case _ => new InvalidNoteValue(letterInvalid.format(letter))
     	}
     	
   }
 }
-case class NumericNote(value: Byte) extends NoteValue
+case class NumericNote(val value: Byte) extends NoteValue {
+  private lazy val octave = (value / 12).toByte
+  def getValue() = value
+  def getOctave() = octave
+  def isNatural() = true
+}
 object CNumericNote {
   val invMsg = "Numeric note values must be between 0 and 60, but it was %s"
   def apply(value : Byte) : NoteValue = {
@@ -65,15 +89,23 @@ object CNumericNote {
         new InvalidNoteValue(invMsg.format(value))
   }
 }
-case class InvalidNoteValue(message: String) extends NoteValue
+case class InvalidNoteValue(val message: String) extends NoteValue {
+  lazy val e = new ParserError(message)
+  def getValue(): Byte = throw e
+  def getOctave(): Byte = throw e
+  def isNatural(): Boolean = throw e
+}
 
 abstract class NoteDuration {
   def getMSDuration(): Long
+  def getDecimalDuration(): Double
 }
-case class LetterDuration(value: String) extends NoteDuration {
-  val ldRE = "([WHQISTXO])(\\.?)".r
-  def getMSDuration(): Long = {
-    val decimalDuration = ldRE.findAllIn(value).foldLeft(0.0){
+trait DurationConverter {
+  def getMSFromDecimal(decimal: Double): Long = (JFugueDefinitions.SEQUENCE_RESOLUTION * decimal).toLong
+}
+case class LetterDuration(val value: String) extends NoteDuration with DurationConverter {
+  lazy val ldRE = "([WHQISTXO])(\\.?)".r
+  lazy val decimalDuration = ldRE.findAllIn(value).foldLeft(0.0){
       (acc, part) =>
       val f = part.charAt(0) match {
       	case 'W' => 1
@@ -88,8 +120,9 @@ case class LetterDuration(value: String) extends NoteDuration {
       val d = 1.0/f
       acc + d + (if (part.length > 1) d/2.0 else 0.0)
     }
-    (org.jfugue.JFugueDefinitions.SEQUENCE_RESOLUTION * decimalDuration).toLong
-  }
+  def getDecimalDuration() = decimalDuration
+  lazy val duration = getMSFromDecimal(decimalDuration)
+  def getMSDuration(): Long = duration
 }
 object CLetterDuration {
   val ValidDuration = "^(?i)([WHQISTXO]\\.?)+$".r
@@ -99,9 +132,10 @@ object CLetterDuration {
     case _ => InvalidDuration(invMsg + value)
   }
 }
-case class NumericDuration(value: Double) extends NoteDuration {
-  def getMSDuration(): Long =
-    (org.jfugue.JFugueDefinitions.SEQUENCE_RESOLUTION * value).toLong
+case class NumericDuration(val value: Double) extends NoteDuration with DurationConverter {
+  lazy val duration = getMSFromDecimal(value)
+  def getMSDuration(): Long = duration
+  def getDecimalDuration() = value 
 }
 object CNumericDuration {
   def apply(value: Double): NoteDuration = {
@@ -111,12 +145,14 @@ object CNumericDuration {
         new InvalidDuration("Numeric durations must be greater than zero, but it was " + value.toString)
   }
 }
-case class InvalidDuration(message: String) extends NoteDuration {
-  def getMSDuration(): Long = 0L
+case class InvalidDuration(val message: String) extends NoteDuration {
+  lazy val e = new ParserError(message)
+  def getMSDuration() = throw e
+  def getDecimalDuration() = throw e
 }
 
 abstract class AbstVelocity
-case class Velocity(attack: Byte, decay: Byte) extends AbstVelocity
+case class Velocity(val attack: Byte, val decay: Byte) extends AbstVelocity
 object CVelocity {
   val velRegex = "(?i)[AD<>][0-9]+".r
   val AccRE = "[Aa<]([0-9]+)".r
@@ -138,4 +174,4 @@ object CVelocity {
       new Velocity(attack.toByte, decay.toByte)
   }
 }
-case class InvalidVelocity(message: String) extends AbstVelocity
+case class InvalidVelocity(val message: String) extends AbstVelocity

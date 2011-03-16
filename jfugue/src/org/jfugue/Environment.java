@@ -4,12 +4,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jfugue.elements.ChannelPressure;
+import org.jfugue.elements.Chord;
+import org.jfugue.elements.CommentProperty;
 import org.jfugue.elements.Controller;
+import org.jfugue.elements.DictAdd;
 import org.jfugue.elements.Instrument;
 import org.jfugue.elements.KeySignature;
 import org.jfugue.elements.Layer;
 import org.jfugue.elements.Measure;
 import org.jfugue.elements.Note;
+import org.jfugue.elements.Note.Parallel;
+import org.jfugue.elements.Note.Sequential;
+import org.jfugue.elements.NoteCollection;
 import org.jfugue.elements.PitchBend;
 import org.jfugue.elements.PolyphonicPressure;
 import org.jfugue.elements.SystemExclusive;
@@ -19,6 +25,7 @@ import org.jfugue.elements.Voice;
 import org.jfugue.parsers.DummyParserEventProxy;
 import org.jfugue.parsers.FireEventProxy;
 import org.jfugue.parsers.ParserContext;
+import org.jfugue.visitors.ElementVisitor;
 
 import org.apache.log4j.Logger;
 
@@ -39,7 +46,7 @@ import org.apache.log4j.Logger;
  * @author joshua
  * 
  */
-public class Environment implements FireEventProxy {
+public class Environment implements FireEventProxy, ElementVisitor {
 	private static Environment instance;
 
 	public static Environment getInstance() {
@@ -67,10 +74,13 @@ public class Environment implements FireEventProxy {
 		this.dictionaryMap = dictionary;
 		this.proxy = proxy;
 	}
-	public void add(String key, Object val) {
+	public void addToDict(String key, String val) {
 		key = key.toUpperCase();
 		// TODO Should we allow arbitrary Objects?
-		dictionaryMap.put(key, val.toString());
+		dictionaryMap.put(key, val);
+	}
+	public String getFromDict(String key) {
+		return dictionaryMap.get(key);
 	}
 
 	/**
@@ -210,7 +220,7 @@ public class Environment implements FireEventProxy {
 	 * @throws JFugueException
 	 *             if there is a problem looking up bracketedString
 	 */
-	private String dictionaryLookup(String bracketedString)
+	public String dictionaryLookup(String bracketedString)
 			throws Error {
 		int indexOfOpeningBracket = bracketedString.indexOf("["); //$NON-NLS-1$
 		int indexOfClosingBracket = bracketedString.indexOf("]"); //$NON-NLS-1$
@@ -404,6 +414,87 @@ public class Environment implements FireEventProxy {
 	}
 	public void setKeySig(KeySignature keySig) {
 		this.keySig = keySig;
+	}
+	public void visit(Chord chord) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void visit(NoteCollection collection) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void visit(Parallel parallel) {
+		fireParallelNoteEvent(parallel);
+		
+	}
+	public void visit(Sequential sequential) {
+		fireSequentialNoteEvent(sequential);
+		
+	}
+	public void visit(ChannelPressure channelPressure) {
+		fireChannelPressureEvent(channelPressure);
+		
+	}
+	public void visit(Controller controller) {
+		fireControllerEvent(controller);
+	}
+	public void visit(Instrument instrument) {
+		fireInstrumentEvent(instrument);
+	}
+	public void visit(KeySignature keySignature) {
+		keySig = keySignature;
+		fireKeySignatureEvent(keySignature);
+	}
+	public void visit(Layer layer) {
+		fireLayerEvent(layer);
+	}
+	public void visit(Measure measure) {
+		fireMeasureEvent(measure);
+	}
+	public void visit(Pattern pattern) {
+		
+	}
+	public void visit(PitchBend pitchBend) {
+		firePitchBendEvent(pitchBend);
+	}
+	public void visit(Voice voice) {
+		fireVoiceEvent(voice);
+	}
+	public void visit(SystemExclusive systemExclusiveEvent) {
+		fireSystemExclusiveEvent(systemExclusiveEvent);
+	}
+	public void visit(Tempo tempo) {
+		fireTempoEvent(tempo);
+	}
+	public void visit(Time time) {
+		fireTimeEvent(time);
+	}
+	public void visit(PolyphonicPressure polyphonicPressure) {
+		firePolyphonicPressureEvent(polyphonicPressure);
+	}
+	public void visit(Note note) {
+		switch (note.getType()) {
+		case FIRST:
+			fireNoteEvent(note);
+			break;
+		case SEQUENTIAL:
+			fireSequentialNoteEvent(note);
+			break;
+		case PARALLEL:
+			fireParallelNoteEvent(note);
+			break;
+		default:
+			break;
+		}
+
+	}
+	public void visit(DictAdd dictAdd) {
+		System.out.println(dictAdd.getMusicString());
+		addToDict(dictAdd.getKey(), dictAdd.getValue());
+	}
+	public void visit(CommentProperty property) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -1386,20 +1386,20 @@ public final class MusicStringParser extends Parser
 
         if (context.isRest) {
             note.setRest(true);
-            note.setDuration(context.duration);
+            note.setMsDuration(context.duration);
             note.setDecimalDuration(context.decimalDuration);
             note.setAttackVelocity( (byte)0 );          // turn off sound for rest notes
             note.setDecayVelocity( (byte)0 );
         } else {
             note.setValue(context.noteNumber);
-            note.setDuration(context.duration);
+            note.setMsDuration(context.duration);
             note.setStartOfTie(context.isStartOfTie);
             note.setEndOfTie(context.isEndOfTie);
             note.setDecimalDuration(context.decimalDuration);
             note.setAttackVelocity(context.attackVelocity);
             note.setDecayVelocity(context.decayVelocity);
         }
-        note.setHasAccompanyingNotes(context.existAnotherNote || context.isChord);
+        note.setAccompanyingNotes(context.existAnotherNote || context.isChord);
 
         // Fire note events
         if (context.isFirstNote) {
@@ -1424,9 +1424,9 @@ public final class MusicStringParser extends Parser
                 chordNote.setType(Note.PARALLEL);
                 Logger.getRootLogger().trace("Chord note number: " + (context.noteNumber+context.halfsteps[i]));
                 if (i == context.numHalfsteps-1) {
-                    chordNote.setHasAccompanyingNotes(context.existAnotherNote);
+                    chordNote.setAccompanyingNotes(context.existAnotherNote);
                 } else {
-                    chordNote.setHasAccompanyingNotes(context.existAnotherNote || context.isChord);
+                    chordNote.setAccompanyingNotes(context.existAnotherNote || context.isChord);
                 }
                 fireParallelNoteEvent(chordNote);
             }
@@ -1480,7 +1480,7 @@ public final class MusicStringParser extends Parser
             public void noteEvent(Note note)
             {
                 rootNote.setValue(note.getValue());
-                rootNote.setDuration(note.getDuration());
+                rootNote.setMsDuration(note.getMsDuration());
                 rootNote.setDecimalDuration(note.getDecimalDuration());
                 rootNote.setStartOfTie(note.isStartOfTie());
                 rootNote.setEndOfTie(note.isEndOfTie());

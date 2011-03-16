@@ -52,6 +52,17 @@ public final class JFugueDefinitions
      * <p>TODO Is there any way to get the actual resolution?
      */
     public static final double SEQUENCE_RESOLUTION = 128.0;
+
+    public static double decimalFromMSDuration(long ms) {
+		return ms / SEQUENCE_RESOLUTION;
+	}
+    
+    public static long msFromDecimalDuration(double decimal) {
+		return (long) (SEQUENCE_RESOLUTION * decimal);
+	}
+    
+    public static final double DEFAULT_NOTE_DECIMAL_DURATION = 0.25;
+    public static final long DEFAULT_NOTE_MS_DURATION = msFromDecimalDuration(DEFAULT_NOTE_DECIMAL_DURATION);
     
     /**
      * Loads default definitions into the JFugue dictionary.  This includes

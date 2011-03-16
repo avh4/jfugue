@@ -35,6 +35,21 @@ public class JFugueException extends RuntimeException
 	 */
 	private static final long serialVersionUID = 1L;
 	protected Object[] objects = null;
+	protected String format;
+	
+	/**
+	 * @return the objects
+	 */
+	public Object[] getObjects() {
+		return objects; // TODO make a copy
+	}
+
+	/**
+	 * @return the format
+	 */
+	public String getFormat() {
+		return format;
+	}
 
 	public JFugueException() {
 		super();
@@ -58,7 +73,8 @@ public class JFugueException extends RuntimeException
      */
     public JFugueException(String format, Object...objects)
     {
-        super(format);
+        super(String.format(format, objects));
+        this.format = format;
         this.objects = objects;
     }
     

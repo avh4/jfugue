@@ -56,8 +56,15 @@ public class Chord extends Note {
 			createNotes();
 		}
 
-
-
+		public Chord(byte value, double decimalDuration, byte attackVelocity,
+				byte decayVelocity, boolean natural, String fullname,
+				byte[] halfsteps) {
+			super(value, decimalDuration, attackVelocity, decayVelocity,
+					natural);
+			this.fullname = fullname;
+			this.halfsteps = halfsteps;
+			createNotes();
+		}
 
 		public Chord(NoteFactory.NoteContext c) {
     		super(c);

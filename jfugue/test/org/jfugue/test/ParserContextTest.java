@@ -35,7 +35,7 @@ public class ParserContextTest {
 
 	@Before
 	public void setUp() throws Exception {
-		environment.add("BLAH", "50");
+		environment.addToDict("BLAH", "50");
 	}
 
 	@After
@@ -115,7 +115,7 @@ public class ParserContextTest {
 		double expected = 0.25;
 		setString(Double.toString(expected));
 		assertEquals(expected, readDouble(), 0.0001);
-		environment.add("DOUBLE", Double.toString(expected));
+		environment.addToDict("DOUBLE", Double.toString(expected));
 		setString("[Double]");
 		assertEquals(expected, readDouble(), 0.0001);
 		expected = 10;

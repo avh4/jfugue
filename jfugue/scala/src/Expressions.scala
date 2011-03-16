@@ -1,6 +1,13 @@
 package org.jfugue.parsers.msp5.expressions
 
 import org.jfugue.Environment
+import org.jfugue.elements.expressions.{
+  IntExp => IExp,
+  ByteExp => BExp,
+  LongExp => LExp,
+  DoubleExp => DExp
+}
+	  
 
 abstract class Expression[T] {
   type W = T
@@ -25,57 +32,9 @@ case class TimesExp[T](x : T, y : T) extends OpsNumExp[T] {
   def eval(env: Environment) = x.eval(env) * y.eval(env)
 }*/
 
-abstract class IntExp extends NumericExpression[Int] {
+abstract class IntExp extends NumericExpression[Int] /*with IExp*/ {
   implicit def wrapper(x: Int) = LInt(x)
-
-  def +(x: IntExp, y: IntExp): IntExp = (x, y) match {
-    case (LInt(xx), LInt(yy)) => LInt(xx + yy)
-    case (xx, yy) => Plus(xx, yy)
-  }
-  case class Plus(x: IntExp, y: IntExp) extends IntExp {
-    def eval(env: Environment) = x.eval(env) + y.eval(env)
-  }
-
-  def -(x: IntExp, y: IntExp): IntExp = (x, y) match {
-    case (LInt(xx), LInt(yy)) => LInt(xx - yy)
-    case (xx, yy) => Minus(xx, yy)
-  }
-  case class Minus(x: IntExp, y: IntExp) extends IntExp {
-    def eval(env: Environment) = x.eval(env) - y.eval(env)
-  }
-
-  def *(x: IntExp, y: IntExp): IntExp = (x, y) match {
-    case (LInt(xx), LInt(yy)) => LInt(xx * yy)
-    case (xx, yy) => Times(xx, yy)
-  }
-  case class Times(x: IntExp, y: IntExp) extends IntExp {
-    def eval(env: Environment) = x.eval(env) * y.eval(env)
-  }
-
-  def /(x: IntExp, y: IntExp): IntExp = (x, y) match {
-    case (LInt(xx), LInt(yy)) => LInt(xx / yy)
-    case (xx, yy) => Quot(xx, yy)
-  }
-  case class Quot(x: IntExp, y: IntExp) extends IntExp {
-    def eval(env: Environment) = x.eval(env) / y.eval(env)
-  }
-
-  def %(y: IntExp): IntExp = (this, y) match {
-    case (LInt(xx), LInt(yy)) => LInt(xx % yy)
-    case (xx, yy) => Minus(xx, yy)
-  }
-  case class Rem(x: IntExp, y: IntExp) extends IntExp {
-    def eval(env: Environment) = x.eval(env) % y.eval(env)
-  }
-
-  def unary_-(): IntExp = this match {
-    case LInt(xx) => LInt(-xx)
-    case xx => Negate(xx)
-  }
-  case class Negate(x: IntExp) extends IntExp {
-    def eval(env: Environment) = -x.eval(env)
-  }
-
+//  implicit def jwrapper(x: java.lang.Integer) = LInt(x)
 }
 case class LInt(int: Int) extends IntExp {
   def eval(env: Environment) = int
@@ -84,56 +43,8 @@ case class IntInDict(key: String) extends IntExp {
   def eval(env: Environment) = env.getIntFromDictionary(key)
 }
 
-abstract class ByteExp extends Expression[Byte] {
+abstract class ByteExp extends Expression[Byte] /*with BExp*/ {
   implicit def wrapper(x: Byte) = LByte(x)
-
-  /*def +(x: ByteExp, y: ByteExp): ByteExp = (x, y) match {
-    case (LByte(xx), LByte(yy)) => LByte(xx + yy)
-    case (xx, yy) => Plus(xx, yy)
-  }
-  case class Plus(x: ByteExp, y: ByteExp) extends ByteExp {
-    def eval(env: Environment) = x.eval(env) + y.eval(env)
-  }
-
-  def -(x: ByteExp, y: ByteExp): ByteExp = (x, y) match {
-    case (LByte(xx), LByte(yy)) => LByte(xx - yy)
-    case (xx, yy) => Minus(xx, yy)
-  }
-  case class Minus(x: ByteExp, y: ByteExp) extends ByteExp {
-    def eval(env: Environment) = x.eval(env) - y.eval(env)
-  }
-
-  def *(x: ByteExp, y: ByteExp): ByteExp = (x, y) match {
-    case (LByte(xx), LByte(yy)) => LByte(xx * yy)
-    case (xx, yy) => Times(xx, yy)
-  }
-  case class Times(x: ByteExp, y: ByteExp) extends ByteExp {
-    def eval(env: Environment) = x.eval(env) * y.eval(env)
-  }
-
-  def /(x: ByteExp, y: ByteExp): ByteExp = (x, y) match {
-    case (LByte(xx), LByte(yy)) => LByte(xx / yy)
-    case (xx, yy) => Quot(xx, yy)
-  }
-  case class Quot(x: ByteExp, y: ByteExp) extends ByteExp {
-    def eval(env: Environment) = x.eval(env) / y.eval(env)
-  }
-
-  def %(y: ByteExp): ByteExp = (this, y) match {
-    case (LByte(xx), LByte(yy)) => LByte(xx % yy)
-    case (xx, yy) => Minus(xx, yy)
-  }
-  case class Rem(x: ByteExp, y: ByteExp) extends ByteExp {
-    def eval(env: Environment) = x.eval(env) % y.eval(env)
-  }
-
-  def unary_-(): ByteExp = this match {
-    case LByte(xx) => LByte(-xx)
-    case xx => Negate(xx)
-  }
-  case class Negate(x: ByteExp) extends ByteExp {
-    def eval(env: Environment) = -x.eval(env)
-  }*/
 }
 case class LByte(byte: Byte) extends ByteExp {
   def eval(env: Environment) = byte

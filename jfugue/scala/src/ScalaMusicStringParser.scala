@@ -12,16 +12,25 @@ import java.lang.{ Byte => JByte }
 
 class ScalaMusicStringParser extends JavaTokenParsers {
 
-  def parseAndEval(r : java.io.Reader, env : Environment) : java.util.List[JFugueElement] = {
+  override def skipWhitespace = false
+
+  def parseAndEval(r : java.io.Reader, env : Environment) : java.util.List[JFugueElement] =
+    parseWithoutEval(r).map { e =>
+      val jfe = e.eval(env)
+      jfe.acceptVisitor(env) 
+      jfe
+    }
+  def parseWithoutEval(r : java.io.Reader) : List[Element] = {
     parse(r) match {
-      case this.Success(pr, _) => pr.flatten.map { _.toJFElement(env) }
+      case this.Success(pr, _) => pr.flatten
       case x => null
     }
   }
+
   def parse(s : String) : ParseResult[List[List[Element]]] = parseAll(musicstring, s)
   def parse(r : java.io.Reader) : ParseResult[List[List[Element]]] = parseAll(musicstring, r)
   
-  lazy val musicstring : Parser[List[List[Element]]] = rep(element)
+  lazy val musicstring : Parser[List[List[Element]]] = repsep(element, """\s+""".r)
 
   lazy val element : Parser[List[Element]] = voice | tempo | instrument | layer | key | controller | time | poly_pressure | channel_pressure | pitch_bend | measure | dict_add | system_exclusive | note | comment
 

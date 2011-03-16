@@ -78,10 +78,10 @@ public abstract class Parser
     /**
 	 * @param key
 	 * @param val
-	 * @see org.jfugue.Environment#add(java.lang.String, java.lang.Object)
+	 * @see org.jfugue.Environment#add(java.lang.String, java.lang.String)
 	 */
-	public void addDict(String key, Object val) {
-		environment.add(key, val);
+	public void addDict(String key, String val) {
+		environment.addToDict(key, val);
 	}
 
 	/**

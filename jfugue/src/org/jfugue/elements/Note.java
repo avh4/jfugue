@@ -58,7 +58,6 @@ public class Note extends AbstractNote {
  
     protected byte attackVelocity = DEFAULT_VELOCITY;
     protected byte decayVelocity = DEFAULT_VELOCITY;
-    protected double decimalDuration = 0.0;
     protected boolean isAdjustedForKey = false;
     protected boolean isNatural = false;
     protected boolean isChord = false;
@@ -71,7 +70,7 @@ public class Note extends AbstractNote {
     public Note()
     {
         this.value = 0;
-        setDecimalDuration(0.25);
+        setDecimalDuration(DEFAULT_DECIMAL_DURATION);
         this.type = NoteTypes.FIRST;
     }
 
@@ -89,7 +88,7 @@ public class Note extends AbstractNote {
         setValue(value);
         
         // Default duration is a quarter note
-        setDecimalDuration(0.25);
+        setDecimalDuration(DEFAULT_DECIMAL_DURATION);
     }
 
     /**
@@ -117,6 +116,11 @@ public class Note extends AbstractNote {
     	setAttackVelocity(attackVelocity);
     	setDecayVelocity(decayVelocity);
     }
+    
+    public Note(byte value, double decimalDuration, byte attackVelocity, byte decayVelocity, boolean natural) {
+    	this(value, decimalDuration, attackVelocity, decayVelocity);
+    	isNatural = natural;
+    }
 
     /**
      * Instantiates a new Note object with the given note value and duration.
@@ -127,7 +131,7 @@ public class Note extends AbstractNote {
     public Note(byte value, long duration)
     {
     	setValue(value);
-    	setDuration(duration);
+    	setMsDuration(duration);
     }
 
     /**
@@ -150,9 +154,9 @@ public class Note extends AbstractNote {
     }
     
     public Note(Note note) {
-		this(note.getValue(), note.getDuration(), note.getAttackVelocity(), note.getDecayVelocity());
+		this(note.getValue(), note.getDecimalDuration(), note.getAttackVelocity(), note.getDecayVelocity());
 		setEndOfTie(note.isEndOfTie());
-		setHasAccompanyingNotes(note.accompanyingNotes);
+		setAccompanyingNotes(note.accompanyingNotes);
 		setRest(note.isRest());
 		setStartOfTie(note.isStartOfTie());
 		setType(note.getType());
@@ -187,6 +191,8 @@ public class Note extends AbstractNote {
     }
 
     public Note adjustForKey(KeySignature keySignature) {
+    	if (isAdjustedForKey())
+    		return this;
         Logger.getRootLogger().trace("Adjusting note for keysig");
         Note note = new Note(this);
         byte keySig = keySignature.getKeySig();
@@ -197,7 +203,7 @@ public class Note extends AbstractNote {
         }
         
         byte noteNumber = note.getSemitoneWithinOctave();
-	byte octaveNumber = note.getOctave();
+        byte octaveNumber = note.getOctave();
     	Logger.getRootLogger().trace("Before adjustment: Octave = " + octaveNumber +  ",  note = " + noteNumber);
         // TODO Is there a prettier way?
         // Adjust for Key Signature
@@ -223,49 +229,13 @@ public class Note extends AbstractNote {
         }
         noteNumber = (byte)intNoteNumber;
         note.setValue(noteNumber);
-	note.setOctave(octaveNumber);
+        note.setOctave(octaveNumber);
         note.setAdjustedForKey(true);
         return note;
     }
     
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Note other = (Note) obj;
-        if (this.value != other.value) {
-            return false;
-        }
-        if (this.duration != other.duration) {
-            return false;
-        }
-        if (this.isStartOfTie != other.isStartOfTie) {
-            return false;
-        }
-        if (this.isEndOfTie != other.isEndOfTie) {
-            return false;
-        }
-        if (this.attackVelocity != other.attackVelocity) {
-            return false;
-        }
-        if (this.decayVelocity != other.decayVelocity) {
-            return false;
-        }
-        if (this.rest != other.rest) {
-            return false;
-        }
-        if (this.type != other.type) {
-            return false;
-        }
-        if (this.accompanyingNotes != other.accompanyingNotes) {
-            return false;
-        }
-        return true;
-    }
-
+    
+    
     /**
      * Returns the attack velocity for this note.
      * @return the attack velocity
@@ -282,24 +252,6 @@ public class Note extends AbstractNote {
     public byte getDecayVelocity()
     {
         return this.decayVelocity;
-    }
-
-    /**
-     * Returns the decimal fraction value for the duration.
-     * @return the decimal fraction value for the duration
-     */
-    public double getDecimalDuration()
-    {
-        return this.decimalDuration;
-    }
-
-    /**
-     * Returns the duration of this note in milliseconds.
-     * @return the duration of this note in milliseconds
-     */
-    public long getDuration()
-    {
-        return this.duration;
     }
 
     /**
@@ -364,21 +316,6 @@ public class Note extends AbstractNote {
     public String getVerifyString()
     {
         return createVerifyString(getValue(), getDecimalDuration(), isStartOfTie(), isEndOfTie(), getAttackVelocity(), getDecayVelocity(), getType()==FIRST, getType() == PARALLEL, getType() == SEQUENTIAL);
-    }
-
-    public int hashCode() {
-        int hash = 3;
-        hash = 37 * hash + this.value;
-        hash = 37 * hash + (int) (this.duration ^ (this.duration >>> 32));
-        hash = 37 * hash + (int) (Double.doubleToLongBits(this.decimalDuration) ^ (Double.doubleToLongBits(this.decimalDuration) >>> 32));
-        hash = 37 * hash + (this.isStartOfTie ? 1 : 0);
-        hash = 37 * hash + (this.isEndOfTie ? 1 : 0);
-        hash = 37 * hash + this.attackVelocity;
-        hash = 37 * hash + this.decayVelocity;
-        hash = 37 * hash + (this.rest ? 1 : 0);
-        hash = 37 * hash + this.type.ordinal();
-        hash = 37 * hash + (this.accompanyingNotes ? 1 : 0);
-        return hash;
     }
 
     /**
@@ -453,44 +390,6 @@ public class Note extends AbstractNote {
         this.decayVelocity = velocity;
     }
 
-
-	/**
-     * Sets the decimal fraction value for the duration.
-     * @param duration the decimal fraction for the duration
-     */
-    public void setDecimalDuration(double duration)
-    {
-        this.decimalDuration = duration;
-        this.duration = (long) (JFugueDefinitions.SEQUENCE_RESOLUTION * decimalDuration);
-    }
-
-	/**
-     * Sets the duration of this note in milliseconds.
-     * @param duration the duration of this note in milliseconds
-     */
-    public void setDuration(long duration)
-    {
-        this.duration = duration;
-        
-        // duration = (long) (MusicStringParser.SEQUENCE_RES * decimalDuration);
-        this.decimalDuration = duration / JFugueDefinitions.SEQUENCE_RESOLUTION;
-    }
-    /**
-     * Indicates whether this note is tied to some past note.
-     * @param endOfTie true if the note is tied, false if not
-     */
-    public void setEndOfTie(boolean endOfTie)
-    {
-        this.isEndOfTie = endOfTie;
-    }
-    /**
-     * Sets whether this Note will have other Notes (sequential or parallel) associated with it.
-     * @param accompanying
-     */
-    public void setHasAccompanyingNotes(boolean accompanying)
-    {
-        this.accompanyingNotes = accompanying;
-    }
     /**
      * Indicates whether this Note object actually represents a rest.
      * @param rest indicates whether this note is rest
@@ -498,15 +397,6 @@ public class Note extends AbstractNote {
     public void setRest(boolean rest)
     {
         this.rest = rest;
-    }
-
-    /**
-     * Indicates whether this note has a tie to some future note.
-     * @param startOfTie true if the note is tied, false if not
-     */
-    public void setStartOfTie(boolean startOfTie)
-    {
-        this.isStartOfTie = startOfTie;
     }
 
     /**
@@ -611,41 +501,6 @@ public class Note extends AbstractNote {
         return createVerifyString(value, duration, false, false, attack, decay, true, false, false);
     }
 
-    
-    /**
-     * Returns the decimal duration that is equal to the given MusicString representation.
-     * This code currently only converts single duration values representing whole, half,
-     * quarter, eighth, etc. durations; and dotted durations associated with those
-     * durations (such as "h.", equal to 0.75).  This method does not convert
-     * combined durations (for example, "hi" for 0.625) or anything greater
-     * than a duration of 1.0 (for example, "wwww" for 4.0).  For these values,
-     * the original decimal duration is returned in a string, prepended with a "/"
-     * to make the returned value a valid MusicString duration indicator.
-     *
-     * @param stringDuration The MusicString duration character (or dotted character)
-     * @return a decimal value representing the duration, expressed as a fraction of a whole note
-     */
-    public static double getDecimalForDuration(String stringDuration)
-    {
-        String stringDuration2 = stringDuration.toLowerCase();
-        if (stringDuration2.equals("w")) return 1.0;
-        else if (stringDuration2.equals("h.")) return 0.75;
-        else if (stringDuration2.equals("h")) return 0.5;
-        else if (stringDuration2.equals("q.")) return 0.375;
-        else if (stringDuration2.equals("q")) return 0.25;
-        else if (stringDuration2.equals("i.")) return 0.1875;
-        else if (stringDuration2.equals("i")) return 0.125;
-        else if (stringDuration2.equals("s.")) return 0.09375;
-        else if (stringDuration2.equals("s")) return 0.0625;
-        else if (stringDuration2.equals("t.")) return 0.046875;
-        else if (stringDuration2.equals("t")) return 0.03125;
-        else if (stringDuration2.equals("x.")) return 0.0234375;
-        else if (stringDuration2.equals("x")) return 0.015625;
-        else if (stringDuration2.equals("o.")) return 0.01171875;
-        else if (stringDuration2.equals("o")) return 0.0078125;
-        else return 0.0;
-    }
-
     /**
      * Returns the frequency, in Hertz, for the given note value.
      * For example, the frequency for A5 (MIDI note 69) is 440.0
@@ -668,38 +523,7 @@ public class Note extends AbstractNote {
     private static double getFrequencyAboveBase(double baseFrequency, double octavesAboveBase) {
 	return baseFrequency * Math.pow(2.0,octavesAboveBase);
     }
-    /**
-     * Returns a MusicString representation of a decimal duration.  This code
-     * currently only converts single duration values representing whole, half,
-     * quarter, eighth, etc. durations; and dotted durations associated with those
-     * durations (such as "h.", equal to 0.75).  This method does not convert
-     * combined durations (for example, "hi" for 0.625) or anything greater
-     * than a duration of 1.0 (for example, "wwww" for 4.0).  For these values,
-     * the original decimal duration is returned in a string, prepended with a "/"
-     * to make the returned value a valid MusicString duration indicator.
-     *
-     * @param decimalDuration The decimal value of the duration to convert
-     * @return a MusicString fragment representing the duration
-     */
-    public static String getStringForDuration(double decimalDuration)
-    {
-        if (decimalDuration == 1.0) return "w";
-        else if (decimalDuration == 0.75) return "h.";
-        else if (decimalDuration == 0.5) return "h";
-        else if (decimalDuration == 0.375) return "q.";
-        else if (decimalDuration == 0.25) return "q";
-        else if (decimalDuration == 0.1875) return "i.";
-        else if (decimalDuration == 0.125) return "i";
-        else if (decimalDuration == 0.09375) return "s.";
-        else if (decimalDuration == 0.0625) return "s";
-        else if (decimalDuration == 0.046875) return "t.";
-        else if (decimalDuration == 0.03125) return "t";
-        else if (decimalDuration == 0.0234375) return "x.";
-        else if (decimalDuration == 0.015625) return "x";
-        else if (decimalDuration == 0.01171875) return "o.";
-        else if (decimalDuration == 0.0078125) return "o";
-        else return "/" + decimalDuration;
-    }
+
 
     /**
      * Returns a MusicString representation of the given MIDI note value --
@@ -929,6 +753,44 @@ public class Note extends AbstractNote {
 			type = SEQUENTIAL;
 		}
 	
+	}
+
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + attackVelocity;
+		result = prime * result + decayVelocity;
+		result = prime * result + (isAdjustedForKey ? 1231 : 1237);
+		result = prime * result + (isChord ? 1231 : 1237);
+		result = prime * result + (isNatural ? 1231 : 1237);
+		result = prime * result + (rest ? 1231 : 1237);
+		result = prime * result + value;
+		return result;
+	}
+
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (!(obj instanceof Note))
+			return false;
+		Note other = (Note) obj;
+		if (attackVelocity != other.attackVelocity)
+			return false;
+		if (decayVelocity != other.decayVelocity)
+			return false;
+		if (isAdjustedForKey != other.isAdjustedForKey)
+			return false;
+		if (isChord != other.isChord)
+			return false;
+		if (isNatural != other.isNatural)
+			return false;
+		if (rest != other.rest)
+			return false;
+		if (value != other.value)
+			return false;
+		return true;
 	}
 
 }
