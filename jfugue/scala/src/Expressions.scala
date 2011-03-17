@@ -1,12 +1,12 @@
 package org.jfugue.parsers.msp5.expressions
 
 import org.jfugue.Environment
-import org.jfugue.elements.expressions.{
-  IntExp => IExp,
-  ByteExp => BExp,
-  LongExp => LExp,
-  DoubleExp => DExp
-}
+//import org.jfugue.elements.expressions.{
+//  IntExp => IExp,
+//  ByteExp => BExp,
+//  LongExp => LExp,
+//  DoubleExp => DExp
+//}
 	  
 
 abstract class Expression[T] {
