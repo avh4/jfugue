@@ -13,123 +13,123 @@
     <scala.version>2.8.1</scala.version>
   </properties>
   <licenses>
-  	<license>
-  		<name>GNU Lesser General Public License</name>
-  		<url>http://www.gnu.org/licenses/lgpl.html</url>
-  		<distribution>repo</distribution>
-  	</license>
+    <license>
+      <name>GNU Lesser General Public License</name>
+      <url>http://www.gnu.org/licenses/lgpl.html</url>
+      <distribution>repo</distribution>
+    </license>
   </licenses>
   <parent>
-  	<groupId>org.sonatype.oss</groupId>
-  	<artifactId>oss-parent</artifactId>
-  	<version>6</version>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>6</version>
   </parent>
   <scm>
-  	<connection>scm:svn:http://jfugue.googlecode.com/svn/trunk/jfugue/</connection>
-  	<developerConnection>scm:svn:https://jfugue.googlecode.com/svn/trunk/jfugue/</developerConnection>
-  	<tag>HEAD</tag>
-  	<url>http://code.google.com/p/jfugue/source/browse/</url>
+    <connection>scm:svn:http://jfugue.googlecode.com/svn/trunk/jfugue/</connection>
+    <developerConnection>scm:svn:https://jfugue.googlecode.com/svn/trunk/jfugue/</developerConnection>
+    <tag>HEAD</tag>
+    <url>http://code.google.com/p/jfugue/source/browse/</url>
   </scm>
   <developers>
-  	<developer>
-  		<id>dmkoelle</id>
-  		<name>David Koelle</name>
-  		<email>dmkoelle@gmail.com</email>
-  	</developer>
-  	<developer>
-  		<id>skavookie</id>
-  		<name>Joshua Gooding</name>
-  		<email>skavookie@gmail.com</email>
-  		<timezone>-8</timezone>
-  	</developer>
-  	<developer>
-  		<id>paul.butcher</id>
-  		<name>Paul Butcher</name>
-  		<email>paul.butcher@gmail.com</email>
-  	</developer>
+    <developer>
+      <id>dmkoelle</id>
+      <name>David Koelle</name>
+      <email>dmkoelle@gmail.com</email>
+    </developer>
+    <developer>
+      <id>skavookie</id>
+      <name>Joshua Gooding</name>
+      <email>skavookie@gmail.com</email>
+      <timezone>-8</timezone>
+    </developer>
+    <developer>
+      <id>paul.butcher</id>
+      <name>Paul Butcher</name>
+      <email>paul.butcher@gmail.com</email>
+    </developer>
   </developers>
   <build>
-    <sourceDirectory>src</sourceDirectory>
-    <testSourceDirectory>test</testSourceDirectory>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <testSourceDirectory>src/test/java</testSourceDirectory>
     <resources>
       <resource>
-        <directory>src</directory>
+        <directory>src/main/java</directory>
         <includes>
           <include>org/jfugue/messages.properties</include>
           <include>log4j.properties</include>
         </includes>
       </resource>
     </resources>
-	<plugins>
-	  <plugin>
-			<groupId>org.codehaus.mojo</groupId>
-			<artifactId>build-helper-maven-plugin</artifactId>
-			<version>1.5</version>
-			<executions><!--
-				<execution>
-					<id>add-test-source</id>
-					<phase>generate-test-sources</phase>
-					<goals>
-						<goal>add-test-source</goal>
-					</goals>
-					<configuration>
-						<sources>
-							<source>scala/test</source>
-						</sources>
-					</configuration>
-				</execution>
-				--><execution>
-					<id>add-source</id>
-					<phase>generate-sources</phase>
-					<goals>
-						<goal>add-source</goal>
-					</goals>
-					<configuration>
-						<sources>
-							<source>scala/src</source>
-						</sources>
-					</configuration>
-				</execution>
-			</executions>
-	  </plugin>
-	  <plugin>
-			<groupId>org.scala-tools</groupId>
-			<artifactId>maven-scala-plugin</artifactId>
-			<version>2.13.1</version>
-			<executions>
-				<execution>
-					<id>compile</id>
-					<goals>
-						<goal>compile</goal>
-					</goals>
-					<phase>compile</phase>
-				</execution>
-				<execution>
-					<id>test-compile</id>
-					<goals>
-						<goal>testCompile</goal>
-					</goals>
-					<phase>test-compile</phase>
-				</execution>
-				<execution>
-					<phase>process-resources</phase>
-					<goals>
-						<goal>compile</goal>
-					</goals>
-				</execution>
-			</executions>
-			<configuration>
-				<scalaVersion>${scala.version}</scalaVersion>
-				<args>
-					<arg>-target:jvm-1.5</arg>
-					<arg>-unchecked</arg>
-					<!-- to support mix java/scala only -->
-					<arg>-make:transitivenocp</arg>
-					<arg>-dependencyfile</arg>
-					<arg>${project.build.directory}/.scala_dependencies</arg>
-				</args>
-			</configuration>
-	  </plugin>
+    <plugins>
+      <plugin>
+	<groupId>org.codehaus.mojo</groupId>
+	<artifactId>build-helper-maven-plugin</artifactId>
+	<version>1.5</version>
+	<executions>
+	  <execution>
+	    <id>add-test-source</id>
+	    <phase>generate-test-sources</phase>
+	    <goals>
+	      <goal>add-test-source</goal>
+	    </goals>
+	    <configuration>
+	      <sources>
+		    <source>src/test/scala</source>
+	      </sources>
+	    </configuration>
+	  </execution>
+	  <execution>
+	    <id>add-source</id>
+	    <phase>generate-sources</phase>
+	    <goals>
+	      <goal>add-source</goal>
+	    </goals>
+	    <configuration>
+	      <sources>
+		<source>src/main/scala</source>
+	      </sources>
+	    </configuration>
+	  </execution>
+	</executions>
+      </plugin>
+      <plugin>
+	<groupId>org.scala-tools</groupId>
+	<artifactId>maven-scala-plugin</artifactId>
+	<version>2.13.1</version>
+	<executions>
+	  <execution>
+	    <id>compile</id>
+	    <goals>
+	      <goal>compile</goal>
+	    </goals>
+	    <phase>compile</phase>
+	  </execution>
+	  <execution>
+	    <id>test-compile</id>
+	    <goals>
+	      <goal>testCompile</goal>
+	    </goals>
+	    <phase>test-compile</phase>
+	  </execution>
+	  <execution>
+	    <phase>process-resources</phase>
+	    <goals>
+	      <goal>compile</goal>
+	    </goals>
+	  </execution>
+	</executions>
+	<configuration>
+	  <scalaVersion>${scala.version}</scalaVersion>
+	  <args>
+	    <arg>-target:jvm-1.5</arg>
+	    <arg>-unchecked</arg>
+	    <!-- to support mix java/scala only -->
+	    <arg>-make:transitivenocp</arg>
+	    <arg>-dependencyfile</arg>
+	    <arg>${project.build.directory}/.scala_dependencies</arg>
+	  </args>
+	</configuration>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -148,6 +148,7 @@
         <artifactId>maven-compiler-plugin</artifactId>
       </plugin>
       <plugin>
+	<groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <executions>
           <execution>
@@ -159,6 +160,7 @@
         </executions>
       </plugin>
       <plugin>
+	<groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
         <executions>
           <execution>
@@ -168,6 +170,35 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-eclipse-plugin</artifactId>
+	<version>2.8</version>
+	<!-- see http://maven.apache.org/plugins/maven-eclipse-plugin/eclipse-mojo.html for more information -->
+	<configuration>
+	  <downloadSources>true</downloadSources>
+	  <downloadJavadocs>true</downloadJavadocs>
+	  <projectnatures>
+	    <projectnature>ch.epfl.lamp.sdt.core.scalanature</projectnature>
+	    <projectnature>org.eclipse.jdt.core.javanature</projectnature>
+	  </projectnatures>
+	  <buildcommands>
+	    <buildcommand>ch.epfl.lamp.sdt.core.scalabuilder</buildcommand>
+	  </buildcommands>
+	  <classpathContainers>
+	    <classpathContainer>ch.epfl.lamp.sdt.launching.SCALA_CONTAINER</classpathContainer>
+	    <classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
+	  </classpathContainers>
+	  <excludes>
+	    <exclude>org.scala-lang:scala-library</exclude>
+	    <exclude>org.scala-lang:scala-compiler</exclude>
+	  </excludes>
+	  <sourceIncludes>
+	    <sourceInclude>**/*.scala</sourceInclude>
+	    <sourceInclude>**/*.java</sourceInclude>
+	  </sourceIncludes>
+	</configuration>
       </plugin>
     </plugins>
     <!-- Plugin versions and basic configuration. -->
@@ -241,16 +272,21 @@
           <artifactId>maven-surefire-plugin</artifactId>
           <version>2.6</version>
         </plugin>
-		<plugin>
-			<groupId>org.scala-tools</groupId>
-			<artifactId>maven-scala-plugin</artifactId>
-			<version>2.13.1</version>
-		</plugin>
-		<plugin>
-			<groupId>org.codehaus.mojo</groupId>
-			<artifactId>build-helper-maven-plugin</artifactId>
-			<version>1.5</version>
-		</plugin>
+	<plugin>
+	  <groupId>org.scala-tools</groupId>
+	  <artifactId>maven-scala-plugin</artifactId>
+	  <version>2.13.1</version>
+	</plugin>
+	<plugin>
+	  <groupId>org.codehaus.mojo</groupId>
+	  <artifactId>build-helper-maven-plugin</artifactId>
+	  <version>1.5</version>
+	</plugin>
+	<plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-eclipse-plugin</artifactId>
+          <version>2.8</version>
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>
@@ -264,7 +300,7 @@
     <dependency>
       <groupId>junit</groupId>
       <!-- Use junit-dep to avoid potential problems as mockito brings in
-      hamcrest and the "normal" junit contains hamcrest in it's jar file. -->
+	   hamcrest and the "normal" junit contains hamcrest in it's jar file. -->
       <artifactId>junit-dep</artifactId>
       <version>4.8.2</version>
       <type>jar</type>
@@ -283,46 +319,46 @@
       <version>1.2.16</version>
     </dependency>
 
-	<dependency>
-		<groupId>org.scala-lang</groupId>
-		<artifactId>scala-library</artifactId>
-		<version>${scala.version}</version>
-	</dependency>
-	<!-- Specs (Behavior Driven Testing through JUnit) -->
-	<dependency>
-		<groupId>org.scala-tools.testing</groupId>
-		<artifactId>specs</artifactId>
-		<version>1.6.1-2.8.0.Beta1-RC1</version>
-<!--		<scope>test</scope>-->
-	</dependency>
-	<dependency>
-		<groupId>org.scala-tools.testing</groupId>
-		<artifactId>scalatest</artifactId>
-		<version>0.9.5</version>
-		<scope>test</scope>
-	</dependency>
+    <dependency>
+      <groupId>org.scala-lang</groupId>
+      <artifactId>scala-library</artifactId>
+      <version>${scala.version}</version>
+    </dependency>
+    <!-- Specs (Behavior Driven Testing through JUnit) -->
+    <dependency>
+      <groupId>org.scala-tools.testing</groupId>
+      <artifactId>specs</artifactId>
+      <version>1.6.1-2.8.0.Beta1-RC1</version>
+      <!--<scope>test</scope>-->
+    </dependency>
+    <dependency>
+      <groupId>org.scala-tools.testing</groupId>
+      <artifactId>scalatest</artifactId>
+      <version>0.9.5</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   
   <repositories>
-		<repository>
-			<id>scala-tools.org</id>
-			<name>Scala-Tools Maven2 Repository</name>
-			<url>http://scala-tools.org/repo-releases</url>
-		</repository>
-		<!-- Scala 2.8 Latest -->
-		<repository>
-			<id>scala-tools.org.snapshots</id>
-			<name>Scala Tools Maven2 Repository</name>
-			<url>http://scala-tools.org/repo-snapshots</url>
-			<snapshots />
-		</repository>
+    <repository>
+      <id>scala-tools.org</id>
+      <name>Scala-Tools Maven2 Repository</name>
+      <url>http://scala-tools.org/repo-releases</url>
+    </repository>
+    <!-- Scala 2.8 Latest -->
+    <repository>
+      <id>scala-tools.org.snapshots</id>
+      <name>Scala Tools Maven2 Repository</name>
+      <url>http://scala-tools.org/repo-snapshots</url>
+      <snapshots />
+    </repository>
   </repositories>
 
   <pluginRepositories>
-		<pluginRepository>
-			<id>scala-tools.org</id>
-			<name>Scala-Tools Maven2 Repository</name>
-			<url>http://scala-tools.org/repo-releases</url>
-		</pluginRepository>
+    <pluginRepository>
+      <id>scala-tools.org</id>
+      <name>Scala-Tools Maven2 Repository</name>
+      <url>http://scala-tools.org/repo-releases</url>
+    </pluginRepository>
   </pluginRepositories>
 </project>
