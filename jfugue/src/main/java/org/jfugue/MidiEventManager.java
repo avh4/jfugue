@@ -22,13 +22,7 @@
 
 package org.jfugue;
 
-import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.MetaMessage;
-import javax.sound.midi.MidiEvent;
-import javax.sound.midi.Sequence;
-import javax.sound.midi.ShortMessage;
-import javax.sound.midi.SysexMessage;
-import javax.sound.midi.Track;
+import javax.sound.midi.*;
 
 /**
  * Places musical data into the MIDI sequence.
@@ -68,7 +62,7 @@ public final class MidiEventManager
         }
         currentTrack = 0;
     }
-    
+
     /**
      * Sets the current track, or channel, to which new events will be added.
      * @param track the track to select
@@ -166,15 +160,19 @@ public final class MidiEventManager
         try {
             ShortMessage message = new ShortMessage();
             message.setMessage(command, currentTrack, data1);
-            MidiEvent event = new MidiEvent(message, getTrackTimer());
-            track[currentTrack].add(event);
+            track[currentTrack].add(createMIDIEvent(message));
         } catch (InvalidMidiDataException e)
         {
             // We've kept a good eye on the data.  This exception won't happen.
             e.printStackTrace();
         }
     }
-    
+
+    private MidiEvent createMIDIEvent(MidiMessage message) {
+        return new MidiEvent(message,getTrackTimer());
+    }
+
+
     /**
      * Adds a MIDI event to the current track.  
      *
@@ -185,17 +183,20 @@ public final class MidiEventManager
     public void addEvent(int command, int data1, int data2)
     {
         try {
-            ShortMessage message = new ShortMessage();
-            message.setMessage(command, currentTrack, data1, data2);
-            MidiEvent event = new MidiEvent(message, getTrackTimer());
-            track[currentTrack].add(event);
+            track[currentTrack].add(createMIDIEvent(createShortMessage(command, data1, data2)));
         } catch (InvalidMidiDataException e)
         {
             // We've kept a good eye on the data.  This exception won't happen.
             e.printStackTrace();
         }
     }
-    
+
+    private ShortMessage createShortMessage(int status,int data1, int data2) throws InvalidMidiDataException {
+        ShortMessage message = new ShortMessage();
+        message.setMessage(status, currentTrack, data1, data2);
+        return message;
+    }
+
     /**
      * Adds a rest - which really just advances the track timer.
      *
@@ -203,9 +204,9 @@ public final class MidiEventManager
      */
     public void addRest(long duration)
     {
-    	advanceTrackTimer(duration);
+        addNoteEvent(0,0,0,duration,true,true);
     }
-    
+
     /**
      * Adds a ShortMessage.NOTE_ON event to the current track, using attack and
      * decay velocity values.  Also adds a ShortMessage.NOTE_OFF command for
@@ -223,26 +224,14 @@ public final class MidiEventManager
      */
     public void addNoteEvent(int data1, int data2, int data3, long duration, boolean addNoteOn, boolean addNoteOff)
     {
-        try {
-            if (addNoteOn) {
-                ShortMessage message = new ShortMessage();
-                message.setMessage(ShortMessage.NOTE_ON, currentTrack, data1, data2);
-                MidiEvent event = new MidiEvent(message, getTrackTimer());
-                track[currentTrack].add(event);
-            }
+        if (addNoteOn) {
+            addEvent(ShortMessage.NOTE_ON, data1, data2);
+        }
 
-            advanceTrackTimer(duration);
+        advanceTrackTimer(duration);
 
-            if (addNoteOff) {
-                ShortMessage message2 = new ShortMessage();
-                message2.setMessage(ShortMessage.NOTE_OFF, currentTrack, data1, data3);
-                MidiEvent event2 = new MidiEvent(message2, getTrackTimer());
-                track[currentTrack].add(event2);
-            }
-        } catch (InvalidMidiDataException e)
-        {
-            // We've kept a good eye on the data.  This exception won't happen.
-            e.printStackTrace();
+        if (addNoteOff) {
+            addEvent(ShortMessage.NOTE_OFF, data1, data3);
         }
     }
 

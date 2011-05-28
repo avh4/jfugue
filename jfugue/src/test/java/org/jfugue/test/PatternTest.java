@@ -9,6 +9,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertTrue;
+
 public class PatternTest {
 
 	public static final String FRERE_JACQUAS_FILE = "FrereJacques.jfugue";
@@ -93,5 +95,24 @@ public class PatternTest {
 		PatternInterface song = getFrereJacques();
 		player.play(song);
 	}
-	
+
+    //Returns true if n0 and n1 are equal to within the tolerance specified.
+    private boolean areRoughlyEqual(long n0,long n1,long tolerance) {
+        return  Math.abs( n0 - n1) < tolerance;
+    };
+
+    @Test
+    public void testRestsAtEndOfPattern () {
+        Pattern p0 = new Pattern("T480 G5q B5q G5q C6q G10q Rq Rq Rq Rq");
+        Player player = new Player();
+        long t0 = System.currentTimeMillis();
+        player.play(p0);
+        long t1 = System.currentTimeMillis();
+        long duration = t1 - t0;
+        //Because other factors may be in play, one cannot rely on exact millisecond timing.
+        //  I believe that 100 is an appropriate tolerance.  This may be refined if other player overheads
+        //  are reduced in the future.
+        assertTrue("5 notes and 4 rests should take 1125ms to play at 480 bpm", areRoughlyEqual(duration, 1125, 100));
+    }
+
 }
