@@ -825,7 +825,7 @@ public final class MusicStringParser extends Parser
         // and 'numHalfsteps' refers to the number of elements in the halfsteps array.
         // This must be done in order from smaller to larger strings, so the longer string names
         // take effect.  This means 'min' can be overwritten by 'minmaj7', or 'maj' by 'maj7', for example.
-
+        
         if (possibleChord3 != null) {
             if (possibleChord3.equals("MAJ"))
                 { lengthOfChordString = 3; context.numHalfsteps = 2; context.halfsteps[0] = 4; context.halfsteps[1] = 7; }
@@ -1523,18 +1523,10 @@ public final class MusicStringParser extends Parser
             parser.parseToken("Cw+Dq_Rq_Dq_Rq");
             System.out.println("(**********************************************)");
             
-
-            parser.parseToken("Cdom9");
-            parser.parseToken("Cmin11");
-            parser.parseToken("Cdom7<5");
-            parser.parseToken("Cminmaj7");
-            parser.parseToken("Cdom7<5<9");
             parser.parseToken("Cwhqistxo");
 
-            parser.parseToken("C10");
             parser.parseToken("(Cmin+Emaj)h.a100d100");
 
-            parser.parseToken("Cmaj7W");
             parser.parseToken("C#5Q");
             parser.parseToken("eb3Q.");
             parser.parseToken("[Cowbell]O");
@@ -1580,7 +1572,6 @@ public final class MusicStringParser extends Parser
             parser.parseToken("C--");
 
             // 4.0 Chord Inversions
-            parser.parseToken("Cmaj");
             parser.parseToken("C7maj");
             parser.parseToken("C7maj^");
             parser.parseToken("C7maj^^");

@@ -708,4 +708,58 @@ public class MusicStringParserTest {
         parseToken("(C_E_G)q");
     }
 
+    //Chords:
+    private String createChordVerifyStringFromNoteList (int rootnote, int ... notes) {
+        return createChordVerifyStringFromNoteList(0.25, rootnote, notes);
+    }
+    
+    private String createChordVerifyStringFromNoteList (double duration, int rootnote, int ... notes) {
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(Note.createVerifyString(rootnote,duration));
+
+        for (int note : notes) {
+          builder.append("; ");
+          builder.append(Note.createVerifyString(note, duration, false, true, false));
+        }
+
+        return builder.toString();
+    }
+            
+    @Test
+    public void testParseCmaj() {
+	verifyToken("Cmaj", createChordVerifyStringFromNoteList(36, 40, 43));
+    }
+
+    @Test
+    public void testParseChordWithDuration() {
+	verifyToken("CmajW", createChordVerifyStringFromNoteList(1.0, 36, 40, 43));
+    }
+
+    @Test
+    public void testParseCdom9() {
+	verifyToken("Cdom9", createChordVerifyStringFromNoteList(36, 40, 43, 46, 50));
+    }
+
+    @Test
+    public void testParseCmin11() {
+	verifyToken("Cmin11", createChordVerifyStringFromNoteList(36, 43, 46, 50, 51, 53));
+    }
+
+    @Test
+    public void testParseCdom7flat5() {
+	verifyToken("Cdom7<5", createChordVerifyStringFromNoteList(36, 40, 42, 46));
+    }
+
+    @Test
+    public void testParseCminmaj7() {
+	verifyToken("Cminmaj7", createChordVerifyStringFromNoteList(36, 39, 43, 47));
+    }
+    
+    @Test
+    public void testParseCdom7flat5flat9() {
+	verifyToken("Cdom7<5<9", createChordVerifyStringFromNoteList(36, 40, 42, 46, 49));
+    }
+    
+
 }
