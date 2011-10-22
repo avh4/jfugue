@@ -419,7 +419,7 @@ public final class MusicStringParser extends Parser
             byte fineIndex = (byte)(controlIndexInt % 128);
 
             // Special case for BANK_SELECT, which has a high byte of 0
-            if (16383 == controlValue) {
+            if (16383 == controlIndexInt) {
                 coarseIndex = 0;
                 fineIndex = 32;
             }
