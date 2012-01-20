@@ -40,8 +40,8 @@ import org.jfugue.elements.Voice;
 
 /**
  * This implementation of a ParserListener listens for all events, and funnels
- * them all to the abstract jfugueEvent() method.  Therefore, you can extend
- * this class if you want to create a ParserListener that will handle all
+ * them all to the abstract jfugueEvent() method.  You may use
+ * this class to create a ParserListener that will handle all
  * JFugue elements in the same way.  For example, this is used by the
  * MusicStringParser to verify the results of a parse.  In this case, all
  * JFugue events are handled in the same way: they're all asked for their
@@ -128,6 +128,10 @@ public abstract class CollatedParserListener implements ParserListener
         jfugueEvent(voice);
     }
 
+    /**
+     * This is called when any JFugue Element is parsed.
+     * 
+     * @param element
+     */
     public abstract void jfugueEvent(JFugueElement element);
-
 }

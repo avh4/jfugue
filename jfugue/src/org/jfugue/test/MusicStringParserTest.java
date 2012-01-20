@@ -710,10 +710,10 @@ public class MusicStringParserTest {
 
     //Chords:
     private String createChordVerifyStringFromNoteList (int rootnote, int ... notes) {
-        return createChordVerifyStringFromNoteList(0.25, rootnote, notes);
+        return createChordVerifyStringFromNoteListWithDuration(0.25, rootnote, notes);
     }
     
-    private String createChordVerifyStringFromNoteList (double duration, int rootnote, int ... notes) {
+    private String createChordVerifyStringFromNoteListWithDuration(double duration, int rootnote, int ... notes) {
 
         StringBuilder builder = new StringBuilder();
         builder.append(Note.createVerifyString(rootnote,duration));
@@ -733,7 +733,7 @@ public class MusicStringParserTest {
 
     @Test
     public void testParseChordWithDuration() {
-	verifyToken("CmajW", createChordVerifyStringFromNoteList(1.0, 36, 40, 43));
+	verifyToken("CmajW", createChordVerifyStringFromNoteListWithDuration(1.0, 36, 40, 43));
     }
 
     @Test
