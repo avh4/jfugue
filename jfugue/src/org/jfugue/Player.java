@@ -260,7 +260,10 @@ public class Player
     {
         // Open the sequencer
         openSequencer();
-
+        
+        intentionalDelay();
+        
+        System.out.println("Seq is "+sequence);
         // Set the sequence
         try {
             getSequencer().setSequence(sequence);
@@ -292,8 +295,29 @@ public class Player
         // Close the sequencer
         getSequencer().close();
 
+        intentionalDelay();
+
         setStarted(false);
         setFinished(true);
+    }
+
+    /**
+     * Ugliness here! Why do we need an Intentional Delay?
+     * Well, it turns out that getSequencer().open() and getSequencer().close()
+     * within javax.sound.midi are happening asynchronously, and this delay
+     * makes things happy enough that:
+     * - Music strings don't skip (which you'll see if you take out the delay, and call
+     *   player.play("some music string") in a while loop)
+     * - We don't get an IllegalArgumentException by trying to send a sequence to a sequencer 
+     *   that, despite openSequencer() having just been called, apparently isn't actually open 
+     */
+    private void intentionalDelay()
+    {
+        try {
+            Thread.sleep(1); 
+        } catch (InterruptedException e) {
+        	e.printStackTrace();
+        }
     }
 
     private synchronized boolean isOn() 
