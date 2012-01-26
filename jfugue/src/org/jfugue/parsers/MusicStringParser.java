@@ -26,8 +26,6 @@ import java.util.Arrays;
 import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
-
-import org.jfugue.CollatedParserListener;
 import org.jfugue.JFugueDefinitions;
 import org.jfugue.JFugueException;
 import org.jfugue.ParserListener;
@@ -37,7 +35,6 @@ import org.jfugue.PatternInterface;
 import org.jfugue.elements.ChannelPressure;
 import org.jfugue.elements.Controller;
 import org.jfugue.elements.Instrument;
-import org.jfugue.elements.JFugueElement;
 import org.jfugue.elements.KeySignature;
 import org.jfugue.elements.Layer;
 import org.jfugue.elements.Measure;
@@ -197,6 +194,16 @@ public final class MusicStringParser extends Parser
             case 'F' :
             case 'G' :
             case 'R' :
+            case '0' : // New in 4.1
+            case '1' : // New in 4.1
+            case '2' : // New in 4.1
+            case '3' : // New in 4.1
+            case '4' : // New in 4.1
+            case '5' : // New in 4.1
+            case '6' : // New in 4.1
+            case '7' : // New in 4.1
+            case '8' : // New in 4.1
+            case '9' : // New in 4.1
             case '[' : parseNoteElement(s);            break;  
             default  : break;  // Unknown characters are okay
         }
@@ -684,25 +691,49 @@ public final class MusicStringParser extends Parser
         }
     }
     
-    /** Returns the index with which to start parsing the next part of the string, once this method is done with its part */
-    private int parseNoteRoot(String s, int slen, int index, NoteContext context)
-    {
+	/**
+	 * Returns the index with which to start parsing the next part of the
+	 * string, once this method is done with its part
+	 */
+    private int parseNoteRoot(String s, int slen, int index, NoteContext context) {
         switch (s.charAt(index)) {
-            case '[' : return parseNumericNote(s, slen, index, context);
-            case 'R' : return parseRest(s, slen, index, context);
-            default  : return parseLetterNote(s, slen, index, context);
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9': return parseNumericNote(s, slen, index, context);
+            case '[': return parseBracketedNote(s, slen, index, context);
+            case 'R': return parseRest(s, slen, index, context);
+            default: return parseLetterNote(s, slen, index, context);
         }
-    }
+	}
 
     /** Returns the index with which to start parsing the next part of the string, once this method is done with its part */
     private int parseNumericNote(String s, int slen, int index, NoteContext context)
+    {
+    	int c = 0;
+    	for (c = 0; (s.charAt(c) >= '0') && (s.charAt(c) <= '9'); c++) { }
+    	String numericNoteString = s.substring(0, c); 
+    	context.noteNumber =  Byte.parseByte(numericNoteString);
+        context.isNumericNote = true;
+
+        Logger.getRootLogger().trace("This note is a numeric note with value " + context.noteNumber);
+        return c;
+    }
+    
+    private int parseBracketedNote(String s, int slen, int index, NoteContext context)
     {
         int indexOfEndBracket = s.indexOf(']', index);
         String stringInBrackets = s.substring(1,indexOfEndBracket);
         context.noteNumber = getByteFromDictionary(stringInBrackets);
         context.isNumericNote = true;
 
-        Logger.getRootLogger().trace("This note is a numeric note with value " +  context.noteNumber);
+        Logger.getRootLogger().trace("This note is a numeric note with value " + context.noteNumber);
         return indexOfEndBracket+1;
     }
 
@@ -1521,7 +1552,7 @@ public final class MusicStringParser extends Parser
             long startTime = System.currentTimeMillis();
 
             parser.parseToken("Cw+Dq_Rq_Dq_Rq");
-            System.out.println("(**********************************************)");
+            Logger.getRootLogger().trace("(**********************************************)");
             
             parser.parseToken("Cwhqistxo");
 
@@ -1598,9 +1629,20 @@ public final class MusicStringParser extends Parser
             parser.parseToken("Cn");
             parser.parseToken("Cn6");
 	
+            // 4.0 New parser
+            parser.parseToken("D3");
+            parser.parseToken("C##3"); // Should be like D3
+
+            // 4.1 System Exclusive
+            parser.parseToken("^dec:240,67,127,0,0,3,0,65,247");
+            parser.parseToken("^hex:F0,43,7F,00,00,03,00,41,F7");
+
+            // 4.1 Numeric notes without brackets
+            parser.parseToken("60q");
+            parser.parseToken("45/0.5");
 
             long endTime = System.currentTimeMillis();
-            System.out.println("Time taken: "+(endTime-startTime)+"ms");
+            Logger.getRootLogger().trace("Time taken: "+(endTime-startTime)+"ms");
 
         } catch (Exception e) {
             e.printStackTrace();
