@@ -55,6 +55,7 @@ import org.jfugue.parsers.Parser;
 public class Player
 {
     private Sequencer sequencer;
+    private Synthesizer synth;
     private MusicStringParser parser;
     private MidiRenderer renderer;
     private float sequenceTiming = Sequence.PPQ;
@@ -110,6 +111,7 @@ public class Player
     public Player(Synthesizer synth) throws MidiUnavailableException
     {
         this(Player.getSequencerConnectedToSynthesizer(synth));
+        this.synth = synth;
     }
 
     private void initParser()
@@ -425,8 +427,9 @@ public class Player
     {
         getSequencer().close();
         try {
-            // TODO: This is a potential bug, if the Player has been passed in a Synthesizer
-            if (MidiSystem.getSynthesizer() != null) {
+        	if (synth != null) {
+        		synth.close();
+        	} else if (MidiSystem.getSynthesizer() != null) {
                 MidiSystem.getSynthesizer().close();
             }
         } catch (MidiUnavailableException e) {
@@ -564,7 +567,6 @@ public class Player
     public static void allNotesOff()
     {
         try {
-            // TODO: This is a potential bug, if the Player has been passed in a Synthesizer
             allNotesOff(MidiSystem.getSynthesizer());
         } catch (MidiUnavailableException e)
         {
@@ -574,6 +576,7 @@ public class Player
 
     /**
      * Stops all notes from playing on all MIDI channels.
+     * Uses the synthesizer provided to the method. 
      */
     public static void allNotesOff(Synthesizer synth)
     {
