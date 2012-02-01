@@ -81,8 +81,8 @@ public final class MusicStringParser extends Parser
 
     private static void trace(String string)
     {
-        // Logger.getRootLogger().trace(string);
-        System.out.println(string);
+        Logger.getRootLogger().trace(string);
+        //System.out.println(string);
     }
     
     /**
@@ -639,33 +639,34 @@ public final class MusicStringParser extends Parser
      * @param s the token that contains a note element
      * @throws JFugueException if there is a problem parsing the element
      */
-    private void parseNoteElement(String s) throws JFugueException
-    {
+    private void parseNoteElement(String s) throws JFugueException {
         NoteContext context = new NoteContext();
 
         while (context.existAnotherNote) {
-            trace("--Parsing note from token "+s);
+            trace("--Parsing note from token " + s);
             int startChord, startChordInversion;
             context.isRest = false;
             context.isStartOfTie = false;
             context.isEndOfTie = false;
             decideSequentialOrParallel(context);
             int index = 0;
-            int slen = s.length(); // We pass the length of the string because it is an invariant value that is used often
+            int slen = s.length(); // We pass the length of the string because
+                                   // it is an invariant value that is used
+                                   // often
             index = parseNoteRoot(s, slen, index, context);
             startChord = parseNoteOctave(s, slen, index, context);
             startChordInversion = parseNoteChord(s, slen, startChord, context);
-	    if (index == startChord)
-	    {
-		trace("No octave spec found, setting default octave");
-		setDefaultOctave(context);
-	    }
-	    trace("Octave: " +  context.octaveNumber);
+            if (index == startChord) {
+                trace("No octave spec found, setting default octave");
+                setDefaultOctave(context);
+            }
+            trace("Octave: " + context.octaveNumber);
 
             computeNoteValue(context);
-            index = parseNoteChordInversion(s, slen, startChordInversion, context);
+            index = parseNoteChordInversion(s, slen, startChordInversion,
+                    context);
             if (context.isChord)
-            	context.chordName = s.substring(startChord, index);
+                context.chordName = s.substring(startChord, index);
             index = parseNoteDuration(s, slen, index, context);
             index = parseNoteVelocity(s, slen, index, context);
             s = parseNoteConnector(s, slen, index, context);
