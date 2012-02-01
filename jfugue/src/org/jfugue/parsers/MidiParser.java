@@ -121,11 +121,25 @@ public final class MidiParser extends Parser
                     MidiMessage message = event.getMessage();
                     
                     Logger.getRootLogger().trace("Message received: " + message);
-                    parse(message, event.getTick());  
                     
-                 // The following line of code may hold the solution to Issue 33,
-                 // but I'm not confident enough to turn it into production code yet
-//                    parse(message, (int)(event.getTick() / (resolution / 120.0)));   
+                    // *** ISSUE 55 MARKUP ***
+                    // (Remove when the issue is resolved - but replace with some descriptive comments!)
+
+                    // Here's the original line that was called next:
+//                  parse(message, event.getTick());  
+                    
+                    // Here's a revised line that seems to work better, but the question
+                    // is what value should resolution be divided by.
+                    //
+                    // For taha_picturebook.mid (available in Issue 55), a value of 120.0 works
+                    // (actually, 120.0 results in music that sounds a little too fast)
+                    // The Resolution of taha_picturebook.mid is 960, the MIDI File Type is 1, and
+                    // the Division Type is PPQ.
+                    //
+                    // For hiphopBb4.mid (available in Issue 55), a value of 30.0 works.
+                    // The Resolution of hiphopBb4.mid is 120, the MIDI File Type is 1, and
+                    // the Division Type is PPQ.
+                    parse(message, (int)(event.getTick() / (resolution / 120.0)));   
                 }
             }
         }
