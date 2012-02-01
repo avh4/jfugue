@@ -131,7 +131,7 @@ public class Note extends AbstractNote {
     public Note(byte value, long duration)
     {
     	setValue(value);
-    	setMsDuration(duration);
+    	setMillisDuration(duration);
     }
 
     /**

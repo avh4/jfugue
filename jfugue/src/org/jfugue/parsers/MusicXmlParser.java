@@ -550,13 +550,13 @@ public final class MusicXmlParser extends Parser
         // Set up the note
         if (isRest)
         {   newNote.setRest(true);
-            newNote.setMsDuration(duration);
+            newNote.setMillisDuration(duration);
             newNote.setAttackVelocity( (byte)0 );          // turn off sound for rest notes
             newNote.setDecayVelocity( (byte)0 );
         }
         else
         {	newNote.setValue(noteNumber);
-            newNote.setMsDuration(duration);
+            newNote.setMillisDuration(duration);
             newNote.setStartOfTie(isStartOfTie);
             newNote.setEndOfTie(isEndOfTie);
             newNote.setAttackVelocity(attackVelocity);

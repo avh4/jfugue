@@ -182,7 +182,7 @@ public final class MidiRenderer extends ParserListenerAdapter
         // Remember the current track time, so we can flip back to it
         // if there are other notes to play in parallel
         this.initialNoteTime = this.eventManager.getTrackTimer();
-        long duration = note.getMsDuration();
+        long duration = note.getMillisDuration();
         
         // If there is no duration, don't add this note to the event manager
         // TODO: This is a special case as of v4.0.3 that should be re-thought if a new noteEvent callback is created in v5.0
@@ -203,7 +203,7 @@ public final class MidiRenderer extends ParserListenerAdapter
 
     public void sequentialNoteEvent(Note note)
     {
-        long duration = note.getMsDuration();
+        long duration = note.getMillisDuration();
         if (note.isRest()) {
             this.eventManager.addRest(duration);
         } else {
@@ -215,7 +215,7 @@ public final class MidiRenderer extends ParserListenerAdapter
 
     public void parallelNoteEvent(Note note)
     {
-        long duration = note.getMsDuration();
+        long duration = note.getMillisDuration();
         this.eventManager.setTrackTimer(this.initialNoteTime);
         if (note.isRest()) {
             this.eventManager.addRest(duration);

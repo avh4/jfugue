@@ -125,7 +125,7 @@ public final class MusicStringRenderer implements ParserListener
         // Don't add notes that have 0 duration - these indicate a note that 
         // is triggered, but has no duration 
     	// TODO: This is a special case as of v4.0.3 that should be re-thought if a new noteEvent callback is created in v5.0
-        if (note.getMsDuration() > 0) {
+        if (note.getMillisDuration() > 0) {
             pattern.addElement(note);
         }
     }

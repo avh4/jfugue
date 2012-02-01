@@ -1417,13 +1417,13 @@ public final class MusicStringParser extends Parser
 
         if (context.isRest) {
             note.setRest(true);
-            note.setMsDuration(context.duration);
+            note.setMillisDuration(context.duration);
             note.setDecimalDuration(context.decimalDuration);
             note.setAttackVelocity( (byte)0 );          // turn off sound for rest notes
             note.setDecayVelocity( (byte)0 );
         } else {
             note.setValue(context.noteNumber);
-            note.setMsDuration(context.duration);
+            note.setMillisDuration(context.duration);
             note.setStartOfTie(context.isStartOfTie);
             note.setEndOfTie(context.isEndOfTie);
             note.setDecimalDuration(context.decimalDuration);
@@ -1511,7 +1511,7 @@ public final class MusicStringParser extends Parser
             public void noteEvent(Note note)
             {
                 rootNote.setValue(note.getValue());
-                rootNote.setMsDuration(note.getMsDuration());
+                rootNote.setMillisDuration(note.getMillisDuration());
                 rootNote.setDecimalDuration(note.getDecimalDuration());
                 rootNote.setStartOfTie(note.isStartOfTie());
                 rootNote.setEndOfTie(note.isEndOfTie());

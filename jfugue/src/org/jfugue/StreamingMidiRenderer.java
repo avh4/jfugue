@@ -213,7 +213,7 @@ public class StreamingMidiRenderer implements ParserListener
         // Here we have to calculate the correct duration in milliseconds 
         // based on the current tempo.
         final double secondsPerWholeNote = 4 * (1.0 / currentTempo) * 60.0;
-        final long durationInMillis = note.getMsDuration() * (long) (1000.0 * secondsPerWholeNote / 128.0);
+        final long durationInMillis = note.getMillisDuration() * (long) (1000.0 * secondsPerWholeNote / 128.0);
         return durationInMillis;
     }
 

@@ -58,7 +58,7 @@ public class DurationPatternTool extends ParserListenerAdapter
     // Only look at the first Note events, not parallel or sequential ones.
     public void noteEvent(Note note)
     {
-        long duration = note.getMsDuration();
+        long duration = note.getMillisDuration();
         this.voiceDuration[this.activeVoice] += duration;
     }
 

@@ -39,7 +39,7 @@ public class NoteTest {
 	public void testFourArgConstructor() {
 		Note n = new Note((byte) 10, 20, (byte) 30, (byte) 40);
 		assertEquals(10, n.getValue());
-		assertEquals(20, n.getMsDuration());
+		assertEquals(20, n.getMillisDuration());
 		assertEquals(30, n.getAttackVelocity());
 		assertEquals(40, n.getDecayVelocity());
 	}
@@ -83,7 +83,7 @@ public class NoteTest {
 		assertEquals(
 				"Decimal duration and long duration don't match when setting decimal duration",
 				n1.getDecimalDuration(),
-				(n1.getMsDuration() / JFugueDefinitions.SEQUENCE_RESOLUTION),
+				(n1.getMillisDuration() / JFugueDefinitions.SEQUENCE_RESOLUTION),
 				0.01);
 	}
 
@@ -93,7 +93,7 @@ public class NoteTest {
 				(long) (JFugueDefinitions.SEQUENCE_RESOLUTION * 0.5));
 		assertEquals(
 				"Decimal duration and long duration don't match when setting long duration",
-				n1.getMsDuration(),
+				n1.getMillisDuration(),
 				((long) (JFugueDefinitions.SEQUENCE_RESOLUTION * n1
 						.getDecimalDuration())));
 	}

@@ -34,11 +34,11 @@ public abstract class AbstractNote implements JFugueElement {
 		msDuration = JFugueDefinitions.msFromDecimalDuration(decimalDuration);
 	}
 
-	public long getMsDuration() {
+	public long getMillisDuration() {
 		return msDuration;
 	}
 
-	public void setMsDuration(long msDuration) {
+	public void setMillisDuration(long msDuration) {
 		this.msDuration = msDuration;
 		decimalDuration = JFugueDefinitions.decimalFromMSDuration(msDuration);
 	}
