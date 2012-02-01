@@ -79,6 +79,12 @@ public final class MusicStringParser extends Parser
 //        dictionaryMap = dict;
     }
 
+    private static void trace(String string)
+    {
+        // Logger.getRootLogger().trace(string);
+        System.out.println(string);
+    }
+    
     /**
      * Returns true if a default tempo event (120bpm) is generated when a pattern
      * doesn't specify an initial tempo.
@@ -168,7 +174,7 @@ public final class MusicStringParser extends Parser
         }
 
         s = s.toUpperCase();
-        Logger.getRootLogger().trace("--------Processing Token: " + s);
+        trace("--------Processing Token: " + s);
 
         switch(s.charAt(0))
         {
@@ -220,7 +226,7 @@ public final class MusicStringParser extends Parser
         if ((voiceNumber < 0) || (voiceNumber > 15)) {
             throw new JFugueException(JFugueException.VOICE_EXC, Byte.toString(voiceNumber), s);
         }
-        Logger.getRootLogger().trace("Voice element: voice = " + voiceNumber);
+        trace("Voice element: voice = " + voiceNumber);
         fireVoiceEvent(new Voice(voiceNumber));
     }
     
@@ -247,7 +253,7 @@ public final class MusicStringParser extends Parser
     {
         String tempoNumberString = s.substring(1,s.length());
         int tempoNumber = getIntFromDictionary(tempoNumberString);
-        Logger.getRootLogger().trace("Tempo element: tempo = " + tempoNumber);
+        trace("Tempo element: tempo = " + tempoNumber);
         fireTempoEvent(new Tempo(tempoNumber));
     }
 
@@ -259,7 +265,7 @@ public final class MusicStringParser extends Parser
     private void parseInstrumentElement(String s) throws JFugueException
     {
         byte instrumentNumber = getByteValueOfToken(s);
-        Logger.getRootLogger().trace("Instrument element: instrument = " + instrumentNumber);
+        trace("Instrument element: instrument = " + instrumentNumber);
         fireInstrumentEvent(new Instrument(instrumentNumber));
     }
 
@@ -274,7 +280,7 @@ public final class MusicStringParser extends Parser
         if ((layerNumber < 0) || (layerNumber > 15)) {
             throw new JFugueException(JFugueException.LAYER_EXC, Byte.toString(layerNumber), s);
         }
-        Logger.getRootLogger().trace("Layer element: layer = " + layerNumber);
+        trace("Layer element: layer = " + layerNumber);
         fireLayerEvent(new Layer(layerNumber));
     }
 
@@ -286,7 +292,7 @@ public final class MusicStringParser extends Parser
     private void parseTimeElement(String s) throws JFugueException
     {
         long timeNumber = getLongValueOfToken(s);
-        Logger.getRootLogger().trace("Time element: time = " + timeNumber);
+        trace("Time element: time = " + timeNumber);
         fireTimeEvent(new Time(timeNumber));
     }
 
@@ -309,7 +315,7 @@ public final class MusicStringParser extends Parser
         }
         
         byte[] data = parseSystemExclusiveData(s.substring(indexOfColon+1,s.length()), radix);
-        Logger.getRootLogger().trace("Sysex element: bytes = " + Arrays.toString(data));
+        trace("Sysex element: bytes = " + Arrays.toString(data));
         fireSystemExclusiveEvent(new SystemExclusive(data));
     }
 
@@ -341,11 +347,11 @@ public final class MusicStringParser extends Parser
      */
     private void parseKeySignatureElement(String s) throws JFugueException
     {
-        Logger.getRootLogger().trace("Key signature element: "+ s.substring(1));
+        trace("Key signature element: "+ s.substring(1));
 
         int scale = getMIDIKeySignatureScale(s);
         int key = KeySignature.keyNameToMIDIKey(s.substring(1));
-        Logger.getRootLogger().trace("Key signature: sig=" + key + " scale=" + scale);
+        trace("Key signature: sig=" + key + " scale=" + scale);
         fireKeySignatureEvent(new KeySignature((byte)key, (byte)scale));
         this.keySig = (byte)key;
     }
@@ -381,7 +387,7 @@ public final class MusicStringParser extends Parser
      */
     private void parseMeasureElement(String s) throws JFugueException
     {
-        Logger.getRootLogger().trace("Measure element.");
+        trace("Measure element.");
         fireMeasureEvent(new Measure());
     }
 
@@ -433,12 +439,12 @@ public final class MusicStringParser extends Parser
 
             byte coarseValue = (byte)(controlValue / 128);
             byte fineValue = (byte)(controlValue % 128);
-            Logger.getRootLogger().trace("Combined controller element: coarse-index = " + coarseIndex + ", coarse-value = " + coarseValue + "; fine-index = " + fineIndex + ", fine-value = " + fineValue);
+            trace("Combined controller element: coarse-index = " + coarseIndex + ", coarse-value = " + coarseValue + "; fine-index = " + fineIndex + ", fine-value = " + fineValue);
             fireControllerEvent(new Controller(coarseIndex, coarseValue));
             fireControllerEvent(new Controller(fineIndex, fineValue));
         } else {
             byte controlValue = getByteFromDictionary(controlValueString);
-            Logger.getRootLogger().trace("Controller element: index = " + controlIndex + ", value = " +controlValue);
+            trace("Controller element: index = " + controlIndex + ", value = " +controlValue);
             fireControllerEvent(new Controller(controlIndex, controlValue));
         }
     }
@@ -457,7 +463,7 @@ public final class MusicStringParser extends Parser
 
         byte pressureNumber = getByteValueOfToken(s);
 
-        Logger.getRootLogger().trace("ChannelPressure element: pressure = " + pressureNumber);
+        trace("ChannelPressure element: pressure = " + pressureNumber);
         fireChannelPressureEvent(new ChannelPressure(pressureNumber));
     }
 
@@ -475,7 +481,7 @@ public final class MusicStringParser extends Parser
         byte keyNumber = getPolyPressureKey(s);
         byte pressureNumber = getPolyPressurePressure(s);
 
-        Logger.getRootLogger().trace("PolyphonicPressure element: key = " + keyNumber+ ", pressure = " + pressureNumber);
+        trace("PolyphonicPressure element: key = " + keyNumber+ ", pressure = " + pressureNumber);
         firePolyphonicPressureEvent(new PolyphonicPressure(keyNumber, pressureNumber));
     }
 
@@ -508,7 +514,7 @@ public final class MusicStringParser extends Parser
             bytes = intStringToOctets(valueStrings[0]);
 	}
 
-        Logger.getRootLogger().trace("PitchBend element: byte1 = " + bytes[0] + ", byte2 = " + bytes[1]);
+        trace("PitchBend element: byte1 = " + bytes[0] + ", byte2 = " + bytes[1]);
         firePitchBendEvent(new PitchBend(bytes[0], bytes[1]));
     }
 
@@ -554,7 +560,7 @@ public final class MusicStringParser extends Parser
         // MusicString has already been tokenized.
         definition.replace('~', ' ');
         word = word.toUpperCase();
-        Logger.getRootLogger().trace("Dictionary Definition element: word = " + word + ", value = " + definition);
+        trace("Dictionary Definition element: word = " + word + ", value = " + definition);
         addDict(word, definition);
     }
 
@@ -638,9 +644,11 @@ public final class MusicStringParser extends Parser
         NoteContext context = new NoteContext();
 
         while (context.existAnotherNote) {
-            Logger.getRootLogger().trace("--Parsing note from token "+s);
+            trace("--Parsing note from token "+s);
             int startChord, startChordInversion;
             context.isRest = false;
+            context.isStartOfTie = false;
+            context.isEndOfTie = false;
             decideSequentialOrParallel(context);
             int index = 0;
             int slen = s.length(); // We pass the length of the string because it is an invariant value that is used often
@@ -649,10 +657,10 @@ public final class MusicStringParser extends Parser
             startChordInversion = parseNoteChord(s, slen, startChord, context);
 	    if (index == startChord)
 	    {
-		Logger.getRootLogger().trace("No octave spec found, setting default octave");
+		trace("No octave spec found, setting default octave");
 		setDefaultOctave(context);
 	    }
-	    Logger.getRootLogger().trace("Octave: " +  context.octaveNumber);
+	    trace("Octave: " +  context.octaveNumber);
 
             computeNoteValue(context);
             index = parseNoteChordInversion(s, slen, startChordInversion, context);
@@ -680,14 +688,14 @@ public final class MusicStringParser extends Parser
         if (context.anotherNoteIsSequential) {
             context.isSequentialNote = true;
             context.anotherNoteIsSequential = false;
-            Logger.getRootLogger().trace("This note is sequential");
+            trace("This note is sequential");
         }
         
         context.isParallelNote = false;
         if (context.anotherNoteIsParallel) {
             context.isParallelNote = true;
             context.anotherNoteIsParallel = false;
-            Logger.getRootLogger().trace("This note is parallel");
+            trace("This note is parallel");
         }
     }
     
@@ -722,7 +730,7 @@ public final class MusicStringParser extends Parser
     	context.noteNumber =  Byte.parseByte(numericNoteString);
         context.isNumericNote = true;
 
-        Logger.getRootLogger().trace("This note is a numeric note with value " + context.noteNumber);
+        trace("This note is a numeric note with value " + context.noteNumber);
         return c;
     }
     
@@ -733,7 +741,7 @@ public final class MusicStringParser extends Parser
         context.noteNumber = getByteFromDictionary(stringInBrackets);
         context.isNumericNote = true;
 
-        Logger.getRootLogger().trace("This note is a numeric note with value " + context.noteNumber);
+        trace("This note is a numeric note with value " + context.noteNumber);
         return indexOfEndBracket+1;
     }
 
@@ -742,7 +750,7 @@ public final class MusicStringParser extends Parser
     {
         context.isRest = true;
 
-        Logger.getRootLogger().trace("This note is a Rest");
+        trace("This note is a Rest");
         return index+1;
     }
 
@@ -778,7 +786,7 @@ public final class MusicStringParser extends Parser
              }
          }
 
-        Logger.getRootLogger().trace("Note number within an octave (C=0, B=11): " +  context.noteNumber);
+        trace("Note number within an octave (C=0, B=11): " +  context.noteNumber);
         return index;
     }
 
@@ -808,10 +816,10 @@ public final class MusicStringParser extends Parser
             if ((possibleOctave2 >= '0') && (possibleOctave2 <= '9')) {
                 definiteOctaveLength = 2;
             }
-	    Logger.getRootLogger().trace("Octave is " + definiteOctaveLength + " digits long");
+	    trace("Octave is " + definiteOctaveLength + " digits long");
 
             String octaveNumberString = s.substring(index, index+definiteOctaveLength);
-	    Logger.getRootLogger().trace("Octave spec is " + octaveNumberString);
+	    trace("Octave spec is " + octaveNumberString);
             try {
                 context.octaveNumber = Byte.parseByte(octaveNumberString);
             } catch (NumberFormatException e) {
@@ -938,7 +946,7 @@ public final class MusicStringParser extends Parser
 
         if (lengthOfChordString > 0) {
             context.isChord = true;
-            Logger.getRootLogger().trace("Chord: chordLength=" +  lengthOfChordString + ", so chord is one of the following: [ 3=" + possibleChord3 + " 4=" + possibleChord4 + " 5=" +  possibleChord5 + " 6=" +  possibleChord6 + " 7=" + possibleChord7+ " 8=" + possibleChord8 + " ]");
+            trace("Chord: chordLength=" +  lengthOfChordString + ", so chord is one of the following: [ 3=" + possibleChord3 + " 4=" + possibleChord4 + " 5=" +  possibleChord5 + " 6=" +  possibleChord6 + " 7=" + possibleChord7+ " 8=" + possibleChord8 + " ]");
         }
 
         return index+lengthOfChordString;
@@ -969,7 +977,7 @@ public final class MusicStringParser extends Parser
             if ((keySig >= +5) && (context.noteNumber == 9)) context.noteNumber = 10;
             if ((keySig >= +6) && (context.noteNumber == 4)) context.noteNumber = 5;
             if ((keySig >= +7) && (context.noteNumber == 11)) { context.noteNumber = 0; context.octaveNumber++; }
-            Logger.getRootLogger().trace("After adjusting for Key Signature, noteNumber=" + context.noteNumber +" octave=" +  context.octaveNumber);
+            trace("After adjusting for Key Signature, noteNumber=" + context.noteNumber +" octave=" +  context.octaveNumber);
         }
 
         // Compute the actual note number, based on octave and note
@@ -980,7 +988,7 @@ public final class MusicStringParser extends Parser
                 throw new JFugueException(JFugueException.NOTE_OCTAVE_EXC, Integer.toString(intNoteNumber), "");
             }
             context.noteNumber = (byte)intNoteNumber;
-            Logger.getRootLogger().trace("Computed note number: " +  context.noteNumber);
+            trace("Computed note number: " +  context.noteNumber);
         }
     }
 
@@ -1108,12 +1116,12 @@ public final class MusicStringParser extends Parser
             if (inversionRootNote == -1) {
                 // The root is determined by a number of carets.  Increase each half-step
                 // before the inversion by 12, the number of notes in an octave.
-                Logger.getRootLogger().trace("Inversion is base on count: " + inversionCount);
-                Logger.getRootLogger().trace("Inverting " + context.noteNumber + " to be " + (context.noteNumber+12));
+                trace("Inversion is base on count: " + inversionCount);
+                trace("Inverting " + context.noteNumber + " to be " + (context.noteNumber+12));
                 context.noteNumber += 12;
                 for (int i=inversionCount-1; i < context.numHalfsteps; i++)
                 {
-                    Logger.getRootLogger().trace("Inverting " + context.halfsteps[i] + " to be " + (context.halfsteps[i]-12));
+                    trace("Inverting " + context.halfsteps[i] + " to be " + (context.halfsteps[i]-12));
                     context.halfsteps[i] -= 12;
                 }
             } else {
@@ -1128,18 +1136,18 @@ public final class MusicStringParser extends Parser
                 }
                 // Otherwise, inversionRootNote is a numeric note value, like [60]
 
-                Logger.getRootLogger().trace("Inversion is base on note: "+inversionRootNote);
+                trace("Inversion is base on note: "+inversionRootNote);
 
                 if ((inversionRootNote > context.noteNumber + context.halfsteps[context.numHalfsteps-1]) || (inversionRootNote < context.noteNumber)) {
                     throw new ParserError(ParserError.INVERSION_EXC);
                 }
 
-                Logger.getRootLogger().trace("Inverting "+context.noteNumber+" to be "+(context.noteNumber+12));
+                trace("Inverting "+context.noteNumber+" to be "+(context.noteNumber+12));
                 context.noteNumber += 12;
                 for (int i=0; i < context.numHalfsteps; i++)
                 {
                     if (context.noteNumber + context.halfsteps[i] >= inversionRootNote + 12) {
-                        Logger.getRootLogger().trace("Inverting "+context.halfsteps[i]+" to be "+(context.halfsteps[i]-12));
+                        trace("Inverting "+context.halfsteps[i]+" to be "+(context.halfsteps[i]-12));
                         context.halfsteps[i]-=12;
                     }
                 }
@@ -1190,8 +1198,8 @@ public final class MusicStringParser extends Parser
 //        double ppw = ppq * 4.0; // 4 quarter notes in a whole note
 //        context.duration = (long)(ppw * context.decimalDuration) / 4000; 
 
-        Logger.getRootLogger().trace("Decimal duration is " + context.decimalDuration);
-        Logger.getRootLogger().trace("Actual duration is " + context.duration);
+        trace("Decimal duration is " + context.decimalDuration);
+        trace("Actual duration is " + context.duration);
 
         return index;
     }
@@ -1212,10 +1220,10 @@ public final class MusicStringParser extends Parser
                 switch (durationChar) {
                     case '-' : if ((context.decimalDuration == 0) && (!context.isEndOfTie)) {
                                    context.isEndOfTie = true;
-                                   Logger.getRootLogger().trace("Note is end of tie");
+                                   trace("Note is end of tie");
                                } else {
                                    context.isStartOfTie = true;
-                                   Logger.getRootLogger().trace("Note is start of tie");
+                                   trace("Note is start of tie");
                                }
                                break;
                     case 'W' : durationNumber = 1; break;
@@ -1271,7 +1279,7 @@ public final class MusicStringParser extends Parser
             index = endingIndex;
         }
 
-        Logger.getRootLogger().trace("Decimal duration is " + context.decimalDuration);
+        trace("Decimal duration is " + context.decimalDuration);
         return index;
     }
     
@@ -1293,7 +1301,7 @@ public final class MusicStringParser extends Parser
     {
         if (index < slen) {
             if (s.charAt(index) == '*') {
-                Logger.getRootLogger().trace("Note is a tuplet");
+                trace("Note is a tuplet");
                 index++;
 
                 // Figure out tuplet ratio, or figure out when to stop looking for tuplet info
@@ -1331,10 +1339,10 @@ public final class MusicStringParser extends Parser
                     numerator = Double.parseDouble(s.substring(indexOfUnitsToMatch, indexOfNumNotes-1));
                     denominator = Double.parseDouble(s.substring(indexOfNumNotes, index));
                 }
-                Logger.getRootLogger().trace("Tuplet ratio is "+numerator+":"+denominator);
+                trace("Tuplet ratio is "+numerator+":"+denominator);
                 double tupletRatio = numerator / denominator;
                 context.decimalDuration = context.decimalDuration * tupletRatio;
-                Logger.getRootLogger().trace("Decimal duration after tuplet is " +  context.decimalDuration);
+                trace("Decimal duration after tuplet is " +  context.decimalDuration);
             }
         }
 
@@ -1357,7 +1365,7 @@ public final class MusicStringParser extends Parser
             char velocityChar = s.charAt(index);
             int lengthOfByte = 0;
             if ((velocityChar == '+') || (velocityChar == '_')) break;
-            Logger.getRootLogger().trace("Identified Velocity character " + velocityChar);
+            trace("Identified Velocity character " + velocityChar);
             boolean byteDone = false;
             while (!byteDone && (index + lengthOfByte+1 < slen)) {
                 char possibleByteChar = s.charAt(index + lengthOfByte+1);
@@ -1385,7 +1393,7 @@ public final class MusicStringParser extends Parser
             }
             index = endPoint;
         }
-        Logger.getRootLogger().trace("Attack velocity = " + context.attackVelocity +  "; Decay velocity = " +  context.decayVelocity);
+        trace("Attack velocity = " + context.attackVelocity +  "; Decay velocity = " +  context.decayVelocity);
         return index;
     }
 
@@ -1395,13 +1403,13 @@ public final class MusicStringParser extends Parser
         context.existAnotherNote = false;
         // See if there's another note to process
         if ((index < slen) && ((s.charAt(index) == '+') || (s.charAt(index) == '_'))) {
-            Logger.getRootLogger().trace("Another note: string = " + s.substring(index, s.length()-1));
+            trace("Another note: string = " + s.substring(index, s.length()-1));
             if (s.charAt(index) == '_') {
                 context.anotherNoteIsSequential = true;
-                Logger.getRootLogger().trace("Next note will be sequential");
+                trace("Next note will be sequential");
             } else {
                 context.anotherNoteIsParallel = true;
-                Logger.getRootLogger().trace("Next note will be parallel");
+                trace("Next note will be parallel");
             }
             index++;
             context.existAnotherNote = true;
@@ -1435,15 +1443,15 @@ public final class MusicStringParser extends Parser
         // Fire note events
         if (context.isFirstNote) {
             note.setType(Note.FIRST);
-            Logger.getRootLogger().trace("Firing first note event");
+            trace("Firing first note event");
             fireNoteEvent(note);
         } else if (context.isSequentialNote) {
             note.setType(Note.SEQUENTIAL);
-            Logger.getRootLogger().trace("Firing sequential note event");
+            trace("Firing sequential note event");
             fireSequentialNoteEvent(note);
         } else if (context.isParallelNote) {
             note.setType(Note.PARALLEL);
-            Logger.getRootLogger().trace("Firing parallel note event");
+            trace("Firing parallel note event");
             fireParallelNoteEvent(note);
         }
 
@@ -1453,7 +1461,7 @@ public final class MusicStringParser extends Parser
                 Note chordNote = new Note((byte)(context.noteNumber+context.halfsteps[i]), context.duration);
                 chordNote.setDecimalDuration(context.decimalDuration); // This won't have any effect on the note, but it's good bookkeeping to have it around.
                 chordNote.setType(Note.PARALLEL);
-                Logger.getRootLogger().trace("Chord note number: " + (context.noteNumber+context.halfsteps[i]));
+                trace("Chord note number: " + (context.noteNumber+context.halfsteps[i]));
                 if (i == context.numHalfsteps-1) {
                     chordNote.setAccompanyingNotes(context.existAnotherNote);
                 } else {
@@ -1552,7 +1560,7 @@ public final class MusicStringParser extends Parser
             long startTime = System.currentTimeMillis();
 
             parser.parseToken("Cw+Dq_Rq_Dq_Rq");
-            Logger.getRootLogger().trace("(**********************************************)");
+            trace("(**********************************************)");
             
             parser.parseToken("Cwhqistxo");
 
@@ -1642,7 +1650,7 @@ public final class MusicStringParser extends Parser
             parser.parseToken("45/0.5");
 
             long endTime = System.currentTimeMillis();
-            Logger.getRootLogger().trace("Time taken: "+(endTime-startTime)+"ms");
+            trace("Time taken: "+(endTime-startTime)+"ms");
 
         } catch (Exception e) {
             e.printStackTrace();
