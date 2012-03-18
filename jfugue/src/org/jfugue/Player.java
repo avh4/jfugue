@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 
+import javax.sound.midi.*;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MetaEventListener;
 import javax.sound.midi.MetaMessage;
@@ -63,6 +64,7 @@ public class Player
     private volatile boolean paused = false;
     private volatile boolean started = false;
     private volatile boolean finished = false;
+    private boolean softClose = false;
     
 //    @SuppressWarnings("unused")
 //	private Map rememberedPatterns;
@@ -75,6 +77,19 @@ public class Player
         this(true);
     }
 
+    /**
+     * Add the softClose parameter to the constructor.  This option changes
+     * how sequences are processed.  If true sequences are not closed and then
+     * reopened, they are stopped and repositioned to the beginning.  These solves the
+     * problem of sound stopping after 17 iterations.
+     * @param connected
+     * @param softClose
+     */
+    public Player(boolean connected, boolean softClose)
+    {
+        this(connected);
+        this.softClose = softClose;
+    }
     /**
      * Instantiates a new Player object, which is used for playing music.
      * The <code>connected</code> parameter is passed directly to MidiSystem.getSequencer.
@@ -123,10 +138,20 @@ public class Player
     
     private void initSequencer()
     {
+        int[] controllers = new int[128];
+        for(int x=0; x < 128; x++) controllers[x] = x;
+        ControllerEventListener cel = new ControllerEventListener() {
+            public void controlChange(javax.sound.midi.ShortMessage event) {
+                System.out.println("got controllerEvent " + event.toString());
+            }
+        };
+        getSequencer().addControllerEventListener(cel, controllers);
+
         // Close the sequencer and synthesizer
         getSequencer().addMetaEventListener(new MetaEventListener() {
             public void meta(MetaMessage event)
             {
+                //System.out.println("got event of type " + event.getType());
                 if (event.getType() == 47)
                 {
                     close();
@@ -263,9 +288,7 @@ public class Player
         // Open the sequencer
         openSequencer();
         
-        intentionalDelay();
-        
-        System.out.println("Seq is "+sequence);
+
         // Set the sequence
         try {
             getSequencer().setSequence(sequence);
@@ -278,49 +301,38 @@ public class Player
 
         // Start the sequence
         getSequencer().start();
-
+        if(softClose) {
+            long msToSleep = getSequencer().getMicrosecondLength() / 1000;
+            try {
+                Thread.sleep(msToSleep);
+            }catch (InterruptedException e) {
+                System.out.println("Exception");
+            }
+        } else {
         // Wait for the sequence to finish
         while (isOn())
         {
             try {
                 Thread.sleep(20); // don't hog all of the CPU
             } catch (InterruptedException e) {
+                System.out.println("interrupted sleep");
                 try {
                     stop();
                 } catch (Exception e2) {
-                    // do nothing
+                    System.out.println("exception stopping sequencer");
                 }
                 throw new JFugueException(JFugueException.ERROR_SLEEP);
             }
         }
+        }
 
-        // Close the sequencer
-        getSequencer().close();
-
-        intentionalDelay();
+        if(softClose == false)
+          getSequencer().close();
 
         setStarted(false);
         setFinished(true);
     }
 
-    /**
-     * Ugliness here! Why do we need an Intentional Delay?
-     * Well, it turns out that getSequencer().open() and getSequencer().close()
-     * within javax.sound.midi are happening asynchronously, and this delay
-     * makes things happy enough that:
-     * - Music strings don't skip (which you'll see if you take out the delay, and call
-     *   player.play("some music string") in a while loop)
-     * - We don't get an IllegalArgumentException by trying to send a sequence to a sequencer 
-     *   that, despite openSequencer() having just been called, apparently isn't actually open 
-     */
-    private void intentionalDelay()
-    {
-        try {
-            Thread.sleep(1); 
-        } catch (InterruptedException e) {
-        	e.printStackTrace();
-        }
-    }
 
     private synchronized boolean isOn() 
     {
@@ -425,6 +437,19 @@ public class Player
      */
     public void close()
     {
+        if(softClose == true) {
+            //System.out.println("softClose");
+            Sequencer seq = getSequencer();
+            seq.stop();
+            seq.setTickPosition(0);
+            seq.start();
+            return;
+        }
+        try {
+            getSequencer().getTransmitter().close();
+        } catch (MidiUnavailableException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
         getSequencer().close();
         try {
         	if (synth != null) {
