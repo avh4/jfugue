@@ -34,7 +34,7 @@ public class Midi2JFugue
 {
     public static void main(String[] args)
     {
-        if (args.length < 3)
+        if (args.length < 2)
         {
             printUsage();
             System.exit(0);
@@ -43,8 +43,8 @@ public class Midi2JFugue
         Player player = new Player();
         PatternInterface pattern = null;
         try {
-            pattern = player.loadMidi(new File(args[1]));
-            pattern.savePattern(new File(args[2]));
+            pattern = player.loadMidi(new File(args[0]));
+            pattern.savePattern(new File(args[1]));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InvalidMidiDataException e) {
